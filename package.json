@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "5.2.0",
     "@types/node": "20.6.0",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
@@ -24,6 +25,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "eslint-config-prettier": "^9.0.0",
     "prettier": "^3.0.0",
-    "prettier-plugin-packagejson": "^2.4.3"
+    "prettier-plugin-packagejson": "^2.4.3",
+    "prisma": "^5.2.0"
   }
 }
