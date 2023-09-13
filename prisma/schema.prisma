@@ -10,15 +10,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum GLUTEN_INTAKE {
+enum GI {
   HIGH
   LOW
 }
 
 model Ingredient {
-  id                 Int            @id @default(autoincrement())
-  created            DateTime       @default(now()) @db.Timestamp(6)
-  modified           DateTime?      @default(now()) @db.Timestamp(6)
+  id                 Int       @id @default(autoincrement())
+  created            DateTime  @default(now()) @db.Timestamp(6)
+  modified           DateTime? @default(now()) @db.Timestamp(6)
   name               String
   brand_vendor       String
   energy             Float
@@ -33,22 +33,22 @@ model Ingredient {
   avg_serving_units  Float?
   avg_serving_weight Float?
   data_source        String
-  gi                 GLUTEN_INTAKE?
+  gi                 GI?
 
   meals Meal[]
   users User[]
 }
 
 model Meal {
-  id             Int            @id @default(autoincrement())
-  created        DateTime       @default(now()) @db.Timestamp(6)
-  modified       DateTime?      @default(now()) @db.Timestamp(6)
+  id             Int          @id @default(autoincrement())
+  created        DateTime     @default(now()) @db.Timestamp(6)
+  modified       DateTime?    @default(now()) @db.Timestamp(6)
   name           String
   ingredients    Ingredient[]
   total_weight   Float
   total_carbs    Float?
   carbs_per_100g Float?
-  gi             GLUTEN_INTAKE?
+  gi             GI?
 
   users User[]
 }
