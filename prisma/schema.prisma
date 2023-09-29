@@ -21,13 +21,13 @@ model Ingredient {
   modified           DateTime? @default(now()) @db.Timestamp(6)
   name               String
   brand_vendor       String
-  energy             Float
-  protein            Float
-  fat                Float
+  energy             Float?
+  protein            Float?
+  fat                Float?
   carbs_per_100g     Float
   carbs_per_serve    Float?
-  sugar              Float
-  fibre              Float
+  sugar              Float?
+  fibre              Float?
   alcohol            Float?
   caffeine           Float?
   avg_serving_units  Float?
