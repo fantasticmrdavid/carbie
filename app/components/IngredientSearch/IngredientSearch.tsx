@@ -13,7 +13,7 @@ export const IngredientSearch = () => {
   const router = useRouter()
   const [search, setSearch] = useState('')
   const { data, isLoading } = useQuery<Ingredient[]>(
-    ['getIngredients'],
+    ['getIngredients', search],
     async () =>
       await fetch(`/api/ingredients?q=${search}`).then((res) => res.json()),
   )
