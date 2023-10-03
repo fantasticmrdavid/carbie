@@ -18,7 +18,7 @@ export const NavBar = () => {
           }}
         />
       </Flex>
-      <Flex gap={'0.5em'} alignItems={'center'}>
+      <Flex className={styles.navRight}>
         <IngredientSearch />
         {!session && <Button onClick={() => signIn()}>Sign in</Button>}
       </Flex>

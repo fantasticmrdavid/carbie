@@ -12,3 +12,15 @@
     justify-content: space-between;
   }
 }
+
+.navRight {
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 0.5em;
+
+  @media only screen and (min-width: 800px) {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
