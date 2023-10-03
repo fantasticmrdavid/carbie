@@ -18,6 +18,7 @@ export const Logo = ({ size, onClick }: Props) => {
         gap: '0.15em',
         cursor: onClick ? 'pointer' : undefined,
         alignItems: 'center',
+        whiteSpace: 'nowrap',
       }}
     >
       ~ Carbie <GiHamburger /> ~
