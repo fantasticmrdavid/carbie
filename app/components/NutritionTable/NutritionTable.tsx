@@ -1,20 +1,12 @@
 import React from 'react'
-import {
-  Table,
-  Tbody,
-  Tr,
-  Td,
-  TableContainer,
-  Container,
-  Heading,
-} from '@chakra-ui/react'
+import { Table, Tbody, Tr, Td, TableContainer, Heading } from '@chakra-ui/react'
 import type { Ingredient } from '@prisma/client'
 
-type NutritionTableProps = {
+type Props = {
   ingredient: Ingredient
 }
 
-export const NutritionTable = (props: NutritionTableProps) => {
+export const NutritionTable = (props: Props) => {
   const { ingredient } = props
   const {
     carbs_per_100g,
@@ -28,7 +20,7 @@ export const NutritionTable = (props: NutritionTableProps) => {
     caffeine,
   } = ingredient
   return (
-    <Container>
+    <div>
       <Heading as="h5" noOfLines={1} size={'md'}>
         Nutrition information (per 100g)
       </Heading>
@@ -78,6 +70,6 @@ export const NutritionTable = (props: NutritionTableProps) => {
           </Tbody>
         </Table>
       </TableContainer>
-    </Container>
+    </div>
   )
 }

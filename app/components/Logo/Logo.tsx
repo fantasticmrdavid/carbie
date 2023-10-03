@@ -1,9 +1,9 @@
-import React, { MouseEventHandler } from 'react'
+import React from 'react'
 import { Heading } from '@chakra-ui/react'
 import { GiHamburger } from 'react-icons/gi'
 
 type Props = {
-  onClick?: () => MouseEventHandler<HTMLHeadingElement> | undefined
+  onClick?: () => void
   size?: 'sm' | 'lg'
 }
 export const Logo = ({ size, onClick }: Props) => {

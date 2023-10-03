@@ -10,7 +10,11 @@ export const NavBar = () => {
   return (
     <nav className={styles.nav}>
       <Flex justifyContent={'space-between'} alignItems={'center'}>
-        <Logo onClick={() => router.push(`/`)} />
+        <Logo
+          onClick={() => {
+            router.push(`/`)
+          }}
+        />
         <IngredientSearch />
       </Flex>
     </nav>

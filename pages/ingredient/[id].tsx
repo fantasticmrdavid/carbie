@@ -4,6 +4,7 @@ import type { Ingredient } from '@prisma/client'
 import { useRouter } from 'next/router'
 import { NutritionTable } from '@/app/components/NutritionTable/NutritionTable'
 import { Flex, Heading } from '@chakra-ui/react'
+import { CarbCalculator } from '@/app/components/CarbCalculator/CarbCalculator'
 
 export const Page = () => {
   const { query } = useRouter()
@@ -22,6 +23,7 @@ export const Page = () => {
           {ingredient.name} ({ingredient.brand_vendor})
         </Heading>
         <NutritionTable ingredient={ingredient} />
+        <CarbCalculator ingredient={ingredient} />
       </Flex>
     )
   }
