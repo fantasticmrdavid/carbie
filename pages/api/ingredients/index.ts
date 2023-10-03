@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getIngredients } from './getIngredients'
 import { addIngredient } from './addIngredient'
+import { updateIngredient } from './updateIngredient'
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,7 +13,7 @@ export default async function handler(
       return await getIngredients(req, res)
     case 'POST':
       return await addIngredient(req, res)
-    // case 'PATCH':
-    //   return await updateIngredient(req, res)
+    case 'PATCH':
+      return await updateIngredient(req, res)
   }
 }

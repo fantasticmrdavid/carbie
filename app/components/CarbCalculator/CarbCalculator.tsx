@@ -24,7 +24,7 @@ export const CarbCalculator = ({ ingredient }: Props) => {
       g of carbs?
       {carbCalcValue && carbCalcValue > 0 && (
         <strong>
-          {((ingredient.carbs_per_100g / 100) * carbCalcValue).toFixed(2)}g
+          {((100 / ingredient.carbs_per_100g) * carbCalcValue).toFixed(2)}g
         </strong>
       )}
     </Flex>

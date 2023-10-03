@@ -25,7 +25,7 @@ const IndexPage = () => {
       </Center>
       <Center>
         <Button onClick={onOpen}>Add Ingredient</Button>
-        <IngredientFormModal isOpen={isOpen} onClose={onClose} />
+        <IngredientFormModal mode={'add'} isOpen={isOpen} onClose={onClose} />
       </Center>
     </Container>
   )

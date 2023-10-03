@@ -1,7 +1,19 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/app/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { getSession } from 'next-auth/react'
+
+const ingredientWithRelations =
+  Prisma.validator<Prisma.IngredientDefaultArgs>()({
+    include: {
+      users: true,
+    },
+  })
+
+export type IngredientWithRelations = Prisma.IngredientGetPayload<
+  typeof ingredientWithRelations
+>
 
 export const getIngredientSingle = async (
   req: NextApiRequest,
@@ -18,6 +30,13 @@ export const getIngredientSingle = async (
     } = req
 
     const results = await prisma.ingredient.findUnique({
+      include: {
+        users: {
+          where: {
+            email: user.email,
+          },
+        },
+      },
       where: {
         id: id as string,
         users: {

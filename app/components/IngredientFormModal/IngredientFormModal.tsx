@@ -24,27 +24,68 @@ import styles from './ingredientFormModal.module.scss'
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
+import { Ingredient } from '@prisma/client'
 
 type Props = {
   isOpen: boolean
   onClose: () => void
+  mode: 'add' | 'edit'
+  ingredient?: Ingredient
 }
-export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
+const hasAdditionalInfo = (i: Ingredient) => {
+  return !!(
+    i.energy ||
+    i.fat ||
+    i.alcohol ||
+    i.caffeine ||
+    i.fibre ||
+    i.protein ||
+    i.sugar ||
+    i.sodium
+  )
+}
+
+export const IngredientFormModal = ({
+  isOpen,
+  onClose,
+  mode,
+  ingredient,
+}: Props) => {
   const queryClient = useQueryClient()
   const toast = useToast()
 
-  const [isOptionalExpanded, setIsOptionalExpanded] = useState(false)
-  const [name, setName] = useState('')
-  const [brand, setBrand] = useState('')
-  const [carbsPer100g, setCarbsPer100g] = useState<string | undefined>()
-  const [energy, setEnergy] = useState<string | undefined>()
-  const [protein, setProtein] = useState<string | undefined>()
-  const [fat, setFat] = useState<string | undefined>()
-  const [sugar, setSugar] = useState<string | undefined>()
-  const [sodium, setSodium] = useState<string | undefined>()
-  const [fibre, setFibre] = useState<string | undefined>()
-  const [alcohol, setAlcohol] = useState<string | undefined>()
-  const [caffeine, setCaffeine] = useState<string | undefined>()
+  const [isOptionalExpanded, setIsOptionalExpanded] = useState(
+    ingredient ? hasAdditionalInfo(ingredient) : false,
+  )
+  const [name, setName] = useState(ingredient ? ingredient.name : '')
+  const [brand, setBrand] = useState(ingredient ? ingredient.brand_vendor : '')
+  const [carbsPer100g, setCarbsPer100g] = useState<string | undefined>(
+    ingredient?.carbs_per_100g.toString() || undefined,
+  )
+  const [energy, setEnergy] = useState<string | undefined>(
+    ingredient?.energy?.toString() || undefined,
+  )
+  const [protein, setProtein] = useState<string | undefined>(
+    ingredient?.protein?.toString() || undefined,
+  )
+  const [fat, setFat] = useState<string | undefined>(
+    ingredient?.fat?.toString() || undefined,
+  )
+  const [sugar, setSugar] = useState<string | undefined>(
+    ingredient?.sugar?.toString() || undefined,
+  )
+  const [sodium, setSodium] = useState<string | undefined>(
+    ingredient?.sodium?.toString() || undefined,
+  )
+  const [fibre, setFibre] = useState<string | undefined>(
+    ingredient?.fibre?.toString() || undefined,
+  )
+  const [alcohol, setAlcohol] = useState<string | undefined>(
+    ingredient?.alcohol?.toString() || undefined,
+  )
+  const [caffeine, setCaffeine] = useState<string | undefined>(
+    ingredient?.caffeine?.toString() || undefined,
+  )
 
   const addIngredient = useMutation({
     mutationFn: () =>
@@ -62,16 +103,7 @@ export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries(['getIngredients'])
-      setName('')
-      setBrand('')
-      setCarbsPer100g(undefined)
-      setEnergy(undefined)
-      setProtein(undefined)
-      setFat(undefined)
-      setSugar(undefined)
-      setFibre(undefined)
-      setAlcohol(undefined)
-      setCaffeine(undefined)
+      onClose()
 
       toast({
         title: `${name} added!`,
@@ -92,6 +124,44 @@ export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
     },
   })
 
+  const saveIngredient = useMutation({
+    mutationFn: () =>
+      axios.patch('/api/ingredients', {
+        id: ingredient?.id,
+        name,
+        brand,
+        carbsPer100g,
+        energy,
+        protein,
+        fat,
+        sugar,
+        fibre,
+        alcohol,
+        caffeine,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['getIngredient', ingredient?.id])
+      onClose()
+
+      toast({
+        title: `${name} updated!`,
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+      })
+    },
+    onError: (error) => {
+      console.log('ERROR: ', error)
+      toast({
+        title: 'Error updating ingredient',
+        description: 'Check the console for details',
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      })
+    },
+  })
+
   return (
     <Modal
       isOpen={isOpen}
@@ -100,7 +170,7 @@ export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Add Ingredient</ModalHeader>
+        <ModalHeader>{mode === 'add' ? 'Add' : 'Edit'} Ingredient</ModalHeader>
         <ModalCloseButton />
         <ModalBody className={styles.modalBody}>
           <FormControl>
@@ -270,9 +340,15 @@ export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
           <Button variant="ghost" mr={3} onClick={onClose}>
             Cancel
           </Button>
-          <Button colorScheme="blue" onClick={() => addIngredient.mutate()}>
-            Add
-          </Button>
+          {mode === 'add' ? (
+            <Button colorScheme="blue" onClick={() => addIngredient.mutate()}>
+              Add
+            </Button>
+          ) : (
+            <Button colorScheme="blue" onClick={() => saveIngredient.mutate()}>
+              Save
+            </Button>
+          )}
         </ModalFooter>
       </ModalContent>
     </Modal>
