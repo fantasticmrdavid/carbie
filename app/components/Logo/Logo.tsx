@@ -17,6 +17,7 @@ export const Logo = ({ size, onClick }: Props) => {
         display: 'flex',
         gap: '0.15em',
         cursor: onClick ? 'pointer' : undefined,
+        alignItems: 'center',
       }}
     >
       ~ Carbie <GiHamburger /> ~
