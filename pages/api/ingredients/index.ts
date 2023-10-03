@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { getIngredients } from './getIngredients'
 import { addIngredient } from './addIngredient'
 
 export default async function handler(
@@ -7,8 +8,8 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   switch (req.method) {
-    // case 'GET':
-    //   return await getIngredients(req, res)
+    case 'GET':
+      return await getIngredients(req, res)
     case 'POST':
       return await addIngredient(req, res)
     // case 'PATCH':

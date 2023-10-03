@@ -16,7 +16,7 @@ enum GI {
 }
 
 model Ingredient {
-  id                 Int       @id @default(autoincrement())
+  id                 String    @id @default(cuid())
   created            DateTime  @default(now()) @db.Timestamp(6)
   modified           DateTime? @default(now()) @db.Timestamp(6)
   name               String

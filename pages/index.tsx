@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react'
 import LoginPage from '@/pages/login'
 import { Button, Center, Container, useDisclosure } from '@chakra-ui/react'
 import { IngredientFormModal } from '@/app/components/IngredientFormModal/IngredientFormModal'
+import { IngredientSearch } from '@/app/components/IngredientSearch/IngredientSearch'
 
 const IndexPage = () => {
   const { data: session } = useSession()
@@ -17,6 +18,7 @@ const IndexPage = () => {
       <Center>
         <Button onClick={onOpen}>Add Ingredient</Button>
         <IngredientFormModal isOpen={isOpen} onClose={onClose} />
+        <IngredientSearch />
       </Center>
     </Container>
   )
