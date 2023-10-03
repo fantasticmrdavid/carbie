@@ -27,6 +27,7 @@ model Ingredient {
   carbs_per_100g     Float
   carbs_per_serve    Float?
   sugar              Float?
+  sodium             Float?
   fibre              Float?
   alcohol            Float?
   caffeine           Float?

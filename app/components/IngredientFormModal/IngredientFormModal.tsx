@@ -37,20 +37,14 @@ export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
   const [name, setName] = useState('')
   const [brand, setBrand] = useState('')
   const [carbsPer100g, setCarbsPer100g] = useState<string | undefined>()
-  const [carbsPerServe, setCarbsPerServe] = useState<string | undefined>()
   const [energy, setEnergy] = useState<string | undefined>()
   const [protein, setProtein] = useState<string | undefined>()
   const [fat, setFat] = useState<string | undefined>()
   const [sugar, setSugar] = useState<string | undefined>()
+  const [sodium, setSodium] = useState<string | undefined>()
   const [fibre, setFibre] = useState<string | undefined>()
   const [alcohol, setAlcohol] = useState<string | undefined>()
   const [caffeine, setCaffeine] = useState<string | undefined>()
-  const [averageServingUnits, setAverageServingUnits] = useState<
-    string | undefined
-  >()
-  const [averageServingWeight, setAverageServingWeight] = useState<
-    string | undefined
-  >()
 
   const addIngredient = useMutation({
     mutationFn: () =>
@@ -58,7 +52,6 @@ export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
         name,
         brand,
         carbsPer100g,
-        carbsPerServe: isOptionalExpanded ? carbsPerServe : undefined,
         energy: isOptionalExpanded ? energy : undefined,
         protein: isOptionalExpanded ? protein : undefined,
         fat: isOptionalExpanded ? fat : undefined,
@@ -66,19 +59,12 @@ export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
         fibre: isOptionalExpanded ? fibre : undefined,
         alcohol: isOptionalExpanded ? alcohol : undefined,
         caffeine: isOptionalExpanded ? caffeine : undefined,
-        averageServingUnits: isOptionalExpanded
-          ? averageServingUnits
-          : undefined,
-        averageServingWeight: isOptionalExpanded
-          ? averageServingWeight
-          : undefined,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries(['getIngredients'])
       setName('')
       setBrand('')
       setCarbsPer100g(undefined)
-      setCarbsPerServe(undefined)
       setEnergy(undefined)
       setProtein(undefined)
       setFat(undefined)
@@ -86,8 +72,6 @@ export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
       setFibre(undefined)
       setAlcohol(undefined)
       setCaffeine(undefined)
-      setAverageServingUnits(undefined)
-      setAverageServingWeight(undefined)
 
       toast({
         title: `${name} added!`,
@@ -157,7 +141,7 @@ export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
             className={styles.expandToggle}
             onClick={() => setIsOptionalExpanded(!isOptionalExpanded)}
           >
-            <strong>Additional info </strong>
+            <strong>Additional info (per 100g)</strong>
             {isOptionalExpanded ? (
               <AiOutlineMinusSquare />
             ) : (
@@ -168,22 +152,6 @@ export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
             <div className={styles.additionalInfo}>
               <FormControl>
                 <Flex alignItems={'center'}>
-                  <FormLabel className={styles.formLabel}>
-                    Carbs per serve
-                  </FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={'number'}
-                      value={carbsPerServe}
-                      onChange={(e) => setCarbsPerServe(e.target.value)}
-                      placeholder={'eg. 20'}
-                    />
-                    <InputRightElement>kj</InputRightElement>
-                  </InputGroup>
-                </Flex>
-              </FormControl>
-              <FormControl>
-                <Flex alignItems={'center'}>
                   <FormLabel className={styles.formLabel}>Energy</FormLabel>
                   <InputGroup>
                     <Input
@@ -192,7 +160,7 @@ export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
                       onChange={(e) => setEnergy(e.target.value)}
                       placeholder={'eg. 100'}
                     />
-                    <InputRightElement>kj</InputRightElement>
+                    <InputRightElement>kJ</InputRightElement>
                   </InputGroup>
                 </Flex>
               </FormControl>
@@ -240,6 +208,20 @@ export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
               </FormControl>
               <FormControl>
                 <Flex alignItems={'center'}>
+                  <FormLabel className={styles.formLabel}>Sodium</FormLabel>
+                  <InputGroup>
+                    <Input
+                      type={'number'}
+                      value={sodium}
+                      onChange={(e) => setSodium(e.target.value)}
+                      placeholder={'eg. 100'}
+                    />
+                    <InputRightElement>mg</InputRightElement>
+                  </InputGroup>
+                </Flex>
+              </FormControl>
+              <FormControl>
+                <Flex alignItems={'center'}>
                   <FormLabel className={styles.formLabel}>Fibre</FormLabel>
                   <InputGroup>
                     <Input
@@ -274,38 +256,6 @@ export const IngredientFormModal = ({ isOpen, onClose }: Props) => {
                       type={'number'}
                       value={caffeine}
                       onChange={(e) => setCaffeine(e.target.value)}
-                      placeholder={'eg. 25'}
-                    />
-                    <InputRightElement>g</InputRightElement>
-                  </InputGroup>
-                </Flex>
-              </FormControl>
-              <FormControl>
-                <Flex alignItems={'center'}>
-                  <FormLabel className={styles.formLabel}>
-                    Avg units per serving
-                  </FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={'number'}
-                      value={averageServingUnits}
-                      onChange={(e) => setAverageServingUnits(e.target.value)}
-                      placeholder={'eg. 25'}
-                    />
-                    <InputRightElement>g</InputRightElement>
-                  </InputGroup>
-                </Flex>
-              </FormControl>
-              <FormControl>
-                <Flex alignItems={'center'}>
-                  <FormLabel className={styles.formLabel}>
-                    Avg weight per serving
-                  </FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={'number'}
-                      value={averageServingWeight}
-                      onChange={(e) => setAverageServingWeight(e.target.value)}
                       placeholder={'eg. 25'}
                     />
                     <InputRightElement>g</InputRightElement>

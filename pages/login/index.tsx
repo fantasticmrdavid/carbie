@@ -1,13 +1,7 @@
 import React from 'react'
 import { signIn } from 'next-auth/react'
-import {
-  Button,
-  Center,
-  Container,
-  Flex,
-  Heading,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, Center, Container, Flex, VStack } from '@chakra-ui/react'
+import { Logo } from '@/app/components/Logo/Logo'
 
 export const LoginPage = () => {
   return (
@@ -18,10 +12,8 @@ export const LoginPage = () => {
         alignItems={'center'}
         justifyContent={'center'}
       >
+        <Logo size={'lg'} />
         <VStack spacing={4} align="stretch">
-          <Heading as="h1" size="2xl" noOfLines={1}>
-            Carbie
-          </Heading>
           <Center>
             <Button onClick={() => signIn()}>Sign in</Button>
           </Center>

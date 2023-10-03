@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 
 import { Container, Flex, VStack } from '@chakra-ui/react'
+import { NavBar } from '@/app/components/NavBar/NavBar'
 
 type RootLayoutProps = {
   children: React.ReactNode
@@ -13,7 +14,7 @@ export const Template = ({ children }: RootLayoutProps) => {
 
   const head = (
     <Head>
-      <title>Carbie</title>
+      <title>~Carbie🍔~</title>
       <meta name={'viewport'} content="width=device-width, initial-scale=1" />
       <link
         rel="icon"
@@ -47,8 +48,9 @@ export const Template = ({ children }: RootLayoutProps) => {
           style={{ minHeight: '100vh' }}
           flexDirection={'column'}
           alignItems={'center'}
-          justifyContent={'center'}
+          justifyContent={'flex-start'}
         >
+          <NavBar />
           {children}
         </Flex>
       </>
