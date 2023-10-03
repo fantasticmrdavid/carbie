@@ -1,7 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 
-import { Flex } from '@chakra-ui/react'
+import { Container, Flex } from '@chakra-ui/react'
 import { NavBar } from '@/app/components/NavBar/NavBar'
 
 type RootLayoutProps = {
@@ -45,7 +45,7 @@ export const Template = ({ children }: RootLayoutProps) => {
         justifyContent={'flex-start'}
       >
         <NavBar />
-        {children}
+        <Container>{children}</Container>
       </Flex>
     </>
   )

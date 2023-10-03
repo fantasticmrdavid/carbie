@@ -3,6 +3,7 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import { useRouter } from 'next/router'
 import { useQuery } from '@tanstack/react-query'
 import type { Ingredient } from '@prisma/client'
+import styles from './ingredientSearch.module.scss'
 
 type Item = {
   id: string
@@ -26,11 +27,13 @@ export const IngredientSearch = () => {
       : []
 
   return (
-    <div style={{ width: 400 }}>
+    <div className={styles.container}>
       <ReactSearchAutocomplete<Item>
         items={items}
         onSearch={(s) => setSearch(s)}
-        onSelect={(i) => router.push(`/ingredient/${i.id}`)}
+        onSelect={(i) => {
+          router.push(`/ingredient/${i.id}`)
+        }}
         formatResult={(item: Item) => item.name}
         placeholder={'Search ingredients'}
         styling={{

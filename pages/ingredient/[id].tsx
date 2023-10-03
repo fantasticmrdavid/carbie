@@ -26,9 +26,10 @@ export const Page = () => {
 
   if (ingredient && !isLoading) {
     return (
-      <Flex gap={'1em'} direction={'column'} padding={'2em 0'}>
+      <Flex direction={'column'} padding={'2em 0'}>
+        <Heading size={'md'}>{ingredient.brand_vendor}</Heading>
         <Heading as="h3" noOfLines={1}>
-          {ingredient.name} ({ingredient.brand_vendor})
+          {ingredient.name}
           {userOwnsIngredient && (
             <>
               <FaRegEdit
@@ -49,8 +50,10 @@ export const Page = () => {
             </>
           )}
         </Heading>
-        <NutritionTable ingredient={ingredient} />
-        <CarbCalculator ingredient={ingredient} />
+        <Flex marginTop={'1em'} direction={'column'} gap={'1em'}>
+          <NutritionTable ingredient={ingredient} />
+          <CarbCalculator ingredient={ingredient} />
+        </Flex>
       </Flex>
     )
   }

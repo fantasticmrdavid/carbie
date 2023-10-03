@@ -17,10 +17,10 @@ export const NavBar = () => {
             router.push(`/`)
           }}
         />
-        <Flex gap={'0.5em'} alignItems={'center'}>
-          <IngredientSearch />
-          {!session && <Button onClick={() => signIn()}>Sign in</Button>}
-        </Flex>
+      </Flex>
+      <Flex gap={'0.5em'} alignItems={'center'}>
+        <IngredientSearch />
+        {!session && <Button onClick={() => signIn()}>Sign in</Button>}
       </Flex>
     </nav>
   )
