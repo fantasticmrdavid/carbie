@@ -1,18 +1,12 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/app/lib/prisma'
-import { getSession } from 'next-auth/react'
 
 export const getIngredients = async (
   req: NextApiRequest,
   res: NextApiResponse,
 ) => {
   try {
-    const session = await getSession({ req })
-    if (!session) return res.status(401)
-    const { user } = session
-    if (!user) return res.status(401)
-
     const {
       query: { q },
     } = req

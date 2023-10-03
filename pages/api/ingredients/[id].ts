@@ -21,9 +21,7 @@ export const getIngredientSingle = async (
 ) => {
   try {
     const session = await getSession({ req })
-    if (!session) return res.status(401)
-    const { user } = session
-    if (!user) return res.status(401)
+    const { user } = session || {}
 
     const {
       query: { id },
@@ -33,7 +31,12 @@ export const getIngredientSingle = async (
       include: {
         users: {
           where: {
-            email: user.email,
+            email: {
+              in: [
+                process.env.PUBLIC_ACCOUNT_EMAIL as string,
+                ...(user ? [user.email as string] : []),
+              ],
+            },
           },
         },
       },

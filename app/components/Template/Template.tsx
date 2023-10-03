@@ -1,8 +1,7 @@
 import React from 'react'
-import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 
-import { Container, Flex, VStack } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 import { NavBar } from '@/app/components/NavBar/NavBar'
 
 type RootLayoutProps = {
@@ -10,8 +9,6 @@ type RootLayoutProps = {
 }
 
 export const Template = ({ children }: RootLayoutProps) => {
-  const { data: session, status: sessionStatus } = useSession()
-
   const head = (
     <Head>
       <title>~Carbie🍔~</title>
@@ -38,40 +35,18 @@ export const Template = ({ children }: RootLayoutProps) => {
     </Head>
   )
 
-  if (sessionStatus === 'loading') return <div>Loading...</div>
-
-  if (session && session.user) {
-    return (
-      <>
-        {head}
-        <Flex
-          style={{ minHeight: '100vh' }}
-          flexDirection={'column'}
-          alignItems={'center'}
-          justifyContent={'flex-start'}
-        >
-          <NavBar />
-          {children}
-        </Flex>
-      </>
-    )
-  }
-
   return (
     <>
       {head}
-      <Container>
-        <Flex
-          style={{ minHeight: '100vh' }}
-          flexDirection={'column'}
-          alignItems={'center'}
-          justifyContent={'center'}
-        >
-          <VStack spacing={4} align="stretch">
-            <main>{children}</main>
-          </VStack>
-        </Flex>
-      </Container>
+      <Flex
+        style={{ minHeight: '100vh' }}
+        flexDirection={'column'}
+        alignItems={'center'}
+        justifyContent={'flex-start'}
+      >
+        <NavBar />
+        {children}
+      </Flex>
     </>
   )
 }
