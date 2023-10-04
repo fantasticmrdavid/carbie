@@ -1,14 +1,17 @@
 import React from 'react'
 import Head from 'next/head'
 
-import { Container, Flex } from '@chakra-ui/react'
+import { Container, Flex, VStack } from '@chakra-ui/react'
 import { NavBar } from '@/app/components/NavBar/NavBar'
+import { Footer } from '@/app/components/Footer/Footer'
+import { usePathname } from 'next/navigation'
 
 type RootLayoutProps = {
   children: React.ReactNode
 }
 
 export const Template = ({ children }: RootLayoutProps) => {
+  const pathname = usePathname()
   const head = (
     <Head>
       <title>~Carbie🍔~</title>
@@ -38,15 +41,19 @@ export const Template = ({ children }: RootLayoutProps) => {
   return (
     <>
       {head}
-      <Flex
-        style={{ minHeight: '100vh' }}
-        flexDirection={'column'}
-        alignItems={'center'}
-        justifyContent={'flex-start'}
-      >
-        <NavBar />
-        <Container>{children}</Container>
-      </Flex>
+      <VStack align="stretch">
+        <Flex
+          style={{ minHeight: '100vh' }}
+          flexDirection={'column'}
+          alignItems={'center'}
+          justifyContent={pathname === '/' ? 'space-between' : 'flex-start'}
+        >
+          <NavBar />
+          <Container>{children}</Container>
+
+          <Footer />
+        </Flex>
+      </VStack>
     </>
   )
 }
