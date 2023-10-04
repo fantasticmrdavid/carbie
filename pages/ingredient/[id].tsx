@@ -44,17 +44,18 @@ export const Page = () => {
     return (
       <Flex direction={'column'} padding={'2em 0'}>
         <Heading size={'md'}>{ingredient.brand_vendor}</Heading>
-        <Heading as="h3" noOfLines={2}>
+        <Heading
+          as="h3"
+          noOfLines={2}
+          style={{ display: 'flex', alignItems: 'center', gap: '0.2em' }}
+        >
           {ingredient.name}
           {userOwnsIngredient && (
             <>
               <FaRegEdit
                 onClick={onOpen}
                 style={{
-                  marginLeft: '0.2em',
                   cursor: 'pointer',
-                  display: 'inline-block',
-                  verticalAlign: 'sub',
                 }}
               />
               <IngredientFormModal
