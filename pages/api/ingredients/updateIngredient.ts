@@ -1,16 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/app/lib/prisma'
-// import { getToken } from 'next-auth/jwt'
+import { getToken } from 'next-auth/jwt'
 
 export const updateIngredient = async (
   req: NextApiRequest,
   res: NextApiResponse,
 ) => {
   try {
-    // const token = await getToken({ req })
-    // if (!token) return res.status(401)
-    // const { sub } = token
-    // if (!sub) return res.status(401)
+    const token = await getToken({ req })
+    if (!token) return res.status(401)
+    const { sub } = token
+    if (!sub) return res.status(401)
 
     const {
       id,

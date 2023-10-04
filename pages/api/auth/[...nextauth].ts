@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession } from 'next-auth'
+import NextAuth from 'next-auth'
 import EmailProvider from 'next-auth/providers/email'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 
@@ -26,7 +26,7 @@ export default NextAuth({
   callbacks: {
     session: async ({ session, token }) => {
       if (session?.user && token.sub) {
-        ;(session.user as DefaultSession & { id: string }).id = token.sub
+        session.user.id = token.sub
       }
       return session
     },
