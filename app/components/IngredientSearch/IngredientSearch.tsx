@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import { useRouter } from 'next/router'
 import { useQuery } from '@tanstack/react-query'
