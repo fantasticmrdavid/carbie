@@ -13,9 +13,16 @@ export const getIngredients = async (
 
     const results = await prisma.ingredient.findMany({
       where: {
-        name: {
-          contains: q as string,
-        },
+        OR: [
+          {
+            name: {
+              contains: q as string,
+            },
+            brand_vendor: {
+              contains: q as string,
+            },
+          },
+        ],
         users: {
           some: {
             email: {

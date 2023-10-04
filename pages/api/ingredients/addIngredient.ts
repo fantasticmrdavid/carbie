@@ -28,8 +28,8 @@ export const addIngredient = async (
 
     const result = await prisma.ingredient.create({
       data: {
-        name,
-        brand_vendor: brand,
+        name: name.trim(),
+        brand_vendor: brand.trim(),
         carbs_per_100g: parseFloat(carbsPer100g),
         energy: energy ? parseFloat(energy) : undefined,
         protein: protein ? parseFloat(protein) : undefined,
