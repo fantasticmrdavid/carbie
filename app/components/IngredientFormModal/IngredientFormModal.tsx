@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Modal,
   ModalBody,
@@ -13,7 +13,10 @@ import {
   Collapse,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
+  Grid,
+  GridItem,
   Input,
   InputGroup,
   InputRightElement,
@@ -91,19 +94,38 @@ export const IngredientFormModal = ({
     ingredient?.caffeine?.toString() || undefined,
   )
 
-  const getValidationErrors = () => {
+  const getValidationErrors = useCallback(() => {
     const errors: string[] = []
     if (!name || name.length === 0) errors.push('name')
     if (!brand || brand.length === 0) errors.push('brand')
     if (!carbsPer100g || carbsPer100g.length === 0) errors.push('carbsPer100g')
 
     return errors
-  }
+  }, [name, brand, carbsPer100g])
 
   useEffect(() => {
     const errors = getValidationErrors()
     if (!isPristine) setValidationErrors(errors)
-  }, [isPristine, name, brand, carbsPer100g])
+  }, [isPristine, name, brand, carbsPer100g, getValidationErrors])
+
+  const resetForm = () => {
+    if (mode === 'add') {
+      setName('')
+      setBrand('')
+      setCarbsPer100g('')
+      setEnergy('')
+      setProtein('')
+      setFat('')
+      setSugar('')
+      setSodium('')
+      setFibre('')
+      setAlcohol('')
+      setCaffeine('')
+      setIsOptionalExpanded(false)
+      setIsPristine(true)
+      setValidationErrors([])
+    }
+  }
 
   const addIngredient = useMutation({
     mutationFn: () =>
@@ -122,17 +144,7 @@ export const IngredientFormModal = ({
       }),
     onSuccess: () => {
       queryClient.invalidateQueries(['searchIngredients'])
-      setName('')
-      setBrand('')
-      setCarbsPer100g('')
-      setEnergy('')
-      setProtein('')
-      setFat('')
-      setSugar('')
-      setSodium('')
-      setFibre('')
-      setAlcohol('')
-      setCaffeine('')
+      resetForm()
       onClose()
 
       toast({
@@ -141,7 +153,6 @@ export const IngredientFormModal = ({
         duration: 2000,
         isClosable: true,
       })
-      setIsPristine(true)
     },
     onError: (error) => {
       console.log('ERROR: ', error)
@@ -173,17 +184,7 @@ export const IngredientFormModal = ({
       }),
     onSuccess: () => {
       queryClient.invalidateQueries(['searchIngredients'])
-      setName('')
-      setBrand('')
-      setCarbsPer100g('')
-      setEnergy('')
-      setProtein('')
-      setFat('')
-      setSugar('')
-      setSodium('')
-      setFibre('')
-      setAlcohol('')
-      setCaffeine('')
+      resetForm()
       onClose()
 
       toast({
@@ -192,7 +193,6 @@ export const IngredientFormModal = ({
         duration: 2000,
         isClosable: true,
       })
-      setIsPristine(true)
     },
     onError: (error) => {
       console.log('ERROR: ', error)
@@ -209,8 +209,11 @@ export const IngredientFormModal = ({
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
-      size={isOptionalExpanded ? '2xl' : 'sm'}
+      onClose={() => {
+        onClose()
+        resetForm()
+      }}
+      size={'2xl'}
     >
       <ModalOverlay />
       <ModalContent>
@@ -219,61 +222,72 @@ export const IngredientFormModal = ({
         <ModalBody className={styles.modalBody}>
           <FormControl
             isRequired
-            isInvalid={
-              validationErrors.length > 0 &&
-              validationErrors.indexOf('name') !== -1
-            }
+            isInvalid={validationErrors.indexOf('name') !== -1}
           >
-            <Flex alignItems={'center'}>
-              <FormLabel className={styles.formLabel}>Name</FormLabel>
-              <Input
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value)
-                }}
-                placeholder={'eg. White bread'}
-              />
-            </Flex>
+            <FormLabel className={styles.formLabel}>Name</FormLabel>
+            <Input
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value)
+              }}
+              placeholder={'eg. White bread'}
+            />
+            {validationErrors.indexOf('name') !== -1 && (
+              <FormErrorMessage>
+                Specify a name for the ingredient
+              </FormErrorMessage>
+            )}
           </FormControl>
-          <FormControl isRequired>
-            <Flex alignItems={'center'}>
-              <FormLabel className={styles.formLabel}>Brand/Vendor</FormLabel>
-              <VendorAutocomplete
-                onSelect={(v) => {
-                  setBrand(v)
-                }}
-                isInvalid={
-                  validationErrors.length > 0 &&
-                  validationErrors.indexOf('brand') !== -1
-                }
-                value={brand}
-              />
-            </Flex>
-          </FormControl>
-          <FormControl
-            isRequired
-            isInvalid={
-              validationErrors.length > 0 &&
-              validationErrors.indexOf('carbsPer100g') !== -1
-            }
+          <Grid
+            templateColumns={'1fr 1fr'}
+            alignItems={'flex-start'}
+            gap={'1em'}
           >
-            <Flex alignItems={'center'}>
-              <FormLabel className={styles.formLabel}>
-                Carbs per 100g/ml
-              </FormLabel>
-              <InputGroup>
-                <Input
-                  type={'number'}
-                  value={carbsPer100g}
-                  onChange={(e) => {
-                    setCarbsPer100g(e.target.value)
+            <GridItem>
+              <FormControl
+                isRequired
+                isInvalid={validationErrors.indexOf('brand') !== -1}
+              >
+                <FormLabel className={styles.formLabel}>Brand/Vendor</FormLabel>
+                <VendorAutocomplete
+                  onSelect={(v) => {
+                    setBrand(v)
                   }}
-                  placeholder={'eg. 15'}
+                  isInvalid={validationErrors.indexOf('brand') !== -1}
+                  value={brand}
                 />
-                <InputRightElement>g</InputRightElement>
-              </InputGroup>
-            </Flex>
-          </FormControl>
+                {validationErrors.indexOf('brand') !== -1 && (
+                  <FormErrorMessage>
+                    Specify a brand/vendor for the ingredient
+                  </FormErrorMessage>
+                )}
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl
+                isRequired
+                isInvalid={validationErrors.indexOf('carbsPer100g') !== -1}
+              >
+                <FormLabel className={styles.formLabel}>
+                  Carbs per 100g/ml
+                </FormLabel>
+                <InputGroup>
+                  <Input
+                    type={'number'}
+                    value={carbsPer100g}
+                    onChange={(e) => {
+                      setCarbsPer100g(e.target.value)
+                    }}
+                    placeholder={'eg. 15'}
+                  />
+                  <InputRightElement>g</InputRightElement>
+                </InputGroup>
+                {validationErrors.indexOf('carbsPer100g') !== -1 && (
+                  <FormErrorMessage>Specify carbs per 100g/ml</FormErrorMessage>
+                )}
+              </FormControl>
+            </GridItem>
+          </Grid>
           <div
             className={styles.expandToggle}
             onClick={() => setIsOptionalExpanded(!isOptionalExpanded)}
@@ -420,7 +434,14 @@ export const IngredientFormModal = ({
         </ModalBody>
 
         <ModalFooter>
-          <Button variant="ghost" mr={3} onClick={onClose}>
+          <Button
+            variant="ghost"
+            mr={3}
+            onClick={() => {
+              onClose()
+              resetForm()
+            }}
+          >
             Cancel
           </Button>
           {mode === 'add' ? (

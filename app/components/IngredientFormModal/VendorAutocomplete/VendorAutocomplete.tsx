@@ -34,7 +34,7 @@ export const VendorAutocomplete = (props: Props) => {
   const styling = {
     ...{
       borderRadius: '0.375rem',
-      height: '40px',
+      height: '37px',
       zIndex: 2,
     },
     ...(isInvalid ? { border: '2px solid #E53E3E' } : {}),
