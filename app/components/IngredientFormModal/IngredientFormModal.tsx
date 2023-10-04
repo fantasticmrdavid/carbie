@@ -60,7 +60,7 @@ export const IngredientFormModal = ({
   const [name, setName] = useState(ingredient ? ingredient.name : '')
   const [brand, setBrand] = useState(ingredient ? ingredient.brand_vendor : '')
   const [carbsPer100g, setCarbsPer100g] = useState<string | undefined>(
-    ingredient?.carbs_per_100g.toString() || undefined,
+    ingredient?.carbs_per_100g.toString() || '',
   )
   const [energy, setEnergy] = useState<string | undefined>(
     ingredient?.energy?.toString() || undefined,
@@ -106,15 +106,15 @@ export const IngredientFormModal = ({
       queryClient.invalidateQueries(['searchIngredients'])
       setName('')
       setBrand('')
-      setCarbsPer100g(undefined)
-      setEnergy(undefined)
-      setProtein(undefined)
-      setFat(undefined)
-      setSugar(undefined)
-      setSodium(undefined)
-      setFibre(undefined)
-      setAlcohol(undefined)
-      setCaffeine(undefined)
+      setCarbsPer100g('')
+      setEnergy('')
+      setProtein('')
+      setFat('')
+      setSugar('')
+      setSodium('')
+      setFibre('')
+      setAlcohol('')
+      setCaffeine('')
       onClose()
 
       toast({
@@ -153,18 +153,18 @@ export const IngredientFormModal = ({
         caffeine,
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries(['getIngredient', ingredient?.id])
+      queryClient.invalidateQueries(['searchIngredients'])
       setName('')
       setBrand('')
-      setCarbsPer100g(undefined)
-      setEnergy(undefined)
-      setProtein(undefined)
-      setFat(undefined)
-      setSugar(undefined)
-      setSodium(undefined)
-      setFibre(undefined)
-      setAlcohol(undefined)
-      setCaffeine(undefined)
+      setCarbsPer100g('')
+      setEnergy('')
+      setProtein('')
+      setFat('')
+      setSugar('')
+      setSodium('')
+      setFibre('')
+      setAlcohol('')
+      setCaffeine('')
       onClose()
 
       toast({

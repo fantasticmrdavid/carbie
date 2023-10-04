@@ -28,7 +28,7 @@ export const Page = () => {
     return (
       <Flex direction={'column'} padding={'2em 0'}>
         <Heading size={'md'}>{ingredient.brand_vendor}</Heading>
-        <Heading as="h3" noOfLines={1}>
+        <Heading as="h3" noOfLines={2}>
           {ingredient.name}
           {userOwnsIngredient && (
             <>

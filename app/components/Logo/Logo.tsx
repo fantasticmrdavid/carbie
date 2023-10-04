@@ -11,7 +11,7 @@ export const Logo = ({ size, onClick }: Props) => {
     <Heading
       onClick={onClick || undefined}
       as="h1"
-      size={size === 'lg' ? '2xl' : 'lg'}
+      size={size === 'lg' ? '2xl' : 'md'}
       noOfLines={1}
       style={{
         display: 'flex',
