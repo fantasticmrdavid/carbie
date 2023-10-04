@@ -23,7 +23,7 @@ export const IngredientSearch = () => {
     !isLoading && data
       ? data.map((d) => ({
           id: d.id,
-          name: `${d.name} (${d.brand_vendor})`,
+          name: `${d.name} - ${d.brand_vendor}`,
         }))
       : []
 

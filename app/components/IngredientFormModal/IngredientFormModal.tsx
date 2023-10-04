@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Modal,
   ModalBody,
@@ -55,6 +55,9 @@ export const IngredientFormModal = ({
   const queryClient = useQueryClient()
   const toast = useToast()
 
+  const [isPristine, setIsPristine] = useState(true)
+  const [validationErrors, setValidationErrors] = useState<string[]>([])
+
   const [isOptionalExpanded, setIsOptionalExpanded] = useState(
     ingredient ? hasAdditionalInfo(ingredient) : false,
   )
@@ -87,6 +90,20 @@ export const IngredientFormModal = ({
   const [caffeine, setCaffeine] = useState<string | undefined>(
     ingredient?.caffeine?.toString() || undefined,
   )
+
+  const getValidationErrors = () => {
+    const errors: string[] = []
+    if (!name || name.length === 0) errors.push('name')
+    if (!brand || brand.length === 0) errors.push('brand')
+    if (!carbsPer100g || carbsPer100g.length === 0) errors.push('carbsPer100g')
+
+    return errors
+  }
+
+  useEffect(() => {
+    const errors = getValidationErrors()
+    if (!isPristine) setValidationErrors(errors)
+  }, [isPristine, name, brand, carbsPer100g])
 
   const addIngredient = useMutation({
     mutationFn: () =>
@@ -124,6 +141,7 @@ export const IngredientFormModal = ({
         duration: 2000,
         isClosable: true,
       })
+      setIsPristine(true)
     },
     onError: (error) => {
       console.log('ERROR: ', error)
@@ -174,6 +192,7 @@ export const IngredientFormModal = ({
         duration: 2000,
         isClosable: true,
       })
+      setIsPristine(true)
     },
     onError: (error) => {
       console.log('ERROR: ', error)
@@ -198,23 +217,46 @@ export const IngredientFormModal = ({
         <ModalHeader>{mode === 'add' ? 'Add' : 'Edit'} Ingredient</ModalHeader>
         <ModalCloseButton />
         <ModalBody className={styles.modalBody}>
-          <FormControl>
+          <FormControl
+            isRequired
+            isInvalid={
+              validationErrors.length > 0 &&
+              validationErrors.indexOf('name') !== -1
+            }
+          >
             <Flex alignItems={'center'}>
               <FormLabel className={styles.formLabel}>Name</FormLabel>
               <Input
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setName(e.target.value)
+                }}
                 placeholder={'eg. White bread'}
               />
             </Flex>
           </FormControl>
-          <FormControl>
+          <FormControl isRequired>
             <Flex alignItems={'center'}>
               <FormLabel className={styles.formLabel}>Brand/Vendor</FormLabel>
-              <VendorAutocomplete onSelect={(v) => setBrand(v)} value={brand} />
+              <VendorAutocomplete
+                onSelect={(v) => {
+                  setBrand(v)
+                }}
+                isInvalid={
+                  validationErrors.length > 0 &&
+                  validationErrors.indexOf('brand') !== -1
+                }
+                value={brand}
+              />
             </Flex>
           </FormControl>
-          <FormControl>
+          <FormControl
+            isRequired
+            isInvalid={
+              validationErrors.length > 0 &&
+              validationErrors.indexOf('carbsPer100g') !== -1
+            }
+          >
             <Flex alignItems={'center'}>
               <FormLabel className={styles.formLabel}>
                 Carbs per 100g/ml
@@ -223,7 +265,9 @@ export const IngredientFormModal = ({
                 <Input
                   type={'number'}
                   value={carbsPer100g}
-                  onChange={(e) => setCarbsPer100g(e.target.value)}
+                  onChange={(e) => {
+                    setCarbsPer100g(e.target.value)
+                  }}
                   placeholder={'eg. 15'}
                 />
                 <InputRightElement>g</InputRightElement>
@@ -250,7 +294,9 @@ export const IngredientFormModal = ({
                     <Input
                       type={'number'}
                       value={energy}
-                      onChange={(e) => setEnergy(e.target.value)}
+                      onChange={(e) => {
+                        setEnergy(e.target.value)
+                      }}
                       placeholder={'eg. 100'}
                     />
                     <InputRightElement>kJ</InputRightElement>
@@ -264,7 +310,9 @@ export const IngredientFormModal = ({
                     <Input
                       type={'number'}
                       value={protein}
-                      onChange={(e) => setProtein(e.target.value)}
+                      onChange={(e) => {
+                        setProtein(e.target.value)
+                      }}
                       placeholder={'eg. 25'}
                     />
                     <InputRightElement>g</InputRightElement>
@@ -278,7 +326,9 @@ export const IngredientFormModal = ({
                     <Input
                       type={'number'}
                       value={fat}
-                      onChange={(e) => setFat(e.target.value)}
+                      onChange={(e) => {
+                        setFat(e.target.value)
+                      }}
                       placeholder={'eg. 30'}
                     />
                     <InputRightElement>g</InputRightElement>
@@ -292,7 +342,9 @@ export const IngredientFormModal = ({
                     <Input
                       type={'number'}
                       value={sugar}
-                      onChange={(e) => setSugar(e.target.value)}
+                      onChange={(e) => {
+                        setSugar(e.target.value)
+                      }}
                       placeholder={'eg. 25'}
                     />
                     <InputRightElement>g</InputRightElement>
@@ -306,7 +358,9 @@ export const IngredientFormModal = ({
                     <Input
                       type={'number'}
                       value={sodium}
-                      onChange={(e) => setSodium(e.target.value)}
+                      onChange={(e) => {
+                        setSodium(e.target.value)
+                      }}
                       placeholder={'eg. 100'}
                     />
                     <InputRightElement>mg</InputRightElement>
@@ -320,7 +374,9 @@ export const IngredientFormModal = ({
                     <Input
                       type={'number'}
                       value={fibre}
-                      onChange={(e) => setFibre(e.target.value)}
+                      onChange={(e) => {
+                        setFibre(e.target.value)
+                      }}
                       placeholder={'eg. 25'}
                     />
                     <InputRightElement>g</InputRightElement>
@@ -334,7 +390,9 @@ export const IngredientFormModal = ({
                     <Input
                       type={'number'}
                       value={alcohol}
-                      onChange={(e) => setAlcohol(e.target.value)}
+                      onChange={(e) => {
+                        setAlcohol(e.target.value)
+                      }}
                       placeholder={'eg. 25'}
                     />
                     <InputRightElement>g</InputRightElement>
@@ -348,7 +406,9 @@ export const IngredientFormModal = ({
                     <Input
                       type={'number'}
                       value={caffeine}
-                      onChange={(e) => setCaffeine(e.target.value)}
+                      onChange={(e) => {
+                        setCaffeine(e.target.value)
+                      }}
                       placeholder={'eg. 25'}
                     />
                     <InputRightElement>g</InputRightElement>
@@ -364,11 +424,31 @@ export const IngredientFormModal = ({
             Cancel
           </Button>
           {mode === 'add' ? (
-            <Button colorScheme="blue" onClick={() => addIngredient.mutate()}>
+            <Button
+              colorScheme="blue"
+              onClick={() => {
+                const errors = getValidationErrors()
+                if (errors.length > 0) {
+                  setIsPristine(false)
+                } else {
+                  addIngredient.mutate()
+                }
+              }}
+            >
               Add
             </Button>
           ) : (
-            <Button colorScheme="blue" onClick={() => saveIngredient.mutate()}>
+            <Button
+              colorScheme="blue"
+              onClick={() => {
+                const errors = getValidationErrors()
+                if (errors.length > 0) {
+                  setIsPristine(false)
+                } else {
+                  saveIngredient.mutate()
+                }
+              }}
+            >
               Save
             </Button>
           )}

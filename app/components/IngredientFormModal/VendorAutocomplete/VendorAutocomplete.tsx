@@ -12,9 +12,10 @@ type Item = {
 type Props = {
   onSelect: (s: string) => void
   value?: string
+  isInvalid: boolean
 }
 export const VendorAutocomplete = (props: Props) => {
-  const { onSelect, value } = props
+  const { onSelect, value, isInvalid } = props
   const [search, setSearch] = useState(value)
   const { data, isLoading } = useQuery<string[]>(
     ['searchVendors'],
@@ -30,6 +31,15 @@ export const VendorAutocomplete = (props: Props) => {
         }))
       : []
 
+  const styling = {
+    ...{
+      borderRadius: '0.375rem',
+      height: '40px',
+      zIndex: 2,
+    },
+    ...(isInvalid ? { border: '2px solid #E53E3E' } : {}),
+  }
+
   return (
     <div className={styles.container}>
       <ReactSearchAutocomplete<Item>
@@ -37,7 +47,13 @@ export const VendorAutocomplete = (props: Props) => {
           threshold: 0.3,
         }}
         items={items}
-        onSearch={(s) => (s.length > 0 ? setSearch(s) : false)}
+        onSearch={(s) => {
+          if (s.length > 0) {
+            onSelect(s)
+            setSearch(s)
+          }
+          return false
+        }}
         onSelect={(i) => {
           onSelect(i.name)
         }}
@@ -45,12 +61,9 @@ export const VendorAutocomplete = (props: Props) => {
           <div style={{ cursor: 'pointer' }}>{item.name}</div>
         )}
         placeholder={'eg. Bakers Delight'}
-        styling={{
-          borderRadius: '0.375rem',
-          height: '40px',
-          zIndex: 2,
-        }}
+        styling={styling}
         showNoResults={false}
+        onClear={() => onSelect('')}
       />
     </div>
   )
