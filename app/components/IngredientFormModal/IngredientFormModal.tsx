@@ -25,6 +25,7 @@ import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { Ingredient } from '@prisma/client'
+import { VendorAutocomplete } from '@/app/components/IngredientFormModal/VendorAutocomplete/VendorAutocomplete'
 
 type Props = {
   isOpen: boolean
@@ -210,16 +211,14 @@ export const IngredientFormModal = ({
           <FormControl>
             <Flex alignItems={'center'}>
               <FormLabel className={styles.formLabel}>Brand/Vendor</FormLabel>
-              <Input
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-                placeholder={"eg. Baker's Delight"}
-              />
+              <VendorAutocomplete onSelect={(v) => setBrand(v)} value={brand} />
             </Flex>
           </FormControl>
           <FormControl>
             <Flex alignItems={'center'}>
-              <FormLabel className={styles.formLabel}>Carbs per 100g</FormLabel>
+              <FormLabel className={styles.formLabel}>
+                Carbs per 100g/ml
+              </FormLabel>
               <InputGroup>
                 <Input
                   type={'number'}
@@ -235,7 +234,7 @@ export const IngredientFormModal = ({
             className={styles.expandToggle}
             onClick={() => setIsOptionalExpanded(!isOptionalExpanded)}
           >
-            <strong>Additional info (per 100g)</strong>
+            <strong>Additional info (per 100g/ml)</strong>
             {isOptionalExpanded ? (
               <AiOutlineMinusSquare />
             ) : (
