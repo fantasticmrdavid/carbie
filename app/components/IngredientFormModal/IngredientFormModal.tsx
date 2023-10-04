@@ -103,7 +103,18 @@ export const IngredientFormModal = ({
         caffeine: isOptionalExpanded ? caffeine : undefined,
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries(['getIngredients'])
+      queryClient.invalidateQueries(['searchIngredients'])
+      setName('')
+      setBrand('')
+      setCarbsPer100g(undefined)
+      setEnergy(undefined)
+      setProtein(undefined)
+      setFat(undefined)
+      setSugar(undefined)
+      setSodium(undefined)
+      setFibre(undefined)
+      setAlcohol(undefined)
+      setCaffeine(undefined)
       onClose()
 
       toast({
@@ -143,6 +154,17 @@ export const IngredientFormModal = ({
       }),
     onSuccess: () => {
       queryClient.invalidateQueries(['getIngredient', ingredient?.id])
+      setName('')
+      setBrand('')
+      setCarbsPer100g(undefined)
+      setEnergy(undefined)
+      setProtein(undefined)
+      setFat(undefined)
+      setSugar(undefined)
+      setSodium(undefined)
+      setFibre(undefined)
+      setAlcohol(undefined)
+      setCaffeine(undefined)
       onClose()
 
       toast({
