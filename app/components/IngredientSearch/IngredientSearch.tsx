@@ -38,7 +38,9 @@ export const IngredientSearch = () => {
         onSelect={(i) => {
           router.push(`/ingredient/${i.id}`)
         }}
-        formatResult={(item: Item) => item.name}
+        formatResult={(item: Item) => (
+          <div style={{ cursor: 'pointer' }}>{item.name}</div>
+        )}
         placeholder={'Search ingredients'}
         styling={{
           zIndex: 2,

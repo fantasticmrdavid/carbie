@@ -38,6 +38,8 @@ export const Template = ({ children }: RootLayoutProps) => {
     </Head>
   )
 
+  const isRoot = pathname === '/'
+
   return (
     <>
       {head}
@@ -46,10 +48,10 @@ export const Template = ({ children }: RootLayoutProps) => {
           style={{ minHeight: '100vh' }}
           flexDirection={'column'}
           alignItems={'center'}
-          justifyContent={pathname === '/' ? 'space-between' : 'flex-start'}
+          justifyContent={isRoot ? 'space-between' : 'flex-start'}
         >
           <NavBar />
-          <Container>{children}</Container>
+          <Container flex={isRoot ? 0 : 1}>{children}</Container>
 
           <Footer />
         </Flex>
