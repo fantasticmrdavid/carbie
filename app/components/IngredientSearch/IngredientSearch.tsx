@@ -13,7 +13,7 @@ export const IngredientSearch = () => {
   const router = useRouter()
   const [search, setSearch] = useState('')
   const { data, isLoading } = useQuery<Ingredient[]>(
-    ['getIngredients', search],
+    ['searchIngredients'],
     async () =>
       await fetch(`/api/ingredients?q=${search}`).then((res) => res.json()),
   )
@@ -30,7 +30,7 @@ export const IngredientSearch = () => {
     <div className={styles.container}>
       <ReactSearchAutocomplete<Item>
         items={items}
-        onSearch={(s) => setSearch(s)}
+        onSearch={(s) => (s.length > 0 ? setSearch(s) : false)}
         onSelect={(i) => {
           router.push(`/ingredient/${i.id}`)
         }}
