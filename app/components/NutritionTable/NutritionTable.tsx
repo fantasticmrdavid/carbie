@@ -19,6 +19,7 @@ export const NutritionTable = (props: Props) => {
     alcohol,
     caffeine,
   } = ingredient
+
   return (
     <div>
       <Heading as="h5" noOfLines={1} size={'md'}>
