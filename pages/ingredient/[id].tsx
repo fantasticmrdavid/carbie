@@ -82,8 +82,15 @@ export const Page = () => {
           )}
         </Heading>
         <Flex marginTop={'1em'} direction={'column'} gap={'1em'}>
+          {ingredient.data_source !== 'web' && (
+            <div>
+              <strong>Data source:</strong> {ingredient.data_source}
+            </div>
+          )}
           <NutritionTable ingredient={ingredient} />
-          <CarbCalculator ingredient={ingredient} />
+          {ingredient.carbs_per_100g > 0 && (
+            <CarbCalculator ingredient={ingredient} />
+          )}
         </Flex>
       </Flex>
     )
