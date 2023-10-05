@@ -48,7 +48,7 @@ export const Page = () => {
 
   if (ingredient && !isLoading) {
     return (
-      <Flex direction={'column'} padding={'2em 0'}>
+      <Flex direction={'column'}>
         <Heading size={'md'}>{ingredient.brand_vendor}</Heading>
         <Heading
           as="h3"

@@ -5,6 +5,7 @@ import { Container, Flex, VStack } from '@chakra-ui/react'
 import { NavBar } from '@/app/components/NavBar/NavBar'
 import { Footer } from '@/app/components/Footer/Footer'
 import { usePathname } from 'next/navigation'
+import { BackButton } from '@/app/components/BackButton/BackButton'
 
 type RootLayoutProps = {
   children: React.ReactNode
@@ -51,6 +52,11 @@ export const Template = ({ children }: RootLayoutProps) => {
           justifyContent={isRoot ? 'space-between' : 'flex-start'}
         >
           <NavBar />
+          {!isRoot && (
+            <div style={{ width: '100%', padding: '0.5em 1em' }}>
+              <BackButton />
+            </div>
+          )}
           <Container flex={isRoot ? 0 : 1}>{children}</Container>
 
           <Footer />

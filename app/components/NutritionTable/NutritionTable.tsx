@@ -32,41 +32,41 @@ export const NutritionTable = (props: Props) => {
               <Td>
                 <strong>Carbs</strong>
               </Td>
-              <Td>
+              <Td isNumeric>
                 <strong>{carbs_per_100g ? `${carbs_per_100g}g` : '-'}</strong>
               </Td>
             </Tr>
             <Tr>
               <Td>Sugar</Td>
-              <Td>{sugar ? `${sugar}g` : '-'}</Td>
+              <Td isNumeric>{sugar ? `${sugar}g` : '-'}</Td>
             </Tr>
             <Tr>
               <Td>Sodium</Td>
-              <Td>{sodium ? `${sodium}mg` : '-'}</Td>
+              <Td isNumeric>{sodium ? `${sodium}mg` : '-'}</Td>
             </Tr>
             <Tr>
               <Td>Energy</Td>
-              <Td>{energy ? `${energy}kJ` : '-'}</Td>
+              <Td isNumeric>{energy ? `${energy}kJ` : '-'}</Td>
             </Tr>
             <Tr>
               <Td>Protein</Td>
-              <Td>{protein ? `${protein}g` : '-'}</Td>
+              <Td isNumeric>{protein ? `${protein}g` : '-'}</Td>
             </Tr>
             <Tr>
               <Td>Fat</Td>
-              <Td>{fat ? `${fat}g` : '-'}</Td>
+              <Td isNumeric>{fat ? `${fat}g` : '-'}</Td>
             </Tr>
             <Tr>
               <Td>Fibre</Td>
-              <Td>{fibre ? `${fibre}g` : '-'}</Td>
+              <Td isNumeric>{fibre ? `${fibre}g` : '-'}</Td>
             </Tr>
             <Tr>
               <Td>Alcohol</Td>
-              <Td>{alcohol ? `${alcohol}g` : '-'}</Td>
+              <Td isNumeric>{alcohol ? `${alcohol}g` : '-'}</Td>
             </Tr>
             <Tr>
               <Td>Caffeine</Td>
-              <Td>{caffeine ? `${caffeine}g` : '-'}</Td>
+              <Td isNumeric>{caffeine ? `${caffeine}g` : '-'}</Td>
             </Tr>
           </Tbody>
         </Table>

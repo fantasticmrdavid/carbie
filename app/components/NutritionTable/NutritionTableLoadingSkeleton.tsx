@@ -13,21 +13,9 @@ export const NutritionTableLoadingSkeleton = () => {
           <Tbody>
             <Tr>
               <Td>
-                <strong>
-                  <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
-                </strong>
-              </Td>
-              <Td>
-                <strong>
-                  <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
-                </strong>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
-              <Td>
+              <Td display={'flex'} justifyContent={'flex-end'}>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
             </Tr>
@@ -35,7 +23,7 @@ export const NutritionTableLoadingSkeleton = () => {
               <Td>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
-              <Td>
+              <Td display={'flex'} justifyContent={'flex-end'}>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
             </Tr>
@@ -43,7 +31,7 @@ export const NutritionTableLoadingSkeleton = () => {
               <Td>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
-              <Td>
+              <Td display={'flex'} justifyContent={'flex-end'}>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
             </Tr>
@@ -51,7 +39,7 @@ export const NutritionTableLoadingSkeleton = () => {
               <Td>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
-              <Td>
+              <Td display={'flex'} justifyContent={'flex-end'}>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
             </Tr>
@@ -59,7 +47,7 @@ export const NutritionTableLoadingSkeleton = () => {
               <Td>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
-              <Td>
+              <Td display={'flex'} justifyContent={'flex-end'}>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
             </Tr>
@@ -67,7 +55,7 @@ export const NutritionTableLoadingSkeleton = () => {
               <Td>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
-              <Td>
+              <Td display={'flex'} justifyContent={'flex-end'}>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
             </Tr>
@@ -75,7 +63,7 @@ export const NutritionTableLoadingSkeleton = () => {
               <Td>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
-              <Td>
+              <Td display={'flex'} justifyContent={'flex-end'}>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
             </Tr>
@@ -83,7 +71,15 @@ export const NutritionTableLoadingSkeleton = () => {
               <Td>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
+              <Td display={'flex'} justifyContent={'flex-end'}>
+                <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
+              </Td>
+            </Tr>
+            <Tr>
               <Td>
+                <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
+              </Td>
+              <Td display={'flex'} justifyContent={'flex-end'}>
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
             </Tr>
