@@ -10,17 +10,20 @@ type Item = {
   id: string
   name: string
 }
+
+const MIN_SEARCH_CHARS = 2
+
 export const IngredientSearch = () => {
   const router = useRouter()
   const [search, setSearch] = useState('')
-  const { data, isLoading } = useQuery<Ingredient[]>(
+  const { data = [] } = useQuery<Ingredient[]>(
     ['searchIngredients'],
     async () =>
       await axios.get(`/api/ingredients?q=${search}`).then((res) => res.data),
   )
 
   const items =
-    !isLoading && data
+    search.length >= MIN_SEARCH_CHARS && data
       ? data.map((d) => ({
           id: d.id,
           name: `${d.name} - ${d.brand_vendor}`,
@@ -33,8 +36,11 @@ export const IngredientSearch = () => {
         fuseOptions={{
           threshold: 0.3,
         }}
+        inputDebounce={50}
         items={items}
-        onSearch={(s) => (s.length > 0 ? setSearch(s) : false)}
+        onSearch={(s) => {
+          if (s.length >= MIN_SEARCH_CHARS) setSearch(s)
+        }}
         onSelect={(i) => {
           router.push(`/ingredient/${i.id}`)
         }}
@@ -45,7 +51,10 @@ export const IngredientSearch = () => {
         styling={{
           zIndex: 2,
         }}
-        autoFocus
+        showNoResults={search.length >= MIN_SEARCH_CHARS}
+        onClear={() => {
+          setSearch('')
+        }}
       />
     </div>
   )
