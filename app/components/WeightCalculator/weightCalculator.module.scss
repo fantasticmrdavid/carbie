@@ -1,0 +1,13 @@
+.weightCalculator {
+  flex-direction: column;
+  white-space: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2em;
+
+  @media only screen and (min-width: 800px) {
+    white-space: nowrap;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+}

@@ -10,6 +10,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { CarbCalculator } from '@/app/components/CarbCalculator/CarbCalculator'
+import { WeightCalculator } from '@/app/components/WeightCalculator/WeightCalculator'
 import { IngredientFormModal } from '@/app/components/IngredientFormModal/IngredientFormModal'
 import { FaRegEdit } from 'react-icons/fa'
 import type { IngredientWithRelations } from '@/pages/api/ingredients/[id]'
@@ -38,6 +39,7 @@ export const Page = () => {
         <Flex marginTop={'1em'} direction={'column'} gap={'1em'}>
           <NutritionTableLoadingSkeleton />
           <Skeleton mt={'1'} height="20px" width={'65%'} />
+          <Skeleton mt={'1'} height="20px" width={'70%'} />
         </Flex>
       </Flex>
     )
@@ -89,7 +91,10 @@ export const Page = () => {
           )}
           <NutritionTable ingredient={ingredient} />
           {ingredient.carbs_per_100g > 0 && (
-            <CarbCalculator ingredient={ingredient} />
+            <>
+              <CarbCalculator ingredient={ingredient} />
+              <WeightCalculator ingredient={ingredient} />
+            </>
           )}
         </Flex>
       </Flex>
