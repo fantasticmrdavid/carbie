@@ -2,7 +2,13 @@ import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { NutritionTable } from '@/app/components/NutritionTable/NutritionTable'
-import { Flex, Heading, Skeleton, useDisclosure } from '@chakra-ui/react'
+import {
+  Flex,
+  Heading,
+  Skeleton,
+  Tooltip,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { CarbCalculator } from '@/app/components/CarbCalculator/CarbCalculator'
 import { IngredientFormModal } from '@/app/components/IngredientFormModal/IngredientFormModal'
 import { FaRegEdit } from 'react-icons/fa'
@@ -52,12 +58,16 @@ export const Page = () => {
           {ingredient.name}
           {userOwnsIngredient && (
             <>
-              <FaRegEdit
-                onClick={onOpen}
-                style={{
-                  cursor: 'pointer',
-                }}
-              />
+              <div style={{ position: 'relative' }}>
+                <Tooltip label={'Edit'}>
+                  <FaRegEdit
+                    onClick={onOpen}
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                  />
+                </Tooltip>
+              </div>
               <IngredientFormModal
                 mode={'edit'}
                 ingredient={ingredient}

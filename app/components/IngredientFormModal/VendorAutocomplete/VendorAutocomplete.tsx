@@ -63,6 +63,7 @@ export const VendorAutocomplete = (props: Props) => {
         placeholder={'eg. Bakers Delight'}
         styling={styling}
         showNoResults={false}
+        showIcon={false}
         onClear={() => onSelect('')}
       />
     </div>

@@ -1,7 +1,4 @@
 .container {
-  width: 350px;
-
-  @media only screen and (min-width: 800px) {
-    width: 400px;
-  }
+  width: 100%;
+  max-width: 350px;
 }

@@ -20,6 +20,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useMediaQuery,
   useToast,
 } from '@chakra-ui/react'
 
@@ -57,6 +58,7 @@ export const IngredientFormModal = ({
 }: Props) => {
   const queryClient = useQueryClient()
   const toast = useToast()
+  const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
 
   const [isPristine, setIsPristine] = useState(true)
   const [validationErrors, setValidationErrors] = useState<string[]>([])
@@ -239,7 +241,7 @@ export const IngredientFormModal = ({
             )}
           </FormControl>
           <Grid
-            templateColumns={'1fr 1fr'}
+            templateColumns={isLargerThan800 ? '1fr 250px' : '100%'}
             alignItems={'flex-start'}
             gap={'1em'}
           >
