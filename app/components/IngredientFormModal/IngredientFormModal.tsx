@@ -26,7 +26,7 @@ import {
 
 import styles from './ingredientFormModal.module.scss'
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { Ingredient } from '@prisma/client'
 import { VendorAutocomplete } from '@/app/components/IngredientFormModal/VendorAutocomplete/VendorAutocomplete'
@@ -96,19 +96,44 @@ export const IngredientFormModal = ({
     ingredient?.caffeine?.toString() || undefined,
   )
 
+  const { data: remoteValidation, refetch: revalidateAlreadyExists } =
+    useQuery<{ isValid: boolean }>(
+      ['validateIngredient'],
+      async () =>
+        await axios
+          .post(`/api/ingredients/validate`, {
+            name,
+            brand,
+          })
+          .then((res) => res.data),
+      { enabled: false },
+    )
+
   const getValidationErrors = useCallback(() => {
     const errors: string[] = []
-    if (!name || name.length === 0) errors.push('name')
-    if (!brand || brand.length === 0) errors.push('brand')
+    if (!name || name.length === 0 || !remoteValidation?.isValid)
+      errors.push('name')
+    if (!brand || brand.length === 0 || !remoteValidation?.isValid)
+      errors.push('brand')
     if (!carbsPer100g || carbsPer100g.length === 0) errors.push('carbsPer100g')
 
     return errors
-  }, [name, brand, carbsPer100g])
+  }, [name, brand, carbsPer100g, remoteValidation])
 
   useEffect(() => {
+    if (!isPristine && name.length > 0 && brand.length > 0)
+      revalidateAlreadyExists()
     const errors = getValidationErrors()
     if (!isPristine) setValidationErrors(errors)
-  }, [isPristine, name, brand, carbsPer100g, getValidationErrors])
+  }, [
+    isPristine,
+    name,
+    brand,
+    carbsPer100g,
+    remoteValidation,
+    getValidationErrors,
+    revalidateAlreadyExists,
+  ])
 
   const resetForm = () => {
     if (mode === 'add') {
@@ -236,7 +261,9 @@ export const IngredientFormModal = ({
             />
             {validationErrors.indexOf('name') !== -1 && (
               <FormErrorMessage>
-                Specify a name for the ingredient
+                {mode === 'add' && !remoteValidation?.isValid
+                  ? 'Ingredient with this name and brand/vendor already exists'
+                  : 'Specify a name for the ingredient'}
               </FormErrorMessage>
             )}
           </FormControl>
@@ -260,7 +287,9 @@ export const IngredientFormModal = ({
                 />
                 {validationErrors.indexOf('brand') !== -1 && (
                   <FormErrorMessage>
-                    Specify a brand/vendor for the ingredient
+                    {mode === 'add' && !remoteValidation?.isValid
+                      ? 'Ingredient with this name and brand/vendor already exists'
+                      : 'Specify a brand/vendor for the ingredient'}
                   </FormErrorMessage>
                 )}
               </FormControl>
@@ -449,7 +478,7 @@ export const IngredientFormModal = ({
           {mode === 'add' ? (
             <Button
               colorScheme="blue"
-              onClick={() => {
+              onClick={async () => {
                 const errors = getValidationErrors()
                 if (errors.length > 0) {
                   setIsPristine(false)
