@@ -58,16 +58,20 @@ export const Page = () => {
           {ingredient.name}
           {userOwnsIngredient && (
             <>
-              <div style={{ position: 'relative' }}>
-                <Tooltip label={'Edit'}>
+              <Tooltip
+                label={'Edit Ingredient'}
+                placement={'right-start'}
+                hasArrow
+              >
+                <div style={{ position: 'relative' }}>
                   <FaRegEdit
                     onClick={onOpen}
                     style={{
                       cursor: 'pointer',
                     }}
                   />
-                </Tooltip>
-              </div>
+                </div>
+              </Tooltip>
               <IngredientFormModal
                 mode={'edit'}
                 ingredient={ingredient}
