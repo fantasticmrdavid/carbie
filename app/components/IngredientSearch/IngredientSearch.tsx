@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 import { useRouter } from 'next/router'
 import { useQuery } from '@tanstack/react-query'
@@ -16,31 +16,33 @@ const MIN_SEARCH_CHARS = 2
 export const IngredientSearch = () => {
   const router = useRouter()
   const [search, setSearch] = useState('')
-  const { data = [] } = useQuery<Ingredient[]>(
-    ['searchIngredients'],
+  const [items, setItems] = useState<Item[]>([])
+  const { data, isLoading } = useQuery<Ingredient[]>(
+    [`searchIngredients`, search],
     async () =>
       await axios.get(`/api/ingredients?q=${search}`).then((res) => res.data),
   )
 
-  const items =
-    search.length >= MIN_SEARCH_CHARS && data
-      ? data.map((d) => ({
+  useEffect(() => {
+    if (!isLoading && data) {
+      setItems(
+        data.map((d) => ({
           id: d.id,
           name: `${d.name} - ${d.brand_vendor}`,
-        }))
-      : []
+        })),
+      )
+    }
+  }, [search, data, isLoading, setItems])
 
   return (
     <div className={styles.container}>
       <ReactSearchAutocomplete<Item>
         fuseOptions={{
-          threshold: 0.3,
+          threshold: 0.4,
         }}
-        inputDebounce={50}
+        inputDebounce={100}
         items={items}
-        onSearch={(s) => {
-          if (s.length >= MIN_SEARCH_CHARS) setSearch(s)
-        }}
+        onSearch={(s) => setSearch(s)}
         onSelect={(i) => {
           router.push(`/ingredient/${i.id}`)
         }}
@@ -51,10 +53,8 @@ export const IngredientSearch = () => {
         styling={{
           zIndex: 2,
         }}
-        showNoResults={search.length >= MIN_SEARCH_CHARS}
-        onClear={() => {
-          setSearch('')
-        }}
+        showNoResults={!isLoading && search.length > MIN_SEARCH_CHARS}
+        onClear={() => setSearch('')}
       />
     </div>
   )
