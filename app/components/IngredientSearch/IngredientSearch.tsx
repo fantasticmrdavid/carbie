@@ -1,61 +1,146 @@
 import React, { useEffect, useState } from 'react'
-import { ReactSearchAutocomplete } from 'react-search-autocomplete'
+import {
+  Box,
+  Input,
+  List,
+  ListItem,
+  Spinner,
+  Text,
+  VStack,
+  Divider,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+} from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Ingredient } from '@prisma/client'
 import styles from './ingredientSearch.module.scss'
 import axios from 'axios'
-
-type Item = {
-  id: string
-  name: string
-}
+import { FiSearch } from 'react-icons/fi'
+import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon'
 
 const MIN_SEARCH_CHARS = 2
 
 export const IngredientSearch = () => {
   const router = useRouter()
+  const queryClient = useQueryClient()
   const [search, setSearch] = useState('')
-  const [items, setItems] = useState<Item[]>([])
-  const { data, isLoading } = useQuery<Ingredient[]>(
-    [`searchIngredients`, search],
-    async () =>
-      await axios.get(`/api/ingredients?q=${search}`).then((res) => res.data),
+  const [isResultsOpen, setIsResultsOpen] = useState(false)
+  const { data, isLoading, refetch } = useQuery<Ingredient[]>(
+    ['searchIngredients', search],
+    async ({ signal }) =>
+      await axios
+        .get(`/api/ingredients?q=${search}`, { signal })
+        .then((res) => res.data),
+    { enabled: false },
   )
 
   useEffect(() => {
-    if (!isLoading && data) {
-      setItems(
-        data.map((d) => ({
-          id: d.id,
-          name: `${d.name} - ${d.brand_vendor}`,
-        })),
-      )
+    refetch()
+  }, [search, refetch])
+
+  useEffect(() => {
+    // Clean up the query when the component unmounts
+    return () => {
+      queryClient.cancelQueries(['searchIngredients'])
     }
-  }, [search, data, isLoading, setItems])
+  }, [queryClient])
 
   return (
     <div className={styles.container}>
-      <ReactSearchAutocomplete<Item>
-        fuseOptions={{
-          threshold: 0.4,
-        }}
-        inputDebounce={100}
-        items={items}
-        onSearch={(s) => setSearch(s)}
-        onSelect={(i) => {
-          router.push(`/ingredient/${i.id}`)
-        }}
-        formatResult={(item: Item) => (
-          <div style={{ cursor: 'pointer' }}>{item.name}</div>
+      <Box className={styles.searchField}>
+        <InputGroup alignItems={'center'}>
+          <InputLeftElement pointerEvents="none" top={'unset'}>
+            <FiSearch opacity={0.5} />
+          </InputLeftElement>
+          <Input
+            outline={'unset'}
+            placeholder="Search ingredients..."
+            value={search}
+            onChange={(e) => {
+              setIsResultsOpen(true)
+              setSearch(e.target.value)
+            }}
+            onFocus={() => setIsResultsOpen(true)}
+            size="lg"
+            borderWidth={'0px'}
+            borderRadius={'24px'}
+            className={styles.searchInput}
+          />
+          {isLoading && search.length >= MIN_SEARCH_CHARS && (
+            <InputRightElement pointerEvents="none" top={'unset'}>
+              <Spinner size="sm" />
+            </InputRightElement>
+          )}
+          {!isLoading && search.length > 0 && (
+            <InputRightElement
+              cursor={'pointer'}
+              top={'unset'}
+              opacity={0.5}
+              right={'0.5em'}
+            >
+              <div onClick={() => setSearch('')}>
+                <CloseIcon />
+              </div>
+            </InputRightElement>
+          )}
+        </InputGroup>
+        {!isLoading && isResultsOpen && search.length >= MIN_SEARCH_CHARS && (
+          <>
+            <Divider marginLeft={'1em'} width={'calc(100% - 2em)'} />
+            <VStack
+              position={'relative'}
+              align={'flex-start'}
+              spacing={0}
+              backgroundColor={'#fff'}
+              zIndex={2}
+              borderRadius={'24px'}
+              padding={'0.5em'}
+            >
+              {data &&
+                data.map((i) => (
+                  <List
+                    key={i.id}
+                    onClick={() => {
+                      setIsResultsOpen(false)
+                      setSearch(i.name)
+                      router.push(`/ingredient/${i.id}`)
+                    }}
+                    cursor={'pointer'}
+                    p={2}
+                    _hover={{
+                      bgColor: 'gray.100',
+                    }}
+                    w={'100%'}
+                    textAlign={'left'}
+                  >
+                    <ListItem display={'flex'} alignItems={'center'}>
+                      <Text>
+                        {i.name} - {i.brand_vendor}
+                      </Text>
+                    </ListItem>
+                  </List>
+                ))}
+              {data && data.length === 0 && (
+                <List
+                  key={'noResults'}
+                  p={2}
+                  _hover={{
+                    bgColor: 'gray.100',
+                  }}
+                  w={'100%'}
+                  textAlign={'left'}
+                >
+                  <ListItem display={'flex'} alignItems={'center'}>
+                    <Text>No results</Text>
+                  </ListItem>
+                </List>
+              )}
+            </VStack>
+          </>
         )}
-        placeholder={'Search ingredients'}
-        styling={{
-          zIndex: 2,
-        }}
-        showNoResults={!isLoading && search.length > MIN_SEARCH_CHARS}
-        onClear={() => setSearch('')}
-      />
+      </Box>
     </div>
   )
 }

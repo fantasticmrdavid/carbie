@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/app/lib/prisma'
+import Fuse from 'fuse.js'
 
 export const getIngredients = async (
   req: NextApiRequest,
@@ -12,7 +13,7 @@ export const getIngredients = async (
     } = req
 
     const results = await prisma.ingredient.findMany({
-      take: 10,
+      take: 30,
       where: {
         OR: [
           {
@@ -29,9 +30,19 @@ export const getIngredients = async (
           },
         ],
       },
-      orderBy: [{ name: 'asc' }],
     })
-    return res.status(200).json(results)
+
+    const sortedResults = new Fuse(results, {
+      threshold: 0.6,
+      keys: ['name', 'brand_vendor'],
+    })
+
+    return res.status(200).json(
+      sortedResults
+        .search(q as string)
+        .slice(0, 5)
+        .map((i) => i.item),
+    )
   } catch (error) {
     console.error(error)
     return res.status(500).json({ error })
