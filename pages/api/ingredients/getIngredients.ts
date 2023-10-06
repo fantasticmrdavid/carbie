@@ -13,7 +13,7 @@ export const getIngredients = async (
     } = req
 
     const results = await prisma.ingredient.findMany({
-      take: 30,
+      take: 10,
       where: {
         OR: [
           {
