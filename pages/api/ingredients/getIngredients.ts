@@ -23,6 +23,11 @@ export const getIngredients = async (
         OR: [
           {
             name: {
+              search: (q as string).split(' ').join(' & '),
+            },
+          },
+          {
+            name: {
               contains: q as string,
               mode: 'insensitive',
             },
