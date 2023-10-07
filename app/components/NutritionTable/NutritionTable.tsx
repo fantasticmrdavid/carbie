@@ -13,6 +13,7 @@ export const NutritionTable = (props: Props) => {
     energy,
     protein,
     fat,
+    saturated_fat,
     sugar,
     sodium,
     fibre,
@@ -33,40 +34,58 @@ export const NutritionTable = (props: Props) => {
                 <strong>Carbs</strong>
               </Td>
               <Td isNumeric>
-                <strong>{carbs_per_100g ? `${carbs_per_100g}g` : '-'}</strong>
+                <strong>
+                  {carbs_per_100g || carbs_per_100g === 0
+                    ? `${carbs_per_100g}g`
+                    : '-'}
+                </strong>
               </Td>
             </Tr>
             <Tr>
               <Td>Sugar</Td>
-              <Td isNumeric>{sugar ? `${sugar}g` : '-'}</Td>
+              <Td isNumeric>{sugar || sugar === 0 ? `${sugar}g` : '-'}</Td>
             </Tr>
             <Tr>
               <Td>Sodium</Td>
-              <Td isNumeric>{sodium ? `${sodium}mg` : '-'}</Td>
+              <Td isNumeric>{sodium || sodium === 0 ? `${sodium}mg` : '-'}</Td>
             </Tr>
             <Tr>
               <Td>Energy</Td>
-              <Td isNumeric>{energy ? `${energy}kJ` : '-'}</Td>
+              <Td isNumeric>{energy || energy === 0 ? `${energy}kJ` : '-'}</Td>
             </Tr>
             <Tr>
               <Td>Protein</Td>
-              <Td isNumeric>{protein ? `${protein}g` : '-'}</Td>
+              <Td isNumeric>
+                {protein || protein === 0 ? `${protein}g` : '-'}
+              </Td>
             </Tr>
             <Tr>
               <Td>Fat</Td>
-              <Td isNumeric>{fat ? `${fat}g` : '-'}</Td>
+              <Td isNumeric>{fat || fat === 0 ? `${fat}g` : '-'}</Td>
+            </Tr>
+            <Tr>
+              <Td>Saturated Fat</Td>
+              <Td isNumeric>
+                {saturated_fat || saturated_fat === 0
+                  ? `${saturated_fat}g`
+                  : '-'}
+              </Td>
             </Tr>
             <Tr>
               <Td>Fibre</Td>
-              <Td isNumeric>{fibre ? `${fibre}g` : '-'}</Td>
+              <Td isNumeric>{fibre || fibre === 0 ? `${fibre}g` : '-'}</Td>
             </Tr>
             <Tr>
               <Td>Alcohol</Td>
-              <Td isNumeric>{alcohol ? `${alcohol}g` : '-'}</Td>
+              <Td isNumeric>
+                {alcohol || alcohol === 0 ? `${alcohol}g` : '-'}
+              </Td>
             </Tr>
             <Tr>
               <Td>Caffeine</Td>
-              <Td isNumeric>{caffeine ? `${caffeine}g` : '-'}</Td>
+              <Td isNumeric>
+                {caffeine || caffeine === 0 ? `${caffeine}g` : '-'}
+              </Td>
             </Tr>
           </Tbody>
         </Table>

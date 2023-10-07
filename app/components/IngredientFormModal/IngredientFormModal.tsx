@@ -80,6 +80,9 @@ export const IngredientFormModal = ({
   const [fat, setFat] = useState<string | undefined>(
     ingredient?.fat?.toString() || undefined,
   )
+  const [saturatedFat, setSaturatedFat] = useState<string | undefined>(
+    ingredient?.saturated_fat?.toString() || undefined,
+  )
   const [sugar, setSugar] = useState<string | undefined>(
     ingredient?.sugar?.toString() || undefined,
   )
@@ -95,6 +98,7 @@ export const IngredientFormModal = ({
   const [caffeine, setCaffeine] = useState<string | undefined>(
     ingredient?.caffeine?.toString() || undefined,
   )
+  const [isSaving, setIsSaving] = useState(false)
 
   const { data: remoteValidation, refetch: revalidateAlreadyExists } =
     useQuery<{ isValid: boolean }>(
@@ -111,17 +115,32 @@ export const IngredientFormModal = ({
 
   const getValidationErrors = useCallback(() => {
     const errors: string[] = []
-    if (!name || name.length === 0 || !remoteValidation?.isValid)
+    if (
+      !name ||
+      name.length === 0 ||
+      (mode === 'add' && !remoteValidation?.isValid)
+    )
       errors.push('name')
-    if (!brand || brand.length === 0 || !remoteValidation?.isValid)
+    if (
+      !brand ||
+      brand.length === 0 ||
+      (mode === 'add' && remoteValidation?.isValid)
+    )
       errors.push('brand')
     if (!carbsPer100g || carbsPer100g.length === 0) errors.push('carbsPer100g')
 
     return errors
-  }, [name, brand, carbsPer100g, remoteValidation])
+  }, [name, brand, mode, carbsPer100g, remoteValidation])
 
   useEffect(() => {
-    if (!isPristine && name.length > 0 && brand.length > 0)
+    if (
+      mode === 'add' &&
+      !isPristine &&
+      name.length > 0 &&
+      brand.length > 0 &&
+      name.trim() !== '' &&
+      brand.trim() !== ''
+    )
       revalidateAlreadyExists()
     const errors = getValidationErrors()
     if (!isPristine) setValidationErrors(errors)
@@ -129,6 +148,7 @@ export const IngredientFormModal = ({
     isPristine,
     name,
     brand,
+    mode,
     carbsPer100g,
     remoteValidation,
     getValidationErrors,
@@ -143,6 +163,7 @@ export const IngredientFormModal = ({
       setEnergy('')
       setProtein('')
       setFat('')
+      setSaturatedFat('')
       setSugar('')
       setSodium('')
       setFibre('')
@@ -155,22 +176,26 @@ export const IngredientFormModal = ({
   }
 
   const addIngredient = useMutation({
-    mutationFn: () =>
-      axios.post('/api/ingredients', {
+    mutationFn: () => {
+      setIsSaving(true)
+      return axios.post('/api/ingredients', {
         name,
         brand,
         carbsPer100g,
         energy: isOptionalExpanded ? energy : undefined,
         protein: isOptionalExpanded ? protein : undefined,
         fat: isOptionalExpanded ? fat : undefined,
+        saturatedFat: isOptionalExpanded ? saturatedFat : undefined,
         sugar: isOptionalExpanded ? sugar : undefined,
         sodium: isOptionalExpanded ? sodium : undefined,
         fibre: isOptionalExpanded ? fibre : undefined,
         alcohol: isOptionalExpanded ? alcohol : undefined,
         caffeine: isOptionalExpanded ? caffeine : undefined,
-      }),
+      })
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['searchIngredients'])
+      setIsSaving(false)
       resetForm()
       onClose()
 
@@ -183,6 +208,7 @@ export const IngredientFormModal = ({
     },
     onError: (error) => {
       console.log('ERROR: ', error)
+      setIsSaving(false)
       toast({
         title: 'Error adding ingredient',
         description: 'Check the console for details',
@@ -194,8 +220,9 @@ export const IngredientFormModal = ({
   })
 
   const saveIngredient = useMutation({
-    mutationFn: () =>
-      axios.patch('/api/ingredients', {
+    mutationFn: () => {
+      setIsSaving(true)
+      return axios.patch('/api/ingredients', {
         id: ingredient?.id,
         name,
         brand,
@@ -203,14 +230,17 @@ export const IngredientFormModal = ({
         energy,
         protein,
         fat,
+        saturatedFat,
         sugar,
         sodium,
         fibre,
         alcohol,
         caffeine,
-      }),
+      })
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['searchIngredients'])
+      setIsSaving(false)
       resetForm()
       onClose()
 
@@ -223,6 +253,7 @@ export const IngredientFormModal = ({
     },
     onError: (error) => {
       console.log('ERROR: ', error)
+      setIsSaving(false)
       toast({
         title: 'Error updating ingredient',
         description: 'Check the console for details',
@@ -382,6 +413,24 @@ export const IngredientFormModal = ({
               </FormControl>
               <FormControl>
                 <Flex alignItems={'center'}>
+                  <FormLabel className={styles.formLabel}>
+                    Saturated Fat
+                  </FormLabel>
+                  <InputGroup>
+                    <Input
+                      type={'number'}
+                      value={saturatedFat}
+                      onChange={(e) => {
+                        setSaturatedFat(e.target.value)
+                      }}
+                      placeholder={'eg. 30'}
+                    />
+                    <InputRightElement>g</InputRightElement>
+                  </InputGroup>
+                </Flex>
+              </FormControl>
+              <FormControl>
+                <Flex alignItems={'center'}>
                   <FormLabel className={styles.formLabel}>Sugar</FormLabel>
                   <InputGroup>
                     <Input
@@ -477,6 +526,7 @@ export const IngredientFormModal = ({
           </Button>
           {mode === 'add' ? (
             <Button
+              disabled={isSaving}
               colorScheme="blue"
               onClick={async () => {
                 const errors = getValidationErrors()
@@ -487,10 +537,11 @@ export const IngredientFormModal = ({
                 }
               }}
             >
-              Add
+              {isSaving ? 'Adding...' : 'Add'}
             </Button>
           ) : (
             <Button
+              disabled={isSaving}
               colorScheme="blue"
               onClick={() => {
                 const errors = getValidationErrors()
@@ -501,7 +552,7 @@ export const IngredientFormModal = ({
                 }
               }}
             >
-              Save
+              {isSaving ? 'Saving...' : 'Save'}
             </Button>
           )}
         </ModalFooter>

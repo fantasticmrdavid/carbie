@@ -21,11 +21,13 @@ model Ingredient {
   id                 String    @id @default(cuid())
   created            DateTime  @default(now()) @db.Timestamp(6)
   modified           DateTime? @default(now()) @db.Timestamp(6)
+  external_id        String?
   name               String
   brand_vendor       String
   energy             Float?
   protein            Float?
   fat                Float?
+  saturated_fat      Float?
   carbs_per_100g     Float
   carbs_per_serve    Float?
   sugar              Float?

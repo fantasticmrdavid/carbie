@@ -47,6 +47,7 @@ export const VendorAutocomplete = (props: Props) => {
           threshold: 0.3,
         }}
         items={items}
+        inputSearchString={value}
         onSearch={(s) => {
           if (s.length > 0) {
             onSelect(s)

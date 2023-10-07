@@ -122,7 +122,7 @@ export const IngredientSearch = () => {
                     </ListItem>
                   </List>
                 ))}
-              {data && data.length === 0 && (
+              {((!isLoading && !data) || (data && data.length === 0)) && (
                 <List
                   key={'noResults'}
                   p={2}

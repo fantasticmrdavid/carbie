@@ -83,6 +83,14 @@ export const NutritionTableLoadingSkeleton = () => {
                 <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
               </Td>
             </Tr>
+            <Tr>
+              <Td>
+                <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
+              </Td>
+              <Td display={'flex'} justifyContent={'flex-end'}>
+                <SkeletonText noOfLines={1} width={'50px'} py={'1'} />
+              </Td>
+            </Tr>
           </Tbody>
         </Table>
       </TableContainer>
