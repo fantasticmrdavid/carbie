@@ -13,6 +13,11 @@ export const getIngredients = async (
     } = req
 
     const results = await prisma.ingredient.findMany({
+      select: {
+        id: true,
+        name: true,
+        brand_vendor: true,
+      },
       take: 10,
       where: {
         OR: [
@@ -33,7 +38,7 @@ export const getIngredients = async (
     })
 
     const sortedResults = new Fuse(results, {
-      threshold: 0.6,
+      threshold: 0.3,
       keys: ['name', 'brand_vendor'],
     })
 
