@@ -15,7 +15,7 @@ export const Template = ({ children }: RootLayoutProps) => {
   const pathname = usePathname()
   const head = (
     <Head>
-      <title>~Carbie🍔~</title>
+      <title>~Carbie~</title>
       <meta name={'viewport'} content="width=device-width, initial-scale=1" />
       <link
         rel="icon"
