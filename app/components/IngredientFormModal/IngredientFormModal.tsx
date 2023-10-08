@@ -39,14 +39,14 @@ type Props = {
 }
 const hasAdditionalInfo = (i: Ingredient) => {
   return !!(
-    i.energy ||
-    i.fat ||
-    i.alcohol ||
-    i.caffeine ||
-    i.fibre ||
-    i.protein ||
-    i.sugar ||
-    i.sodium
+    i.energy_per_100g ||
+    i.fat_per_100g ||
+    i.alcohol_per_100g ||
+    i.caffeine_per_100g ||
+    i.fibre_per_100g ||
+    i.protein_per_100g ||
+    i.sugar_per_100g ||
+    i.sodium_per_100g
   )
 }
 
@@ -72,31 +72,31 @@ export const IngredientFormModal = ({
     ingredient?.carbs_per_100g.toString() || '',
   )
   const [energy, setEnergy] = useState<string | undefined>(
-    ingredient?.energy?.toString() || undefined,
+    ingredient?.energy_per_100g?.toString() || undefined,
   )
   const [protein, setProtein] = useState<string | undefined>(
-    ingredient?.protein?.toString() || undefined,
+    ingredient?.protein_per_100g?.toString() || undefined,
   )
   const [fat, setFat] = useState<string | undefined>(
-    ingredient?.fat?.toString() || undefined,
+    ingredient?.fat_per_100g?.toString() || undefined,
   )
   const [saturatedFat, setSaturatedFat] = useState<string | undefined>(
-    ingredient?.saturated_fat?.toString() || undefined,
+    ingredient?.saturated_fat_per_100g?.toString() || undefined,
   )
   const [sugar, setSugar] = useState<string | undefined>(
-    ingredient?.sugar?.toString() || undefined,
+    ingredient?.sugar_per_100g?.toString() || undefined,
   )
   const [sodium, setSodium] = useState<string | undefined>(
-    ingredient?.sodium?.toString() || undefined,
+    ingredient?.sodium_per_100g?.toString() || undefined,
   )
   const [fibre, setFibre] = useState<string | undefined>(
-    ingredient?.fibre?.toString() || undefined,
+    ingredient?.fibre_per_100g?.toString() || undefined,
   )
   const [alcohol, setAlcohol] = useState<string | undefined>(
-    ingredient?.alcohol?.toString() || undefined,
+    ingredient?.alcohol_per_100g?.toString() || undefined,
   )
   const [caffeine, setCaffeine] = useState<string | undefined>(
-    ingredient?.caffeine?.toString() || undefined,
+    ingredient?.caffeine_per_100g?.toString() || undefined,
   )
   const [isSaving, setIsSaving] = useState(false)
 
@@ -240,6 +240,7 @@ export const IngredientFormModal = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['searchIngredients'])
+      queryClient.invalidateQueries(['getIngredient', ingredient?.id])
       setIsSaving(false)
       resetForm()
       onClose()

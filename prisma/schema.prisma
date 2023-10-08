@@ -18,27 +18,27 @@ enum GI {
 }
 
 model Ingredient {
-  id                 String    @id @default(cuid())
-  created            DateTime  @default(now()) @db.Timestamp(6)
-  modified           DateTime? @default(now()) @db.Timestamp(6)
-  external_id        String?
-  name               String
-  brand_vendor       String
-  energy             Float?
-  protein            Float?
-  fat                Float?
-  saturated_fat      Float?
-  carbs_per_100g     Float
-  carbs_per_serve    Float?
-  sugar              Float?
-  sodium             Float?
-  fibre              Float?
-  alcohol            Float?
-  caffeine           Float?
-  avg_serving_units  Float?
-  avg_serving_weight Float?
-  data_source        String
-  gi                 GI?
+  id                     String    @id @default(cuid())
+  created                DateTime  @default(now()) @db.Timestamp(6)
+  modified               DateTime? @default(now()) @db.Timestamp(6)
+  external_id            String?
+  name                   String
+  brand_vendor           String
+  energy_per_100g        Float?
+  protein_per_100g       Float?
+  fat_per_100g           Float?
+  saturated_fat_per_100g Float?
+  carbs_per_100g         Float
+  carbs_per_serve        Float?
+  sugar_per_100g         Float?
+  sodium_per_100g        Float?
+  fibre_per_100g         Float?
+  alcohol_per_100g       Float?
+  caffeine_per_100g      Float?
+  avg_serving_units      Float?
+  avg_serving_weight     Float?
+  data_source            String
+  gi                     GI?
 
   meals Meal[]
   users User[]

@@ -10,15 +10,15 @@ export const NutritionTable = (props: Props) => {
   const { ingredient } = props
   const {
     carbs_per_100g,
-    energy,
-    protein,
-    fat,
-    saturated_fat,
-    sugar,
-    sodium,
-    fibre,
-    alcohol,
-    caffeine,
+    energy_per_100g,
+    protein_per_100g,
+    fat_per_100g,
+    saturated_fat_per_100g,
+    sugar_per_100g,
+    sodium_per_100g,
+    fibre_per_100g,
+    alcohol_per_100g,
+    caffeine_per_100g,
   } = ingredient
 
   return (
@@ -43,48 +43,72 @@ export const NutritionTable = (props: Props) => {
             </Tr>
             <Tr>
               <Td>Sugar</Td>
-              <Td isNumeric>{sugar || sugar === 0 ? `${sugar}g` : '-'}</Td>
+              <Td isNumeric>
+                {sugar_per_100g || sugar_per_100g === 0
+                  ? `${sugar_per_100g}g`
+                  : '-'}
+              </Td>
             </Tr>
             <Tr>
               <Td>Sodium</Td>
-              <Td isNumeric>{sodium || sodium === 0 ? `${sodium}mg` : '-'}</Td>
+              <Td isNumeric>
+                {sodium_per_100g || sodium_per_100g === 0
+                  ? `${sodium_per_100g}mg`
+                  : '-'}
+              </Td>
             </Tr>
             <Tr>
               <Td>Energy</Td>
-              <Td isNumeric>{energy || energy === 0 ? `${energy}kJ` : '-'}</Td>
+              <Td isNumeric>
+                {energy_per_100g || energy_per_100g === 0
+                  ? `${energy_per_100g}kJ`
+                  : '-'}
+              </Td>
             </Tr>
             <Tr>
               <Td>Protein</Td>
               <Td isNumeric>
-                {protein || protein === 0 ? `${protein}g` : '-'}
+                {protein_per_100g || protein_per_100g === 0
+                  ? `${protein_per_100g}g`
+                  : '-'}
               </Td>
             </Tr>
             <Tr>
               <Td>Fat</Td>
-              <Td isNumeric>{fat || fat === 0 ? `${fat}g` : '-'}</Td>
+              <Td isNumeric>
+                {fat_per_100g || fat_per_100g === 0 ? `${fat_per_100g}g` : '-'}
+              </Td>
             </Tr>
             <Tr>
               <Td>Saturated Fat</Td>
               <Td isNumeric>
-                {saturated_fat || saturated_fat === 0
-                  ? `${saturated_fat}g`
+                {saturated_fat_per_100g || saturated_fat_per_100g === 0
+                  ? `${saturated_fat_per_100g}g`
                   : '-'}
               </Td>
             </Tr>
             <Tr>
               <Td>Fibre</Td>
-              <Td isNumeric>{fibre || fibre === 0 ? `${fibre}g` : '-'}</Td>
+              <Td isNumeric>
+                {fibre_per_100g || fibre_per_100g === 0
+                  ? `${fibre_per_100g}g`
+                  : '-'}
+              </Td>
             </Tr>
             <Tr>
               <Td>Alcohol</Td>
               <Td isNumeric>
-                {alcohol || alcohol === 0 ? `${alcohol}g` : '-'}
+                {alcohol_per_100g || alcohol_per_100g === 0
+                  ? `${alcohol_per_100g}g`
+                  : '-'}
               </Td>
             </Tr>
             <Tr>
               <Td>Caffeine</Td>
               <Td isNumeric>
-                {caffeine || caffeine === 0 ? `${caffeine}g` : '-'}
+                {caffeine_per_100g || caffeine_per_100g === 0
+                  ? `${caffeine_per_100g}g`
+                  : '-'}
               </Td>
             </Tr>
           </Tbody>
