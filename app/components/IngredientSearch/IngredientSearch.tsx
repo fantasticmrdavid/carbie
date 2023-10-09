@@ -56,7 +56,7 @@ export const IngredientSearch = () => {
           </InputLeftElement>
           <Input
             outline={'unset'}
-            placeholder="Search ingredients..."
+            placeholder="Search for food and drinks..."
             value={search}
             onChange={(e) => {
               setIsResultsOpen(true)
