@@ -277,7 +277,7 @@ export const IngredientFormModal = ({
       console.log('ERROR: ', error)
       setIsSaving(false)
       toast({
-        title: 'Error adding ingredient',
+        title: 'Error adding food',
         description: 'Check the console for details',
         status: 'error',
         duration: 2000,
@@ -339,7 +339,7 @@ export const IngredientFormModal = ({
       console.log('ERROR: ', error)
       setIsSaving(false)
       toast({
-        title: 'Error updating ingredient',
+        title: 'Error updating food',
         description: 'Check the console for details',
         status: 'error',
         duration: 2000,
@@ -359,7 +359,7 @@ export const IngredientFormModal = ({
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{mode === 'add' ? 'Add' : 'Edit'} Ingredient</ModalHeader>
+        <ModalHeader>{mode === 'add' ? 'Add' : 'Edit'} Food</ModalHeader>
         <ModalCloseButton />
         <ModalBody className={styles.modalBody}>
           <FormControl
