@@ -43,7 +43,7 @@ export const getIngredients = async (
     })
 
     const sortedResults = new Fuse(results, {
-      threshold: 0.3,
+      threshold: 0.5,
       keys: ['name', 'brand_vendor'],
     })
 
