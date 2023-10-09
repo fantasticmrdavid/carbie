@@ -16,6 +16,7 @@ import { FaRegEdit } from 'react-icons/fa'
 import type { IngredientWithRelations } from '@/pages/api/ingredients/[id]'
 import { useSession } from 'next-auth/react'
 import { NutritionTableLoadingSkeleton } from '@/app/components/NutritionTable/NutritionTableLoadingSkeleton'
+import Head from 'next/head'
 
 export const Page = () => {
   const { data: session } = useSession()
@@ -45,59 +46,70 @@ export const Page = () => {
     )
   }
 
+  const head = (
+    <Head>
+      <title>
+        ~Carbie - {ingredient?.name} - {ingredient?.brand_vendor}~
+      </title>
+    </Head>
+  )
+
   const userOwnsIngredient =
     ingredient?.users?.some((u) => u.email === session?.user?.email) || false
 
   if (ingredient && !isLoading) {
     return (
-      <Flex direction={'column'} pb={6}>
-        <Heading size={'md'}>{ingredient.brand_vendor}</Heading>
-        <Heading
-          as="h3"
-          noOfLines={2}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.2em' }}
-        >
-          {ingredient.name}
-          {userOwnsIngredient && (
-            <>
-              <Tooltip
-                label={'Edit Ingredient'}
-                placement={'right-start'}
-                hasArrow
-              >
-                <div style={{ position: 'relative' }}>
-                  <FaRegEdit
-                    onClick={onOpen}
-                    style={{
-                      cursor: 'pointer',
-                    }}
-                  />
-                </div>
-              </Tooltip>
-              <IngredientFormModal
-                mode={'edit'}
-                ingredient={ingredient}
-                isOpen={isOpen}
-                onClose={onClose}
-              />
-            </>
-          )}
-        </Heading>
-        <Flex marginTop={'1em'} direction={'column'} gap={'1em'}>
-          {ingredient.data_source !== 'web' && (
-            <div>
-              <strong>Data source:</strong> {ingredient.data_source}
-            </div>
-          )}
-          <NutritionTable ingredient={ingredient} />
-          {ingredient.carbs_per_100g > 0 && (
-            <>
-              <CarbCalculator ingredient={ingredient} />
-              <WeightCalculator ingredient={ingredient} />
-            </>
-          )}
+      <>
+        {head}
+        <Flex direction={'column'} pb={6}>
+          <Heading size={'md'}>{ingredient.brand_vendor}</Heading>
+          <Heading
+            as="h3"
+            noOfLines={2}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.2em' }}
+          >
+            {ingredient.name}
+            {userOwnsIngredient && (
+              <>
+                <Tooltip
+                  label={'Edit Ingredient'}
+                  placement={'right-start'}
+                  hasArrow
+                >
+                  <div style={{ position: 'relative' }}>
+                    <FaRegEdit
+                      onClick={onOpen}
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                    />
+                  </div>
+                </Tooltip>
+                <IngredientFormModal
+                  mode={'edit'}
+                  ingredient={ingredient}
+                  isOpen={isOpen}
+                  onClose={onClose}
+                />
+              </>
+            )}
+          </Heading>
+          <Flex marginTop={'1em'} direction={'column'} gap={'1em'}>
+            {ingredient.data_source !== 'web' && (
+              <div>
+                <strong>Data source:</strong> {ingredient.data_source}
+              </div>
+            )}
+            <NutritionTable ingredient={ingredient} />
+            {ingredient.carbs_per_100g > 0 && (
+              <>
+                <CarbCalculator ingredient={ingredient} />
+                <WeightCalculator ingredient={ingredient} />
+              </>
+            )}
+          </Flex>
         </Flex>
-      </Flex>
+      </>
     )
   }
 
