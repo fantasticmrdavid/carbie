@@ -50,7 +50,7 @@ export const Page = () => {
 
   if (ingredient && !isLoading) {
     return (
-      <Flex direction={'column'}>
+      <Flex direction={'column'} pb={6}>
         <Heading size={'md'}>{ingredient.brand_vendor}</Heading>
         <Heading
           as="h3"
