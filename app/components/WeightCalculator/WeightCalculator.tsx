@@ -23,7 +23,7 @@ export const WeightCalculator = ({ ingredient }: Props) => {
             )
           }
         />
-        g of this ingredient?
+        g of this item?
       </Flex>
       {weightCalcValue && weightCalcValue > 0 && (
         <Flex alignItems={'center'}>
