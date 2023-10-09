@@ -65,6 +65,7 @@ export const VendorAutocomplete = (props: Props) => {
         styling={styling}
         showNoResults={false}
         showIcon={false}
+        autoFocus={false}
         onClear={() => onSelect('')}
       />
     </div>

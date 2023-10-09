@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/modal'
 import {
   Button,
-  Collapse,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -20,12 +19,17 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
   useMediaQuery,
   useToast,
+  Heading,
 } from '@chakra-ui/react'
 
 import styles from './ingredientFormModal.module.scss'
-import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { Ingredient } from '@prisma/client'
@@ -36,18 +40,6 @@ type Props = {
   onClose: () => void
   mode: 'add' | 'edit'
   ingredient?: Ingredient
-}
-const hasAdditionalInfo = (i: Ingredient) => {
-  return !!(
-    i.energy_per_100g ||
-    i.fat_per_100g ||
-    i.alcohol_per_100g ||
-    i.caffeine_per_100g ||
-    i.fibre_per_100g ||
-    i.protein_per_100g ||
-    i.sugar_per_100g ||
-    i.sodium_per_100g
-  )
 }
 
 export const IngredientFormModal = ({
@@ -63,13 +55,13 @@ export const IngredientFormModal = ({
   const [isPristine, setIsPristine] = useState(true)
   const [validationErrors, setValidationErrors] = useState<string[]>([])
 
-  const [isOptionalExpanded, setIsOptionalExpanded] = useState(
-    ingredient ? hasAdditionalInfo(ingredient) : false,
-  )
   const [name, setName] = useState(ingredient ? ingredient.name : '')
   const [brand, setBrand] = useState(ingredient ? ingredient.brand_vendor : '')
   const [carbsPer100g, setCarbsPer100g] = useState<string | undefined>(
     ingredient?.carbs_per_100g.toString() || '',
+  )
+  const [carbsPerServe, setCarbsPerServe] = useState<string | undefined>(
+    ingredient?.carbs_per_serve?.toString() || undefined,
   )
   const [energyPer100g, setEnergyPer100g] = useState<string | undefined>(
     ingredient?.energy_per_100g?.toString() || undefined,
@@ -97,6 +89,33 @@ export const IngredientFormModal = ({
   )
   const [caffeinePer100g, setCaffeinePer100g] = useState<string | undefined>(
     ingredient?.caffeine_per_100g?.toString() || undefined,
+  )
+  const [energyPerServe, setEnergyPerServe] = useState<string | undefined>(
+    ingredient?.energy_per_serve?.toString() || undefined,
+  )
+  const [proteinPerServe, setProteinPerServe] = useState<string | undefined>(
+    ingredient?.protein_per_serve?.toString() || undefined,
+  )
+  const [fatPerServe, setFatPerServe] = useState<string | undefined>(
+    ingredient?.fat_per_serve?.toString() || undefined,
+  )
+  const [saturatedFatPerServe, setSaturatedFatPerServe] = useState<
+    string | undefined
+  >(ingredient?.saturated_fat_per_serve?.toString() || undefined)
+  const [sugarPerServe, setSugarPerServe] = useState<string | undefined>(
+    ingredient?.sugar_per_serve?.toString() || undefined,
+  )
+  const [sodiumPerServe, setSodiumPerServe] = useState<string | undefined>(
+    ingredient?.sodium_per_serve?.toString() || undefined,
+  )
+  const [fibrePerServe, setFibrePerServe] = useState<string | undefined>(
+    ingredient?.fibre_per_serve?.toString() || undefined,
+  )
+  const [alcoholPerServe, setAlcoholPerServe] = useState<string | undefined>(
+    ingredient?.alcohol_per_serve?.toString() || undefined,
+  )
+  const [caffeinePerServe, setCaffeinePerServe] = useState<string | undefined>(
+    ingredient?.caffeine_per_serve?.toString() || undefined,
   )
   const [isSaving, setIsSaving] = useState(false)
 
@@ -169,7 +188,18 @@ export const IngredientFormModal = ({
       setFibrePer100g('')
       setAlcoholPer100g('')
       setCaffeinePer100g('')
-      setIsOptionalExpanded(false)
+
+      setCarbsPerServe('')
+      setEnergyPerServe('')
+      setProteinPerServe('')
+      setFatPerServe('')
+      setSaturatedFatPerServe('')
+      setSugarPerServe('')
+      setSodiumPerServe('')
+      setFibrePerServe('')
+      setAlcoholPerServe('')
+      setCaffeinePerServe('')
+
       setIsPristine(true)
       setValidationErrors([])
     }
@@ -182,17 +212,25 @@ export const IngredientFormModal = ({
         name,
         brand,
         carbsPer100g,
-        energyPer100g: isOptionalExpanded ? energyPer100g : undefined,
-        proteinPer100g: isOptionalExpanded ? proteinPer100g : undefined,
-        fatPer100g: isOptionalExpanded ? fatPer100g : undefined,
-        saturatedFatPer100g: isOptionalExpanded
-          ? saturatedFatPer100g
-          : undefined,
-        sugarPer100g: isOptionalExpanded ? sugarPer100g : undefined,
-        sodiumPer100g: isOptionalExpanded ? sodiumPer100g : undefined,
-        fibrePer100g: isOptionalExpanded ? fibrePer100g : undefined,
-        alcoholPer100g: isOptionalExpanded ? alcoholPer100g : undefined,
-        caffeinePer100g: isOptionalExpanded ? caffeinePer100g : undefined,
+        energyPer100g,
+        proteinPer100g,
+        fatPer100g,
+        saturatedFatPer100g,
+        sugarPer100g,
+        sodiumPer100g,
+        fibrePer100g,
+        alcoholPer100g,
+        caffeinePer100g,
+        carbsPerServe,
+        energyPerServe,
+        proteinPerServe,
+        fatPerServe,
+        saturatedFatPerServe,
+        sugarPerServe,
+        sodiumPerServe,
+        fibrePerServe,
+        alcoholPerServe,
+        caffeinePerServe,
       })
     },
     onSuccess: () => {
@@ -238,6 +276,16 @@ export const IngredientFormModal = ({
         fibrePer100g,
         alcoholPer100g,
         caffeinePer100g,
+        carbsPerServe,
+        energyPerServe,
+        proteinPerServe,
+        fatPerServe,
+        saturatedFatPerServe,
+        sugarPerServe,
+        sodiumPerServe,
+        fibrePerServe,
+        alcoholPerServe,
+        caffeinePerServe,
       })
     },
     onSuccess: () => {
@@ -353,167 +401,349 @@ export const IngredientFormModal = ({
               </FormControl>
             </GridItem>
           </Grid>
-          <div
-            className={styles.expandToggle}
-            onClick={() => setIsOptionalExpanded(!isOptionalExpanded)}
-          >
+          <Heading as="h5" noOfLines={1} size={'sm'} mt={4}>
             <strong>Additional info (per 100g/ml)</strong>
-            {isOptionalExpanded ? (
-              <AiOutlineMinusSquare />
-            ) : (
-              <AiOutlinePlusSquare />
-            )}
-          </div>
-          <Collapse in={isOptionalExpanded}>
-            <div className={styles.additionalInfo}>
-              <FormControl>
-                <Flex alignItems={'center'}>
-                  <FormLabel className={styles.formLabel}>Energy</FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={'number'}
-                      value={energyPer100g}
-                      onChange={(e) => {
-                        setEnergyPer100g(e.target.value)
-                      }}
-                      placeholder={'eg. 100'}
-                    />
-                    <InputRightElement>kJ</InputRightElement>
-                  </InputGroup>
-                </Flex>
-              </FormControl>
-              <FormControl>
-                <Flex alignItems={'center'}>
-                  <FormLabel className={styles.formLabel}>Protein</FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={'number'}
-                      value={proteinPer100g}
-                      onChange={(e) => {
-                        setProteinPer100g(e.target.value)
-                      }}
-                      placeholder={'eg. 25'}
-                    />
-                    <InputRightElement>g</InputRightElement>
-                  </InputGroup>
-                </Flex>
-              </FormControl>
-              <FormControl>
-                <Flex alignItems={'center'}>
-                  <FormLabel className={styles.formLabel}>Fat</FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={'number'}
-                      value={fatPer100g}
-                      onChange={(e) => {
-                        setFatPer100g(e.target.value)
-                      }}
-                      placeholder={'eg. 30'}
-                    />
-                    <InputRightElement>g</InputRightElement>
-                  </InputGroup>
-                </Flex>
-              </FormControl>
-              <FormControl>
-                <Flex alignItems={'center'}>
-                  <FormLabel className={styles.formLabel}>
-                    Saturated Fat
-                  </FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={'number'}
-                      value={saturatedFatPer100g}
-                      onChange={(e) => {
-                        setSaturatedFatPer100g(e.target.value)
-                      }}
-                      placeholder={'eg. 30'}
-                    />
-                    <InputRightElement>g</InputRightElement>
-                  </InputGroup>
-                </Flex>
-              </FormControl>
-              <FormControl>
-                <Flex alignItems={'center'}>
-                  <FormLabel className={styles.formLabel}>Sugar</FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={'number'}
-                      value={sugarPer100g}
-                      onChange={(e) => {
-                        setSugarPer100g(e.target.value)
-                      }}
-                      placeholder={'eg. 25'}
-                    />
-                    <InputRightElement>g</InputRightElement>
-                  </InputGroup>
-                </Flex>
-              </FormControl>
-              <FormControl>
-                <Flex alignItems={'center'}>
-                  <FormLabel className={styles.formLabel}>Sodium</FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={'number'}
-                      value={sodiumPer100g}
-                      onChange={(e) => {
-                        setSodiumPer100g(e.target.value)
-                      }}
-                      placeholder={'eg. 100'}
-                    />
-                    <InputRightElement>mg</InputRightElement>
-                  </InputGroup>
-                </Flex>
-              </FormControl>
-              <FormControl>
-                <Flex alignItems={'center'}>
-                  <FormLabel className={styles.formLabel}>Fibre</FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={'number'}
-                      value={fibrePer100g}
-                      onChange={(e) => {
-                        setFibrePer100g(e.target.value)
-                      }}
-                      placeholder={'eg. 25'}
-                    />
-                    <InputRightElement>g</InputRightElement>
-                  </InputGroup>
-                </Flex>
-              </FormControl>
-              <FormControl>
-                <Flex alignItems={'center'}>
-                  <FormLabel className={styles.formLabel}>Alcohol</FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={'number'}
-                      value={alcoholPer100g}
-                      onChange={(e) => {
-                        setAlcoholPer100g(e.target.value)
-                      }}
-                      placeholder={'eg. 25'}
-                    />
-                    <InputRightElement>g</InputRightElement>
-                  </InputGroup>
-                </Flex>
-              </FormControl>
-              <FormControl>
-                <Flex alignItems={'center'}>
-                  <FormLabel className={styles.formLabel}>Caffeine</FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={'number'}
-                      value={caffeinePer100g}
-                      onChange={(e) => {
-                        setCaffeinePer100g(e.target.value)
-                      }}
-                      placeholder={'eg. 25'}
-                    />
-                    <InputRightElement>g</InputRightElement>
-                  </InputGroup>
-                </Flex>
-              </FormControl>
-            </div>
-          </Collapse>
+          </Heading>
+          <Tabs>
+            <TabList>
+              <Tab>
+                <strong>Per 100g</strong>
+              </Tab>
+              <Tab>
+                <strong>Per Serving</strong>
+              </Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <div className={styles.additionalInfo}>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Energy</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={energyPer100g}
+                          onChange={(e) => {
+                            setEnergyPer100g(e.target.value)
+                          }}
+                          placeholder={'eg. 100'}
+                        />
+                        <InputRightElement>kJ</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>
+                        Protein
+                      </FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={proteinPer100g}
+                          onChange={(e) => {
+                            setProteinPer100g(e.target.value)
+                          }}
+                          placeholder={'eg. 25'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Fat</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={fatPer100g}
+                          onChange={(e) => {
+                            setFatPer100g(e.target.value)
+                          }}
+                          placeholder={'eg. 30'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>
+                        Saturated Fat
+                      </FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={saturatedFatPer100g}
+                          onChange={(e) => {
+                            setSaturatedFatPer100g(e.target.value)
+                          }}
+                          placeholder={'eg. 30'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Sugar</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={sugarPer100g}
+                          onChange={(e) => {
+                            setSugarPer100g(e.target.value)
+                          }}
+                          placeholder={'eg. 25'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Sodium</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={sodiumPer100g}
+                          onChange={(e) => {
+                            setSodiumPer100g(e.target.value)
+                          }}
+                          placeholder={'eg. 100'}
+                        />
+                        <InputRightElement>mg</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Fibre</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={fibrePer100g}
+                          onChange={(e) => {
+                            setFibrePer100g(e.target.value)
+                          }}
+                          placeholder={'eg. 25'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>
+                        Alcohol
+                      </FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={alcoholPer100g}
+                          onChange={(e) => {
+                            setAlcoholPer100g(e.target.value)
+                          }}
+                          placeholder={'eg. 25'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>
+                        Caffeine
+                      </FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={caffeinePer100g}
+                          onChange={(e) => {
+                            setCaffeinePer100g(e.target.value)
+                          }}
+                          placeholder={'eg. 25'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                </div>
+              </TabPanel>
+              <TabPanel>
+                <div className={styles.additionalInfo}>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Carbs</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={carbsPerServe}
+                          onChange={(e) => {
+                            setCarbsPerServe(e.target.value)
+                          }}
+                          placeholder={'eg. 15'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Energy</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={energyPerServe}
+                          onChange={(e) => {
+                            setEnergyPerServe(e.target.value)
+                          }}
+                          placeholder={'eg. 100'}
+                        />
+                        <InputRightElement>kJ</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>
+                        Protein
+                      </FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={proteinPerServe}
+                          onChange={(e) => {
+                            setProteinPerServe(e.target.value)
+                          }}
+                          placeholder={'eg. 25'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Fat</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={fatPerServe}
+                          onChange={(e) => {
+                            setFatPerServe(e.target.value)
+                          }}
+                          placeholder={'eg. 30'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>
+                        Saturated Fat
+                      </FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={saturatedFatPerServe}
+                          onChange={(e) => {
+                            setSaturatedFatPerServe(e.target.value)
+                          }}
+                          placeholder={'eg. 30'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Sugar</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={sugarPerServe}
+                          onChange={(e) => {
+                            setSugarPerServe(e.target.value)
+                          }}
+                          placeholder={'eg. 25'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Sodium</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={sodiumPerServe}
+                          onChange={(e) => {
+                            setSodiumPerServe(e.target.value)
+                          }}
+                          placeholder={'eg. 100'}
+                        />
+                        <InputRightElement>mg</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Fibre</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={fibrePerServe}
+                          onChange={(e) => {
+                            setFibrePerServe(e.target.value)
+                          }}
+                          placeholder={'eg. 25'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>
+                        Alcohol
+                      </FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={alcoholPerServe}
+                          onChange={(e) => {
+                            setAlcoholPerServe(e.target.value)
+                          }}
+                          placeholder={'eg. 25'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>
+                        Caffeine
+                      </FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={caffeinePerServe}
+                          onChange={(e) => {
+                            setCaffeinePerServe(e.target.value)
+                          }}
+                          placeholder={'eg. 25'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                </div>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </ModalBody>
 
         <ModalFooter>

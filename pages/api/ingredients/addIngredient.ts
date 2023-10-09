@@ -25,6 +25,16 @@ export const addIngredient = async (
       fibrePer100g,
       alcoholPer100g,
       caffeinePer100g,
+      carbsPerServe,
+      energyPerServe,
+      sodiumPerServe,
+      proteinPerServe,
+      fatPerServe,
+      saturatedFatPerServe,
+      sugarPerServe,
+      fibrePerServe,
+      alcoholPerServe,
+      caffeinePerServe,
     } = req.body
 
     const result = await prisma.ingredient.create({
@@ -48,6 +58,28 @@ export const addIngredient = async (
           : undefined,
         caffeine_per_100g: caffeinePer100g
           ? parseFloat(caffeinePer100g)
+          : undefined,
+        carbs_per_serve: parseFloat(carbsPerServe),
+        energy_per_serve: energyPer100g
+          ? parseFloat(energyPerServe)
+          : undefined,
+        protein_per_serve: proteinPerServe
+          ? parseFloat(proteinPerServe)
+          : undefined,
+        fat_per_serve: fatPerServe ? parseFloat(fatPerServe) : undefined,
+        saturated_fat_per_serve: saturatedFatPerServe
+          ? parseFloat(saturatedFatPerServe)
+          : undefined,
+        sugar_per_serve: sugarPerServe ? parseFloat(sugarPerServe) : undefined,
+        sodium_per_serve: sodiumPerServe
+          ? parseFloat(sodiumPerServe)
+          : undefined,
+        fibre_per_serve: fibrePerServe ? parseFloat(fibrePerServe) : undefined,
+        alcohol_per_serve: alcoholPerServe
+          ? parseFloat(alcoholPerServe)
+          : undefined,
+        caffeine_per_serve: caffeinePerServe
+          ? parseFloat(caffeinePerServe)
           : undefined,
         data_source: 'web',
         users: {
