@@ -46,10 +46,13 @@ model Ingredient {
   alcohol_per_serve       Float?
   caffeine_per_serve      Float?
 
-  avg_serving_units  Float?
-  avg_serving_weight Float?
-  data_source        String
-  gi                 GI?
+  serving_size_units Float?
+  serving_size_grams Float?
+
+  notes String?
+
+  data_source String
+  gi          GI?
 
   meals Meal[]
   users User[]

@@ -100,6 +100,11 @@ export const Page = () => {
                 <strong>Data source:</strong> {ingredient.data_source}
               </div>
             )}
+            {ingredient.notes && ingredient.notes.length > 0 && (
+              <div>
+                <strong>Notes:</strong> {ingredient.notes}
+              </div>
+            )}
             <NutritionTable ingredient={ingredient} />
             {ingredient.carbs_per_100g > 0 && (
               <>

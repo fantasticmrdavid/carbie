@@ -27,6 +27,7 @@ import {
   useMediaQuery,
   useToast,
   Heading,
+  Textarea,
 } from '@chakra-ui/react'
 
 import styles from './ingredientFormModal.module.scss'
@@ -117,6 +118,10 @@ export const IngredientFormModal = ({
   const [caffeinePerServe, setCaffeinePerServe] = useState<string | undefined>(
     ingredient?.caffeine_per_serve?.toString() || undefined,
   )
+
+  const [notes, setNotes] = useState<string | undefined>(
+    ingredient?.notes || undefined,
+  )
   const [isSaving, setIsSaving] = useState(false)
 
   const { data: remoteValidation, refetch: revalidateAlreadyExists } =
@@ -200,6 +205,8 @@ export const IngredientFormModal = ({
       setAlcoholPerServe('')
       setCaffeinePerServe('')
 
+      setNotes('')
+
       setIsPristine(true)
       setValidationErrors([])
     }
@@ -231,6 +238,7 @@ export const IngredientFormModal = ({
         fibrePerServe,
         alcoholPerServe,
         caffeinePerServe,
+        notes,
       })
     },
     onSuccess: () => {
@@ -286,6 +294,7 @@ export const IngredientFormModal = ({
         fibrePerServe,
         alcoholPerServe,
         caffeinePerServe,
+        notes,
       })
     },
     onSuccess: () => {
@@ -402,7 +411,7 @@ export const IngredientFormModal = ({
             </GridItem>
           </Grid>
           <Heading as="h5" noOfLines={1} size={'sm'} mt={4}>
-            <strong>Additional info (per 100g/ml)</strong>
+            <strong>Additional info</strong>
           </Heading>
           <Tabs>
             <TabList>
@@ -411,6 +420,9 @@ export const IngredientFormModal = ({
               </Tab>
               <Tab>
                 <strong>Per Serving</strong>
+              </Tab>
+              <Tab>
+                <strong>Notes</strong>
               </Tab>
             </TabList>
             <TabPanels>
@@ -741,6 +753,20 @@ export const IngredientFormModal = ({
                     </Flex>
                   </FormControl>
                 </div>
+              </TabPanel>
+              <TabPanel>
+                <FormControl>
+                  <Flex alignItems={'center'}>
+                    <FormLabel className={styles.formLabel}>Notes</FormLabel>
+                    <Textarea
+                      value={notes}
+                      onChange={(e) => {
+                        setNotes(e.target.value)
+                      }}
+                      placeholder={'Any comments and notes'}
+                    />
+                  </Flex>
+                </FormControl>
               </TabPanel>
             </TabPanels>
           </Tabs>

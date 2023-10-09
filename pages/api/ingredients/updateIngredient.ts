@@ -36,6 +36,7 @@ export const updateIngredient = async (
       fibrePerServe,
       alcoholPerServe,
       caffeinePerServe,
+      notes,
     } = req.body
 
     const result = await prisma.ingredient.update({
@@ -82,6 +83,7 @@ export const updateIngredient = async (
         caffeine_per_serve: caffeinePerServe
           ? parseFloat(caffeinePerServe)
           : undefined,
+        notes: notes.trim(),
       },
       where: {
         id,

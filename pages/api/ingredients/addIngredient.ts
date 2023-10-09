@@ -35,6 +35,7 @@ export const addIngredient = async (
       fibrePerServe,
       alcoholPerServe,
       caffeinePerServe,
+      notes,
     } = req.body
 
     const result = await prisma.ingredient.create({
@@ -81,6 +82,7 @@ export const addIngredient = async (
         caffeine_per_serve: caffeinePerServe
           ? parseFloat(caffeinePerServe)
           : undefined,
+        notes: notes.trim(),
         data_source: 'web',
         users: {
           connect: {
