@@ -16,15 +16,15 @@ export const addIngredient = async (
       name,
       brand,
       carbsPer100g,
-      energy,
-      sodium,
-      protein,
-      fat,
-      saturatedFat,
-      sugar,
-      fibre,
-      alcohol,
-      caffeine,
+      energyPer100g,
+      sodiumPer100g,
+      proteinPer100g,
+      fatPer100g,
+      saturatedFatPer100g,
+      sugarPer100g,
+      fibrePer100g,
+      alcoholPer100g,
+      caffeinePer100g,
     } = req.body
 
     const result = await prisma.ingredient.create({
@@ -32,17 +32,23 @@ export const addIngredient = async (
         name: name.trim(),
         brand_vendor: brand.trim(),
         carbs_per_100g: parseFloat(carbsPer100g),
-        energy_per_100g: energy ? parseFloat(energy) : undefined,
-        protein_per_100g: protein ? parseFloat(protein) : undefined,
-        fat_per_100g: fat ? parseFloat(fat) : undefined,
-        saturated_fat_per_100g: saturatedFat
-          ? parseFloat(saturatedFat)
+        energy_per_100g: energyPer100g ? parseFloat(energyPer100g) : undefined,
+        protein_per_100g: proteinPer100g
+          ? parseFloat(proteinPer100g)
           : undefined,
-        sugar_per_100g: sugar ? parseFloat(sugar) : undefined,
-        sodium_per_100g: sodium ? parseFloat(sodium) : undefined,
-        fibre_per_100g: fibre ? parseFloat(fibre) : undefined,
-        alcohol_per_100g: alcohol ? parseFloat(alcohol) : undefined,
-        caffeine_per_100g: caffeine ? parseFloat(caffeine) : undefined,
+        fat_per_100g: fatPer100g ? parseFloat(fatPer100g) : undefined,
+        saturated_fat_per_100g: saturatedFatPer100g
+          ? parseFloat(saturatedFatPer100g)
+          : undefined,
+        sugar_per_100g: sugarPer100g ? parseFloat(sugarPer100g) : undefined,
+        sodium_per_100g: sodiumPer100g ? parseFloat(sodiumPer100g) : undefined,
+        fibre_per_100g: fibrePer100g ? parseFloat(fibrePer100g) : undefined,
+        alcohol_per_100g: alcoholPer100g
+          ? parseFloat(alcoholPer100g)
+          : undefined,
+        caffeine_per_100g: caffeinePer100g
+          ? parseFloat(caffeinePer100g)
+          : undefined,
         data_source: 'web',
         users: {
           connect: {

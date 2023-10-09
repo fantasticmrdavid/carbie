@@ -71,31 +71,31 @@ export const IngredientFormModal = ({
   const [carbsPer100g, setCarbsPer100g] = useState<string | undefined>(
     ingredient?.carbs_per_100g.toString() || '',
   )
-  const [energy, setEnergy] = useState<string | undefined>(
+  const [energyPer100g, setEnergyPer100g] = useState<string | undefined>(
     ingredient?.energy_per_100g?.toString() || undefined,
   )
-  const [protein, setProtein] = useState<string | undefined>(
+  const [proteinPer100g, setProteinPer100g] = useState<string | undefined>(
     ingredient?.protein_per_100g?.toString() || undefined,
   )
-  const [fat, setFat] = useState<string | undefined>(
+  const [fatPer100g, setFatPer100g] = useState<string | undefined>(
     ingredient?.fat_per_100g?.toString() || undefined,
   )
-  const [saturatedFat, setSaturatedFat] = useState<string | undefined>(
-    ingredient?.saturated_fat_per_100g?.toString() || undefined,
-  )
-  const [sugar, setSugar] = useState<string | undefined>(
+  const [saturatedFatPer100g, setSaturatedFatPer100g] = useState<
+    string | undefined
+  >(ingredient?.saturated_fat_per_100g?.toString() || undefined)
+  const [sugarPer100g, setSugarPer100g] = useState<string | undefined>(
     ingredient?.sugar_per_100g?.toString() || undefined,
   )
-  const [sodium, setSodium] = useState<string | undefined>(
+  const [sodiumPer100g, setSodiumPer100g] = useState<string | undefined>(
     ingredient?.sodium_per_100g?.toString() || undefined,
   )
-  const [fibre, setFibre] = useState<string | undefined>(
+  const [fibrePer100g, setFibrePer100g] = useState<string | undefined>(
     ingredient?.fibre_per_100g?.toString() || undefined,
   )
-  const [alcohol, setAlcohol] = useState<string | undefined>(
+  const [alcoholPer100g, setAlcoholPer100g] = useState<string | undefined>(
     ingredient?.alcohol_per_100g?.toString() || undefined,
   )
-  const [caffeine, setCaffeine] = useState<string | undefined>(
+  const [caffeinePer100g, setCaffeinePer100g] = useState<string | undefined>(
     ingredient?.caffeine_per_100g?.toString() || undefined,
   )
   const [isSaving, setIsSaving] = useState(false)
@@ -160,15 +160,15 @@ export const IngredientFormModal = ({
       setName('')
       setBrand('')
       setCarbsPer100g('')
-      setEnergy('')
-      setProtein('')
-      setFat('')
-      setSaturatedFat('')
-      setSugar('')
-      setSodium('')
-      setFibre('')
-      setAlcohol('')
-      setCaffeine('')
+      setEnergyPer100g('')
+      setProteinPer100g('')
+      setFatPer100g('')
+      setSaturatedFatPer100g('')
+      setSugarPer100g('')
+      setSodiumPer100g('')
+      setFibrePer100g('')
+      setAlcoholPer100g('')
+      setCaffeinePer100g('')
       setIsOptionalExpanded(false)
       setIsPristine(true)
       setValidationErrors([])
@@ -182,15 +182,17 @@ export const IngredientFormModal = ({
         name,
         brand,
         carbsPer100g,
-        energy: isOptionalExpanded ? energy : undefined,
-        protein: isOptionalExpanded ? protein : undefined,
-        fat: isOptionalExpanded ? fat : undefined,
-        saturatedFat: isOptionalExpanded ? saturatedFat : undefined,
-        sugar: isOptionalExpanded ? sugar : undefined,
-        sodium: isOptionalExpanded ? sodium : undefined,
-        fibre: isOptionalExpanded ? fibre : undefined,
-        alcohol: isOptionalExpanded ? alcohol : undefined,
-        caffeine: isOptionalExpanded ? caffeine : undefined,
+        energyPer100g: isOptionalExpanded ? energyPer100g : undefined,
+        proteinPer100g: isOptionalExpanded ? proteinPer100g : undefined,
+        fatPer100g: isOptionalExpanded ? fatPer100g : undefined,
+        saturatedFatPer100g: isOptionalExpanded
+          ? saturatedFatPer100g
+          : undefined,
+        sugarPer100g: isOptionalExpanded ? sugarPer100g : undefined,
+        sodiumPer100g: isOptionalExpanded ? sodiumPer100g : undefined,
+        fibrePer100g: isOptionalExpanded ? fibrePer100g : undefined,
+        alcoholPer100g: isOptionalExpanded ? alcoholPer100g : undefined,
+        caffeinePer100g: isOptionalExpanded ? caffeinePer100g : undefined,
       })
     },
     onSuccess: () => {
@@ -227,15 +229,15 @@ export const IngredientFormModal = ({
         name,
         brand,
         carbsPer100g,
-        energy,
-        protein,
-        fat,
-        saturatedFat,
-        sugar,
-        sodium,
-        fibre,
-        alcohol,
-        caffeine,
+        energyPer100g,
+        proteinPer100g,
+        fatPer100g,
+        saturatedFatPer100g,
+        sugarPer100g,
+        sodiumPer100g,
+        fibrePer100g,
+        alcoholPer100g,
+        caffeinePer100g,
       })
     },
     onSuccess: () => {
@@ -370,9 +372,9 @@ export const IngredientFormModal = ({
                   <InputGroup>
                     <Input
                       type={'number'}
-                      value={energy}
+                      value={energyPer100g}
                       onChange={(e) => {
-                        setEnergy(e.target.value)
+                        setEnergyPer100g(e.target.value)
                       }}
                       placeholder={'eg. 100'}
                     />
@@ -386,9 +388,9 @@ export const IngredientFormModal = ({
                   <InputGroup>
                     <Input
                       type={'number'}
-                      value={protein}
+                      value={proteinPer100g}
                       onChange={(e) => {
-                        setProtein(e.target.value)
+                        setProteinPer100g(e.target.value)
                       }}
                       placeholder={'eg. 25'}
                     />
@@ -402,9 +404,9 @@ export const IngredientFormModal = ({
                   <InputGroup>
                     <Input
                       type={'number'}
-                      value={fat}
+                      value={fatPer100g}
                       onChange={(e) => {
-                        setFat(e.target.value)
+                        setFatPer100g(e.target.value)
                       }}
                       placeholder={'eg. 30'}
                     />
@@ -420,9 +422,9 @@ export const IngredientFormModal = ({
                   <InputGroup>
                     <Input
                       type={'number'}
-                      value={saturatedFat}
+                      value={saturatedFatPer100g}
                       onChange={(e) => {
-                        setSaturatedFat(e.target.value)
+                        setSaturatedFatPer100g(e.target.value)
                       }}
                       placeholder={'eg. 30'}
                     />
@@ -436,9 +438,9 @@ export const IngredientFormModal = ({
                   <InputGroup>
                     <Input
                       type={'number'}
-                      value={sugar}
+                      value={sugarPer100g}
                       onChange={(e) => {
-                        setSugar(e.target.value)
+                        setSugarPer100g(e.target.value)
                       }}
                       placeholder={'eg. 25'}
                     />
@@ -452,9 +454,9 @@ export const IngredientFormModal = ({
                   <InputGroup>
                     <Input
                       type={'number'}
-                      value={sodium}
+                      value={sodiumPer100g}
                       onChange={(e) => {
-                        setSodium(e.target.value)
+                        setSodiumPer100g(e.target.value)
                       }}
                       placeholder={'eg. 100'}
                     />
@@ -468,9 +470,9 @@ export const IngredientFormModal = ({
                   <InputGroup>
                     <Input
                       type={'number'}
-                      value={fibre}
+                      value={fibrePer100g}
                       onChange={(e) => {
-                        setFibre(e.target.value)
+                        setFibrePer100g(e.target.value)
                       }}
                       placeholder={'eg. 25'}
                     />
@@ -484,9 +486,9 @@ export const IngredientFormModal = ({
                   <InputGroup>
                     <Input
                       type={'number'}
-                      value={alcohol}
+                      value={alcoholPer100g}
                       onChange={(e) => {
-                        setAlcohol(e.target.value)
+                        setAlcoholPer100g(e.target.value)
                       }}
                       placeholder={'eg. 25'}
                     />
@@ -500,9 +502,9 @@ export const IngredientFormModal = ({
                   <InputGroup>
                     <Input
                       type={'number'}
-                      value={caffeine}
+                      value={caffeinePer100g}
                       onChange={(e) => {
-                        setCaffeine(e.target.value)
+                        setCaffeinePer100g(e.target.value)
                       }}
                       placeholder={'eg. 25'}
                     />

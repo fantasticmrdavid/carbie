@@ -29,16 +29,27 @@ model Ingredient {
   fat_per_100g           Float?
   saturated_fat_per_100g Float?
   carbs_per_100g         Float
-  carbs_per_serve        Float?
   sugar_per_100g         Float?
   sodium_per_100g        Float?
   fibre_per_100g         Float?
   alcohol_per_100g       Float?
   caffeine_per_100g      Float?
-  avg_serving_units      Float?
-  avg_serving_weight     Float?
-  data_source            String
-  gi                     GI?
+
+  energy_per_serve        Float?
+  protein_per_serve       Float?
+  fat_per_serve           Float?
+  saturated_fat_per_serve Float?
+  carbs_per_serve         Float?
+  sugar_per_serve         Float?
+  sodium_per_serve        Float?
+  fibre_per_serve         Float?
+  alcohol_per_serve       Float?
+  caffeine_per_serve      Float?
+
+  avg_serving_units  Float?
+  avg_serving_weight Float?
+  data_source        String
+  gi                 GI?
 
   meals Meal[]
   users User[]
