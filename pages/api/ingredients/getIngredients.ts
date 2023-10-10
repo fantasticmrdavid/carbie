@@ -17,7 +17,6 @@ export const getIngredients = async (
         name: true,
         brand_vendor: true,
       },
-      take: 10,
       where: {
         OR: [
           {
@@ -26,22 +25,21 @@ export const getIngredients = async (
             },
           },
           {
-            name: {
-              contains: q as string,
-              mode: 'insensitive',
-            },
-          },
-          {
             brand_vendor: {
-              contains: q as string,
-              mode: 'insensitive',
+              search: (q as string).split(' ').join(' & '),
             },
           },
         ],
       },
     })
 
-    return res.status(200).json(results.slice(0, 5))
+    const sortedResults = results.sort((r1, r2) => {
+      return r1.name.length > r2.name.length ? 1 : -1
+
+      return 0
+    })
+
+    return res.status(200).json(sortedResults.slice(0, 5))
   } catch (error) {
     console.error(error)
     return res.status(500).json({ error })
