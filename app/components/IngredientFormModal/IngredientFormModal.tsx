@@ -148,7 +148,7 @@ export const IngredientFormModal = ({
     if (
       !brand ||
       brand.length === 0 ||
-      (mode === 'add' && remoteValidation?.isValid)
+      (mode === 'add' && !remoteValidation?.isValid)
     )
       errors.push('brand')
     if (!carbsPer100g || carbsPer100g.length === 0) errors.push('carbsPer100g')
@@ -373,7 +373,6 @@ export const IngredientFormModal = ({
                   onSelect={(v) => {
                     setBrand(v)
                   }}
-                  isInvalid={validationErrors.indexOf('brand') !== -1}
                   value={brand}
                 />
                 {validationErrors.indexOf('brand') !== -1 && (

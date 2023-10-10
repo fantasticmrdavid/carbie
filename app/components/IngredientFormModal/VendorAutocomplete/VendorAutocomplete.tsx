@@ -1,73 +1,152 @@
-import React, { useState } from 'react'
-import { ReactSearchAutocomplete } from 'react-search-autocomplete'
-import { useQuery } from '@tanstack/react-query'
+import React, { useEffect, useState } from 'react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import styles from './vendorAutocomplete.module.scss'
 import axios from 'axios'
-
-type Item = {
-  id: string
-  name: string
-}
+import {
+  Box,
+  Divider,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  List,
+  ListItem,
+  Spinner,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
+import { FiSearch } from 'react-icons/fi'
+import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon'
 
 type Props = {
   onSelect: (s: string) => void
   value?: string
-  isInvalid: boolean
 }
+
+const MIN_SEARCH_CHARS = 2
 export const VendorAutocomplete = (props: Props) => {
-  const { onSelect, value, isInvalid } = props
+  const { onSelect, value } = props
+  const queryClient = useQueryClient()
   const [search, setSearch] = useState(value)
-  const { data, isLoading } = useQuery<string[]>(
+  const [isResultsOpen, setIsResultsOpen] = useState(false)
+  const { data, isLoading, refetch } = useQuery<string[]>(
     ['searchVendors'],
     async () =>
       await axios.get(`/api/vendors?q=${search}`).then((res) => res.data),
+    {
+      enabled: false,
+    },
   )
 
-  const items =
-    !isLoading && data
-      ? data.map((d) => ({
-          id: d,
-          name: d,
-        }))
-      : []
+  useEffect(() => {
+    refetch()
+  }, [search, refetch])
 
-  const styling = {
-    ...{
-      borderRadius: '0.375rem',
-      height: '37px',
-      zIndex: 2,
-    },
-    ...(isInvalid ? { border: '2px solid #E53E3E' } : {}),
-  }
+  useEffect(() => {
+    // Clean up the query when the component unmounts
+    return () => {
+      queryClient.cancelQueries(['searchVendors'])
+    }
+  }, [queryClient])
 
   return (
     <div className={styles.container}>
-      <ReactSearchAutocomplete<Item>
-        fuseOptions={{
-          threshold: 0.3,
-        }}
-        items={items}
-        inputSearchString={value}
-        onSearch={(s) => {
-          if (s.length > 0) {
-            onSelect(s)
-            setSearch(s)
-          }
-          return false
-        }}
-        onSelect={(i) => {
-          onSelect(i.name)
-        }}
-        formatResult={(item: Item) => (
-          <div style={{ cursor: 'pointer' }}>{item.name}</div>
-        )}
-        placeholder={'eg. Bakers Delight'}
-        styling={styling}
-        showNoResults={false}
-        showIcon={false}
-        autoFocus={false}
-        onClear={() => onSelect('')}
-      />
+      <Box className={styles.searchField}>
+        <InputGroup alignItems={'center'}>
+          <InputLeftElement pointerEvents="none" top={'unset'}>
+            <FiSearch opacity={0.5} />
+          </InputLeftElement>
+          <Input
+            outline={'unset'}
+            placeholder="Search for brands/vendors"
+            value={search}
+            onChange={(e) => {
+              setIsResultsOpen(true)
+              setSearch(e.target.value)
+              onSelect(e.target.value)
+            }}
+            onFocus={() => setIsResultsOpen(true)}
+            size="lg"
+            borderWidth={'0px'}
+            borderRadius={'24px'}
+            className={styles.searchInput}
+          />
+          {isLoading && search && search.length >= MIN_SEARCH_CHARS && (
+            <InputRightElement pointerEvents="none" top={'unset'}>
+              <Spinner size="sm" />
+            </InputRightElement>
+          )}
+          {!isLoading && search && search.length > 0 && (
+            <InputRightElement
+              cursor={'pointer'}
+              top={'unset'}
+              opacity={0.5}
+              right={'0.5em'}
+            >
+              <div onClick={() => setSearch('')}>
+                <CloseIcon />
+              </div>
+            </InputRightElement>
+          )}
+        </InputGroup>
+        {!isLoading &&
+          isResultsOpen &&
+          search &&
+          search.length >= MIN_SEARCH_CHARS && (
+            <>
+              <Divider marginLeft={'1em'} width={'calc(100% - 2em)'} />
+              <VStack
+                position={'relative'}
+                align={'flex-start'}
+                spacing={0}
+                backgroundColor={'#fff'}
+                zIndex={2}
+                borderRadius={'24px'}
+                padding={'0.5em'}
+              >
+                {data &&
+                  data.map((s) => (
+                    <List
+                      key={`vendorSearch_${s}`}
+                      onClick={() => {
+                        if (s.length > 0) {
+                          onSelect(s)
+                          setSearch(s)
+                        }
+                        return false
+                      }}
+                      cursor={'pointer'}
+                      p={2}
+                      _hover={{
+                        bgColor: 'gray.100',
+                      }}
+                      w={'100%'}
+                      textAlign={'left'}
+                    >
+                      <ListItem display={'flex'} alignItems={'center'}>
+                        <Text>{s}</Text>
+                      </ListItem>
+                    </List>
+                  ))}
+                {((!isLoading && !data) || (data && data.length === 0)) && (
+                  <List
+                    key={'noResults'}
+                    p={2}
+                    _hover={{
+                      bgColor: 'gray.100',
+                    }}
+                    w={'100%'}
+                    textAlign={'left'}
+                  >
+                    <ListItem display={'flex'} alignItems={'center'}>
+                      <Text>No results</Text>
+                    </ListItem>
+                  </List>
+                )}
+              </VStack>
+            </>
+          )}
+      </Box>
     </div>
   )
 }

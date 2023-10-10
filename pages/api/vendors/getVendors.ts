@@ -12,9 +12,18 @@ export const getVendors = async (req: NextApiRequest, res: NextApiResponse) => {
       where: {
         AND: [
           {
-            brand_vendor: {
-              contains: q as string,
-            },
+            OR: [
+              {
+                brand_vendor: {
+                  search: (q as string).split(' ').join(' & '),
+                },
+              },
+              {
+                brand_vendor: {
+                  contains: q as string,
+                },
+              },
+            ],
           },
           {
             users: {
@@ -30,6 +39,7 @@ export const getVendors = async (req: NextApiRequest, res: NextApiResponse) => {
       distinct: ['brand_vendor'],
       orderBy: [{ brand_vendor: 'asc' }],
     })
+
     const results = ingredients.map((i) => i.brand_vendor)
     return res.status(200).json(results)
   } catch (error) {
