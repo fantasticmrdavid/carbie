@@ -82,7 +82,7 @@ export const addIngredient = async (
         caffeine_per_serve: caffeinePerServe
           ? parseFloat(caffeinePerServe)
           : undefined,
-        notes: notes.trim(),
+        notes: notes ? notes?.trim() : undefined,
         data_source: 'web',
         users: {
           connect: {
