@@ -56,9 +56,6 @@ model Ingredient {
 
   meals Meal[]
   users User[]
-
-  @@index(fields: [name], map: "Ingredient_name_index")
-  @@index(fields: [brand_vendor], map: "Ingredient_brand_vendor_index")
 }
 
 model Meal {
