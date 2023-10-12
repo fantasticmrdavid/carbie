@@ -25,8 +25,20 @@ export const getIngredients = async (
             },
           },
           {
+            name: {
+              contains: q as string,
+              mode: 'insensitive',
+            },
+          },
+          {
             brand_vendor: {
               search: (q as string).split(' ').join(' & '),
+            },
+          },
+          {
+            brand_vendor: {
+              contains: q as string,
+              mode: 'insensitive',
             },
           },
         ],
