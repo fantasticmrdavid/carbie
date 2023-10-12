@@ -37,7 +37,7 @@ export const IngredientSearch = () => {
   )
 
   useEffect(() => {
-    refetch()
+    if (search.length >= MIN_SEARCH_CHARS) refetch()
   }, [search, refetch])
 
   useEffect(() => {
