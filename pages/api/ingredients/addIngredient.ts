@@ -35,6 +35,8 @@ export const addIngredient = async (
       fibrePerServe,
       alcoholPerServe,
       caffeinePerServe,
+      servingSizeUnits,
+      servingSizeGrams,
       notes,
     } = req.body
 
@@ -83,6 +85,12 @@ export const addIngredient = async (
           ? parseFloat(caffeinePerServe)
           : undefined,
         notes: notes ? notes?.trim() : undefined,
+        serving_size_units: servingSizeUnits
+          ? parseFloat(servingSizeUnits)
+          : undefined,
+        serving_size_grams: servingSizeGrams
+          ? parseFloat(servingSizeGrams)
+          : undefined,
         data_source: 'web',
         users: {
           connect: {

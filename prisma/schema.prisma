@@ -46,8 +46,8 @@ model Ingredient {
   alcohol_per_serve       Float?
   caffeine_per_serve      Float?
 
-  serving_size_units Float?
-  serving_size_grams Float?
+  serving_size_units Float? // No. of units in a serve
+  serving_size_grams Float? // No. of grams per serve
 
   notes String?
 

@@ -105,6 +105,18 @@ export const Page = () => {
                 <strong>Notes:</strong> {ingredient.notes}
               </div>
             )}
+            {ingredient.serving_size_units && (
+              <div>
+                <strong>Items per serve:</strong>{' '}
+                {ingredient.serving_size_units}
+              </div>
+            )}
+            {ingredient.serving_size_grams && (
+              <div>
+                <strong>Serving weight:</strong> {ingredient.serving_size_grams}
+                g
+              </div>
+            )}
             <NutritionTable ingredient={ingredient} />
             {ingredient.carbs_per_100g > 0 && (
               <>

@@ -119,9 +119,18 @@ export const IngredientFormModal = ({
     ingredient?.caffeine_per_serve?.toString() || undefined,
   )
 
+  const [servingSizeUnits, setServingSizeUnits] = useState<string | undefined>(
+    ingredient?.serving_size_units?.toString() || undefined,
+  )
+
+  const [servingSizeGrams, setServingSizeGrams] = useState<string | undefined>(
+    ingredient?.serving_size_grams?.toString() || undefined,
+  )
+
   const [notes, setNotes] = useState<string | undefined>(
     ingredient?.notes || undefined,
   )
+
   const [isSaving, setIsSaving] = useState(false)
 
   const { data: remoteValidation, refetch: revalidateAlreadyExists } =
@@ -204,6 +213,8 @@ export const IngredientFormModal = ({
       setFibrePerServe('')
       setAlcoholPerServe('')
       setCaffeinePerServe('')
+      setServingSizeGrams('')
+      setServingSizeUnits('')
 
       setNotes('')
 
@@ -238,6 +249,8 @@ export const IngredientFormModal = ({
         fibrePerServe,
         alcoholPerServe,
         caffeinePerServe,
+        servingSizeUnits,
+        servingSizeGrams,
         notes,
       })
     },
@@ -294,6 +307,8 @@ export const IngredientFormModal = ({
         fibrePerServe,
         alcoholPerServe,
         caffeinePerServe,
+        servingSizeUnits,
+        servingSizeGrams,
         notes,
       })
     },
@@ -405,6 +420,51 @@ export const IngredientFormModal = ({
                 </InputGroup>
                 {validationErrors.indexOf('carbsPer100g') !== -1 && (
                   <FormErrorMessage>Specify carbs per 100g/ml</FormErrorMessage>
+                )}
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl
+                isInvalid={validationErrors.indexOf('servingSizeUnits') !== -1}
+              >
+                <FormLabel className={styles.formLabel}>
+                  Items per serve
+                </FormLabel>
+                <Input
+                  type={'number'}
+                  value={servingSizeUnits}
+                  onChange={(e) => {
+                    setServingSizeUnits(e.target.value)
+                  }}
+                  placeholder={'eg. 1'}
+                />
+                {validationErrors.indexOf('servingSizeUnits') !== -1 && (
+                  <FormErrorMessage>
+                    Specify number of items in a serve
+                  </FormErrorMessage>
+                )}
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl
+                isInvalid={validationErrors.indexOf('servingSizeGrams') !== -1}
+              >
+                <FormLabel className={styles.formLabel}>
+                  Serving weight
+                </FormLabel>
+                <InputGroup>
+                  <Input
+                    type={'number'}
+                    value={servingSizeGrams}
+                    onChange={(e) => {
+                      setServingSizeGrams(e.target.value)
+                    }}
+                    placeholder={'eg. 70'}
+                  />
+                  <InputRightElement>g</InputRightElement>
+                </InputGroup>
+                {validationErrors.indexOf('servingSizeGrams') !== -1 && (
+                  <FormErrorMessage>Specify grams in a serve</FormErrorMessage>
                 )}
               </FormControl>
             </GridItem>
