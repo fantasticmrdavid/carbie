@@ -39,6 +39,7 @@ export const updateIngredient = async (
       notes,
       servingSizeUnits,
       servingSizeGrams,
+      isGeneric,
     } = req.body
 
     const result = await prisma.ingredient.update({
@@ -92,6 +93,7 @@ export const updateIngredient = async (
         serving_size_grams: servingSizeGrams
           ? parseFloat(servingSizeGrams)
           : undefined,
+        is_generic: !!isGeneric,
       },
       where: {
         id,

@@ -21,7 +21,7 @@ const IndexPage = () => {
       {session && session.user && (
         <Center>
           <Button onClick={onOpen} colorScheme={'blue'}>
-            Add Ingredient
+            Add Food
           </Button>
           <IngredientFormModal mode={'add'} isOpen={isOpen} onClose={onClose} />
         </Center>

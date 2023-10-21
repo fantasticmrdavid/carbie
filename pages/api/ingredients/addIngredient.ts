@@ -38,6 +38,7 @@ export const addIngredient = async (
       servingSizeUnits,
       servingSizeGrams,
       notes,
+      isGeneric,
     } = req.body
 
     const result = await prisma.ingredient.create({
@@ -91,6 +92,7 @@ export const addIngredient = async (
         serving_size_grams: servingSizeGrams
           ? parseFloat(servingSizeGrams)
           : undefined,
+        is_generic: !!isGeneric,
         data_source: 'web',
         users: {
           connect: {

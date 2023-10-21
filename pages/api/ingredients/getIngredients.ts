@@ -16,6 +16,7 @@ export const getIngredients = async (
         id: true,
         name: true,
         brand_vendor: true,
+        is_generic: true,
       },
       where: {
         OR: [
@@ -46,6 +47,10 @@ export const getIngredients = async (
     })
 
     const sortedResults = results.sort((r1, r2) => {
+      if (r1.is_generic && r2.is_generic)
+        return r1.name.length > r2.name.length ? 1 : -1
+      if (r1.is_generic) return -1
+      if (r2.is_generic) return 1
       return r1.name.length > r2.name.length ? 1 : -1
 
       return 0

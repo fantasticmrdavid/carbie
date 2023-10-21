@@ -28,6 +28,8 @@ import {
   useToast,
   Heading,
   Textarea,
+  Checkbox,
+  Box,
 } from '@chakra-ui/react'
 
 import styles from './ingredientFormModal.module.scss'
@@ -131,6 +133,8 @@ export const IngredientFormModal = ({
     ingredient?.notes || undefined,
   )
 
+  const [isGeneric, setIsGeneric] = useState(ingredient?.is_generic || false)
+
   const [isSaving, setIsSaving] = useState(false)
 
   const { data: remoteValidation, refetch: revalidateAlreadyExists } =
@@ -217,6 +221,7 @@ export const IngredientFormModal = ({
       setServingSizeUnits('')
 
       setNotes('')
+      setIsGeneric(false)
 
       setIsPristine(true)
       setValidationErrors([])
@@ -252,6 +257,7 @@ export const IngredientFormModal = ({
         servingSizeUnits,
         servingSizeGrams,
         notes,
+        isGeneric,
       })
     },
     onSuccess: () => {
@@ -310,6 +316,7 @@ export const IngredientFormModal = ({
         servingSizeUnits,
         servingSizeGrams,
         notes,
+        isGeneric,
       })
     },
     onSuccess: () => {
@@ -481,7 +488,7 @@ export const IngredientFormModal = ({
                 <strong>Per Serving</strong>
               </Tab>
               <Tab>
-                <strong>Notes</strong>
+                <strong>Misc</strong>
               </Tab>
             </TabList>
             <TabPanels>
@@ -825,6 +832,16 @@ export const IngredientFormModal = ({
                       placeholder={'Any comments and notes'}
                     />
                   </Flex>
+                </FormControl>
+                <FormControl>
+                  <Box pt={4}>
+                    <Checkbox
+                      isChecked={isGeneric}
+                      onChange={(e) => setIsGeneric(e.target.checked)}
+                    >
+                      This is a standard/generic version of the item
+                    </Checkbox>
+                  </Box>
                 </FormControl>
               </TabPanel>
             </TabPanels>
