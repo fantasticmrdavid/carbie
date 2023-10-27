@@ -23,10 +23,11 @@ export const Page = () => {
   const { query } = useRouter()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { id } = query
-  const { data: ingredient, isLoading } = useQuery<IngredientWithRelations>(
-    ['getIngredient', id],
-    async () => await fetch(`/api/ingredients/${id}`).then((res) => res.json()),
-  )
+  const { data: ingredient, isLoading } = useQuery<IngredientWithRelations>({
+    queryKey: ['getIngredient', id],
+    queryFn: async () =>
+      await fetch(`/api/ingredients/${id}`).then((res) => res.json()),
+  })
 
   if (isLoading) {
     return (

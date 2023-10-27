@@ -29,14 +29,12 @@ export const VendorAutocomplete = (props: Props) => {
   const queryClient = useQueryClient()
   const [search, setSearch] = useState(value)
   const [isResultsOpen, setIsResultsOpen] = useState(false)
-  const { data, isLoading, refetch } = useQuery<string[]>(
-    ['searchVendors'],
-    async () =>
+  const { data, isLoading, refetch } = useQuery<string[]>({
+    queryKey: ['searchVendors'],
+    queryFn: async () =>
       await axios.get(`/api/vendors?q=${search}`).then((res) => res.data),
-    {
-      enabled: false,
-    },
-  )
+    enabled: false,
+  })
 
   useEffect(() => {
     refetch()
@@ -45,7 +43,7 @@ export const VendorAutocomplete = (props: Props) => {
   useEffect(() => {
     // Clean up the query when the component unmounts
     return () => {
-      queryClient.cancelQueries(['searchVendors'])
+      queryClient.cancelQueries({ queryKey: ['searchVendors'] })
     }
   }, [queryClient])
 

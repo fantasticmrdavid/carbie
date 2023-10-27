@@ -138,17 +138,17 @@ export const IngredientFormModal = ({
   const [isSaving, setIsSaving] = useState(false)
 
   const { data: remoteValidation, refetch: revalidateAlreadyExists } =
-    useQuery<{ isValid: boolean }>(
-      ['validateIngredient'],
-      async () =>
+    useQuery<{ isValid: boolean }>({
+      queryKey: ['validateIngredient'],
+      queryFn: async () =>
         await axios
           .post(`/api/ingredients/validate`, {
             name,
             brand,
           })
           .then((res) => res.data),
-      { enabled: false },
-    )
+      enabled: false,
+    })
 
   const getValidationErrors = useCallback(() => {
     const errors: string[] = []
@@ -261,7 +261,7 @@ export const IngredientFormModal = ({
       })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['searchIngredients'])
+      queryClient.invalidateQueries({ queryKey: ['searchIngredients'] })
       setIsSaving(false)
       resetForm()
       onClose()
@@ -320,8 +320,10 @@ export const IngredientFormModal = ({
       })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['searchIngredients'])
-      queryClient.invalidateQueries(['getIngredient', ingredient?.id])
+      queryClient.invalidateQueries({ queryKey: ['searchIngredients'] })
+      queryClient.invalidateQueries({
+        queryKey: ['getIngredient', ingredient?.id],
+      })
       setIsSaving(false)
       resetForm()
       onClose()

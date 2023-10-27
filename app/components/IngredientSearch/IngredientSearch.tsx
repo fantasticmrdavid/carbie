@@ -27,14 +27,14 @@ export const IngredientSearch = () => {
   const queryClient = useQueryClient()
   const [search, setSearch] = useState('')
   const [isResultsOpen, setIsResultsOpen] = useState(false)
-  const { data, isLoading, refetch } = useQuery<Ingredient[]>(
-    ['searchIngredients', search],
-    async ({ signal }) =>
+  const { data, isLoading, refetch } = useQuery<Ingredient[]>({
+    queryKey: ['searchIngredients', search],
+    queryFn: async ({ signal }) =>
       await axios
         .get(`/api/ingredients?q=${search}`, { signal })
         .then((res) => res.data),
-    { enabled: false },
-  )
+    enabled: false,
+  })
 
   useEffect(() => {
     if (search.length >= MIN_SEARCH_CHARS) refetch()
@@ -43,7 +43,7 @@ export const IngredientSearch = () => {
   useEffect(() => {
     // Clean up the query when the component unmounts
     return () => {
-      queryClient.cancelQueries(['searchIngredients'])
+      queryClient.cancelQueries({ queryKey: ['searchIngredients'] })
     }
   }, [queryClient])
 
