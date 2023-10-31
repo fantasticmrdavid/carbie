@@ -17,6 +17,8 @@ export const getIngredients = async (
         name: true,
         brand_vendor: true,
         is_generic: true,
+        carbs_per_100g: true,
+        carbs_per_serve: true,
       },
       where: {
         OR: [

@@ -61,79 +61,79 @@ export const IngredientFormModal = ({
   const [name, setName] = useState(ingredient ? ingredient.name : '')
   const [brand, setBrand] = useState(ingredient ? ingredient.brand_vendor : '')
   const [carbsPer100g, setCarbsPer100g] = useState<string | undefined>(
-    ingredient?.carbs_per_100g.toString() || '',
+    ingredient?.carbs_per_100g.toString() ?? '',
   )
   const [carbsPerServe, setCarbsPerServe] = useState<string | undefined>(
-    ingredient?.carbs_per_serve?.toString() || undefined,
+    ingredient?.carbs_per_serve?.toString() ?? undefined,
   )
   const [energyPer100g, setEnergyPer100g] = useState<string | undefined>(
-    ingredient?.energy_per_100g?.toString() || undefined,
+    ingredient?.energy_per_100g?.toString() ?? undefined,
   )
   const [proteinPer100g, setProteinPer100g] = useState<string | undefined>(
-    ingredient?.protein_per_100g?.toString() || undefined,
+    ingredient?.protein_per_100g?.toString() ?? undefined,
   )
   const [fatPer100g, setFatPer100g] = useState<string | undefined>(
-    ingredient?.fat_per_100g?.toString() || undefined,
+    ingredient?.fat_per_100g?.toString() ?? undefined,
   )
   const [saturatedFatPer100g, setSaturatedFatPer100g] = useState<
     string | undefined
-  >(ingredient?.saturated_fat_per_100g?.toString() || undefined)
+  >(ingredient?.saturated_fat_per_100g?.toString() ?? undefined)
   const [sugarPer100g, setSugarPer100g] = useState<string | undefined>(
-    ingredient?.sugar_per_100g?.toString() || undefined,
+    ingredient?.sugar_per_100g?.toString() ?? undefined,
   )
   const [sodiumPer100g, setSodiumPer100g] = useState<string | undefined>(
-    ingredient?.sodium_per_100g?.toString() || undefined,
+    ingredient?.sodium_per_100g?.toString() ?? undefined,
   )
   const [fibrePer100g, setFibrePer100g] = useState<string | undefined>(
-    ingredient?.fibre_per_100g?.toString() || undefined,
+    ingredient?.fibre_per_100g?.toString() ?? undefined,
   )
   const [alcoholPer100g, setAlcoholPer100g] = useState<string | undefined>(
-    ingredient?.alcohol_per_100g?.toString() || undefined,
+    ingredient?.alcohol_per_100g?.toString() ?? undefined,
   )
   const [caffeinePer100g, setCaffeinePer100g] = useState<string | undefined>(
-    ingredient?.caffeine_per_100g?.toString() || undefined,
+    ingredient?.caffeine_per_100g?.toString() ?? undefined,
   )
   const [energyPerServe, setEnergyPerServe] = useState<string | undefined>(
-    ingredient?.energy_per_serve?.toString() || undefined,
+    ingredient?.energy_per_serve?.toString() ?? undefined,
   )
   const [proteinPerServe, setProteinPerServe] = useState<string | undefined>(
-    ingredient?.protein_per_serve?.toString() || undefined,
+    ingredient?.protein_per_serve?.toString() ?? undefined,
   )
   const [fatPerServe, setFatPerServe] = useState<string | undefined>(
-    ingredient?.fat_per_serve?.toString() || undefined,
+    ingredient?.fat_per_serve?.toString() ?? undefined,
   )
   const [saturatedFatPerServe, setSaturatedFatPerServe] = useState<
     string | undefined
-  >(ingredient?.saturated_fat_per_serve?.toString() || undefined)
+  >(ingredient?.saturated_fat_per_serve?.toString() ?? undefined)
   const [sugarPerServe, setSugarPerServe] = useState<string | undefined>(
-    ingredient?.sugar_per_serve?.toString() || undefined,
+    ingredient?.sugar_per_serve?.toString() ?? undefined,
   )
   const [sodiumPerServe, setSodiumPerServe] = useState<string | undefined>(
-    ingredient?.sodium_per_serve?.toString() || undefined,
+    ingredient?.sodium_per_serve?.toString() ?? undefined,
   )
   const [fibrePerServe, setFibrePerServe] = useState<string | undefined>(
-    ingredient?.fibre_per_serve?.toString() || undefined,
+    ingredient?.fibre_per_serve?.toString() ?? undefined,
   )
   const [alcoholPerServe, setAlcoholPerServe] = useState<string | undefined>(
-    ingredient?.alcohol_per_serve?.toString() || undefined,
+    ingredient?.alcohol_per_serve?.toString() ?? undefined,
   )
   const [caffeinePerServe, setCaffeinePerServe] = useState<string | undefined>(
-    ingredient?.caffeine_per_serve?.toString() || undefined,
+    ingredient?.caffeine_per_serve?.toString() ?? undefined,
   )
 
   const [servingSizeUnits, setServingSizeUnits] = useState<string | undefined>(
-    ingredient?.serving_size_units?.toString() || undefined,
+    ingredient?.serving_size_units?.toString() ?? undefined,
   )
 
   const [servingSizeGrams, setServingSizeGrams] = useState<string | undefined>(
-    ingredient?.serving_size_grams?.toString() || undefined,
+    ingredient?.serving_size_grams?.toString() ?? undefined,
   )
 
   const [notes, setNotes] = useState<string | undefined>(
-    ingredient?.notes || undefined,
+    ingredient?.notes ?? undefined,
   )
 
-  const [isGeneric, setIsGeneric] = useState(ingredient?.is_generic || false)
+  const [isGeneric, setIsGeneric] = useState(ingredient?.is_generic ?? false)
 
   const [isSaving, setIsSaving] = useState(false)
 

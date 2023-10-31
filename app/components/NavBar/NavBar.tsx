@@ -22,7 +22,12 @@ export const NavBar = () => {
         />
       </Flex>
       <Flex className={styles.navRight}>
-        {pathname !== '/' && <IngredientSearch />}
+        {pathname !== '/' && (
+          <IngredientSearch
+            id={'navbar'}
+            onChange={(i) => router.push(`/ingredient/${i.id}`)}
+          />
+        )}
         {!session && <Button onClick={() => signIn()}>Sign in</Button>}
       </Flex>
     </nav>

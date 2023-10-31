@@ -60,17 +60,19 @@ model Ingredient {
 }
 
 model Meal {
-  id              Int          @id @default(autoincrement())
-  created         DateTime     @default(now()) @db.Timestamp(6)
-  modified        DateTime?    @default(now()) @db.Timestamp(6)
-  name            String
-  ingredients     Ingredient[]
-  total_weight    Float
-  total_carbs     Float?
-  carbs_per_100g  Float?
-  carbs_per_serve Float?
-  notes           String?
-  gi              GI?
+  id                 Int          @id @default(autoincrement())
+  created            DateTime     @default(now()) @db.Timestamp(6)
+  modified           DateTime?    @default(now()) @db.Timestamp(6)
+  name               String
+  ingredients        Ingredient[]
+  total_weight       Float
+  total_carbs        Float?
+  carbs_per_100g     Float?
+  carbs_per_serve    Float?
+  notes              String?
+  gi                 GI?
+  serving_size_units Float? // No. of units in a serve
+  serving_size_grams Float? // No. of grams per serve
 
   users User[]
 }
