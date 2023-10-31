@@ -12,22 +12,14 @@ import {
   Box,
   Button,
   Divider,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
+  Flex,
   Grid,
   GridItem,
   Heading,
-  Input,
-  InputGroup,
-  InputRightElement,
   useMediaQuery,
-  useToast,
 } from '@chakra-ui/react'
 
 import styles from './mealFormModal.module.scss'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
 import { MealWithRelations } from '@/pages/api/meals/getMeals'
 import {
   MealIngredient,
@@ -42,130 +34,11 @@ type Props = {
   meal?: MealWithRelations
 }
 
-export const MealFormModal = ({ isOpen, onClose, mode, meal }: Props) => {
-  const queryClient = useQueryClient()
-  const toast = useToast()
+export const MealFormModal = ({ isOpen, onClose }: Props) => {
   const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
-  const [validationErrors, setValidationErrors] = useState<string[]>([])
-
-  const [name, setName] = useState(meal ? meal.name : '')
-  const [carbsPer100g, setCarbsPer100g] = useState<string | undefined>(
-    meal?.carbs_per_100g?.toString() ?? '',
-  )
-  const [carbsPerServe, setCarbsPerServe] = useState<string | undefined>(
-    meal?.carbs_per_serve?.toString() ?? undefined,
-  )
-
-  const [servingSizeUnits, setServingSizeUnits] = useState<string | undefined>(
-    meal?.serving_size_units?.toString() ?? undefined,
-  )
-
-  const [servingSizeGrams, setServingSizeGrams] = useState<string | undefined>(
-    meal?.serving_size_grams?.toString() ?? undefined,
-  )
-
   const [ingredientList, setIngredientList] = useState<MealIngredientProps[]>(
     [],
   )
-
-  const [notes, setNotes] = useState<string | undefined>(
-    meal?.notes ?? undefined,
-  )
-
-  const [isSaving, setIsSaving] = useState(false)
-
-  const resetForm = () => {
-    if (mode === 'add') {
-      setName('')
-      setCarbsPer100g('')
-      setCarbsPerServe('')
-      setServingSizeGrams('')
-      setServingSizeUnits('')
-
-      setNotes('')
-      setValidationErrors([])
-    }
-  }
-
-  const addMeal = useMutation({
-    mutationFn: () => {
-      setIsSaving(true)
-      return axios.post('/api/meals', {
-        name,
-        carbsPer100g,
-        carbsPerServe,
-        servingSizeUnits,
-        servingSizeGrams,
-        notes,
-      })
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['searchMeals'] })
-      setIsSaving(false)
-      resetForm()
-      onClose()
-
-      toast({
-        title: `${name} added!`,
-        status: 'success',
-        duration: 2000,
-        isClosable: true,
-      })
-    },
-    onError: (error) => {
-      console.log('ERROR: ', error)
-      setIsSaving(false)
-      toast({
-        title: 'Error adding food',
-        description: 'Check the console for details',
-        status: 'error',
-        duration: 2000,
-        isClosable: true,
-      })
-    },
-  })
-
-  const saveMeal = useMutation({
-    mutationFn: () => {
-      setIsSaving(true)
-      return axios.patch('/api/meals', {
-        id: meal?.id,
-        name,
-        carbsPer100g,
-        carbsPerServe,
-        servingSizeUnits,
-        servingSizeGrams,
-        notes,
-      })
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['searchMeals'] })
-      queryClient.invalidateQueries({
-        queryKey: ['getMeal', meal?.id],
-      })
-      setIsSaving(false)
-      resetForm()
-      onClose()
-
-      toast({
-        title: `${name} updated!`,
-        status: 'success',
-        duration: 2000,
-        isClosable: true,
-      })
-    },
-    onError: (error) => {
-      console.log('ERROR: ', error)
-      setIsSaving(false)
-      toast({
-        title: 'Error updating food',
-        description: 'Check the console for details',
-        status: 'error',
-        duration: 2000,
-        isClosable: true,
-      })
-    },
-  })
 
   const carbTotal = ingredientList.reduce((total, current) => {
     const { ingredient, qty, qtyMode } = current
@@ -195,33 +68,18 @@ export const MealFormModal = ({ isOpen, onClose, mode, meal }: Props) => {
       isOpen={isOpen}
       onClose={() => {
         onClose()
-        resetForm()
       }}
-      size={'2xl'}
+      size={isLargerThan800 ? '2xl' : 'full'}
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{mode === 'add' ? 'Create' : 'Edit'} Meal</ModalHeader>
+        <ModalHeader>Meal Calculator</ModalHeader>
         <ModalCloseButton />
         <ModalBody className={styles.modalBody}>
-          <FormControl
-            isRequired
-            isInvalid={validationErrors.indexOf('name') !== -1}
-          >
-            <FormLabel className={styles.formLabel}>Name</FormLabel>
-            <Input
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value)
-              }}
-              placeholder={'eg. White bread'}
-            />
-            {validationErrors.indexOf('name') !== -1 && (
-              <FormErrorMessage>Specify a name for the meal</FormErrorMessage>
-            )}
-          </FormControl>
           <Heading as="h5" noOfLines={1} size={'sm'} mt={4}>
-            <Box mb={2}>Ingredients/Foods: {carbTotal.toFixed(2)}g/c</Box>
+            <Box mb={2}>Ingredients/Foods</Box>
+          </Heading>
+          {ingredientList.length > 0 && (
             <Grid gap={'0.5em'}>
               {ingredientList.map((i) => (
                 <GridItem key={`mealIngredient_${i.ingredient.id}`}>
@@ -250,88 +108,26 @@ export const MealFormModal = ({ isOpen, onClose, mode, meal }: Props) => {
                       )
                     }
                   />
+                  {!isLargerThan800 && <Divider my={2} />}
                 </GridItem>
               ))}
             </Grid>
-            <Divider my={4} />
-            <MealIngredient
-              id={`mealIngredient_add`}
-              mode={'add'}
-              onChange={(payload) => {
-                console.log(payload)
-                setIngredientList([...ingredientList, payload])
-              }}
-            />
-          </Heading>
-          <Grid
-            templateColumns={isLargerThan800 ? '1fr 1fr 1fr' : '100%'}
-            alignItems={'flex-start'}
-            gap={'1em'}
-          >
-            <GridItem>
-              <FormControl>
-                <FormLabel className={styles.formLabel}>
-                  Carbs per 100g/ml
-                </FormLabel>
-                <InputGroup>
-                  <Input
-                    type={'number'}
-                    value={carbsPer100g}
-                    onChange={(e) => {
-                      setCarbsPer100g(e.target.value)
-                    }}
-                    placeholder={'eg. 15'}
-                  />
-                  <InputRightElement>g</InputRightElement>
-                </InputGroup>
-              </FormControl>
-            </GridItem>
-            <GridItem>
-              <FormControl
-                isInvalid={validationErrors.indexOf('servingSizeUnits') !== -1}
-              >
-                <FormLabel className={styles.formLabel}>
-                  Items per serve
-                </FormLabel>
-                <Input
-                  type={'number'}
-                  value={servingSizeUnits}
-                  onChange={(e) => {
-                    setServingSizeUnits(e.target.value)
-                  }}
-                  placeholder={'eg. 1'}
-                />
-                {validationErrors.indexOf('servingSizeUnits') !== -1 && (
-                  <FormErrorMessage>
-                    Specify number of items in a serve
-                  </FormErrorMessage>
-                )}
-              </FormControl>
-            </GridItem>
-            <GridItem>
-              <FormControl
-                isInvalid={validationErrors.indexOf('servingSizeGrams') !== -1}
-              >
-                <FormLabel className={styles.formLabel}>
-                  Serving weight
-                </FormLabel>
-                <InputGroup>
-                  <Input
-                    type={'number'}
-                    value={servingSizeGrams}
-                    onChange={(e) => {
-                      setServingSizeGrams(e.target.value)
-                    }}
-                    placeholder={'eg. 70'}
-                  />
-                  <InputRightElement>g</InputRightElement>
-                </InputGroup>
-                {validationErrors.indexOf('servingSizeGrams') !== -1 && (
-                  <FormErrorMessage>Specify grams in a serve</FormErrorMessage>
-                )}
-              </FormControl>
-            </GridItem>
-          </Grid>
+          )}
+          {carbTotal > 0 && (
+            <>
+              <Flex justifyContent={'flex-end'} alignItems={'center'}>
+                <strong>Total: {carbTotal.toFixed(2)}g/c</strong>
+              </Flex>
+              <Divider my={4} />
+            </>
+          )}
+          <MealIngredient
+            id={`mealIngredient_add`}
+            mode={'add'}
+            onChange={(payload) => {
+              setIngredientList([...ingredientList, payload])
+            }}
+          />
         </ModalBody>
 
         <ModalFooter>
@@ -340,32 +136,10 @@ export const MealFormModal = ({ isOpen, onClose, mode, meal }: Props) => {
             mr={3}
             onClick={() => {
               onClose()
-              resetForm()
             }}
           >
-            Cancel
+            Close
           </Button>
-          {mode === 'add' ? (
-            <Button
-              disabled={isSaving}
-              colorScheme="blue"
-              onClick={async () => {
-                addMeal.mutate()
-              }}
-            >
-              {isSaving ? 'Creating...' : 'Create'}
-            </Button>
-          ) : (
-            <Button
-              disabled={isSaving}
-              colorScheme="blue"
-              onClick={() => {
-                saveMeal.mutate()
-              }}
-            >
-              {isSaving ? 'Saving...' : 'Save'}
-            </Button>
-          )}
         </ModalFooter>
       </ModalContent>
     </Modal>

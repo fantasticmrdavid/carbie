@@ -34,26 +34,28 @@ const IndexPage = () => {
           onChange={(i) => router.push(`/ingredient/${i.id}`)}
         />
       </Center>
-      {session?.user && (
-        <Center gap={'1em'}>
-          <Button onClick={openIngredientModal} colorScheme={'blue'}>
-            Add Food
-          </Button>
-          <Button onClick={openMealModal} colorScheme={'blue'}>
-            Create Meal
-          </Button>
-          <IngredientFormModal
-            mode={'add'}
-            isOpen={isIngredientModalOpen}
-            onClose={closeIngredientModal}
-          />
-          <MealFormModal
-            mode={'add'}
-            isOpen={isMealModalOpen}
-            onClose={closeMealModal}
-          />
-        </Center>
-      )}
+      <Center gap={'1em'}>
+        {session?.user && (
+          <>
+            <Button onClick={openIngredientModal} colorScheme={'blue'}>
+              Add Food
+            </Button>
+            <IngredientFormModal
+              mode={'add'}
+              isOpen={isIngredientModalOpen}
+              onClose={closeIngredientModal}
+            />
+          </>
+        )}
+        <Button onClick={openMealModal} colorScheme={'blue'}>
+          Meal Calculator
+        </Button>
+        <MealFormModal
+          mode={'add'}
+          isOpen={isMealModalOpen}
+          onClose={closeMealModal}
+        />
+      </Center>
     </Container>
   )
 }

@@ -54,6 +54,10 @@ export const IngredientSearch = (props: Props) => {
   })
 
   useEffect(() => {
+    setSearch(value ?? '')
+  }, [value])
+
+  useEffect(() => {
     if (search.length >= MIN_SEARCH_CHARS) refetch()
   }, [search, refetch])
 
@@ -65,7 +69,11 @@ export const IngredientSearch = (props: Props) => {
   }, [id, queryClient])
 
   return (
-    <div className={variant === 'default' ? styles.container : undefined}>
+    <div
+      className={
+        variant === 'default' ? styles.container : styles.containerFormField
+      }
+    >
       <Box
         className={
           variant === 'default'

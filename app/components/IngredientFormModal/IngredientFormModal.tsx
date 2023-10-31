@@ -355,7 +355,7 @@ export const IngredientFormModal = ({
         onClose()
         resetForm()
       }}
-      size={'2xl'}
+      size={isLargerThan800 ? '2xl' : 'full'}
     >
       <ModalOverlay />
       <ModalContent>

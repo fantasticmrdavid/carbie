@@ -8,6 +8,7 @@ import {
   Input,
   InputGroup,
   Select,
+  useMediaQuery,
 } from '@chakra-ui/react'
 import { IngredientSearch } from '@/app/components/IngredientSearch/IngredientSearch'
 import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon'
@@ -35,95 +36,112 @@ export const MealIngredient = (props: Props) => {
   )
   const [qtyMode, setQtyMode] = useState<QtyMode>(value?.qtyMode ?? 'grams')
   const [qty, setQty] = useState<number>(value?.qty ?? 0)
-  const isValid = ingredient && qtyMode && qty && qty > 0
+  const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
+  const isValid = ingredient && qtyMode && qty > 0
 
   const resetForm = () => {
     setIngredient(null)
     setQty(0)
     setQtyMode('grams')
   }
+
   return (
     <Grid
-      templateColumns={'1fr 65px 100px auto auto'}
+      templateColumns={'1fr auto'}
       alignItems={'center'}
       gap={'0.5em'}
+      mb={isLargerThan800 ? 0 : 4}
     >
       <GridItem>
-        <IngredientSearch
-          id={id}
-          variant={'formInput'}
-          hideSearchIcon
-          value={ingredient?.name ?? ''}
-          placeholder={'Search'}
-          onChange={(i) => {
-            setIngredient(i)
+        <Grid
+          display={isLargerThan800 ? 'grid' : 'flex'}
+          flexWrap={isLargerThan800 ? 'nowrap' : 'wrap'}
+          templateColumns={'1fr 65px 100px auto'}
+          alignItems={'flex-start'}
+          gap={'0.5em'}
+        >
+          <GridItem minWidth={isLargerThan800 ? 'auto' : '100%'}>
+            <IngredientSearch
+              id={id}
+              variant={'formInput'}
+              hideSearchIcon
+              value={ingredient?.name ?? ''}
+              placeholder={'Search'}
+              onChange={(i) => {
+                setIngredient(i)
 
-            if (mode === 'edit')
-              onChange({
-                ingredient: i,
-                qtyMode,
-                qty,
-              })
-          }}
-          allowClear={mode === 'add'}
-        />
-      </GridItem>
-      <GridItem>
-        <FormControl>
-          <InputGroup>
-            <Input
-              type={'number'}
-              value={qty}
-              onChange={(e) => {
-                const newQty = e.target.value ? parseFloat(e.target.value) : 0
-                setQty(newQty)
                 if (mode === 'edit')
                   onChange({
-                    ingredient: ingredient as Ingredient,
+                    ingredient: i,
                     qtyMode,
-                    qty: newQty,
-                  })
-              }}
-              placeholder={'qty'}
-            />
-          </InputGroup>
-        </FormControl>
-      </GridItem>
-      <GridItem>
-        <FormControl>
-          <InputGroup>
-            <Select
-              defaultValue={qtyMode ?? 'grams'}
-              value={qtyMode}
-              onChange={(e) => {
-                const newQtyMode = e.target.value as QtyMode
-                setQtyMode(newQtyMode)
-
-                if (mode === 'edit') {
-                  onChange({
-                    ingredient: ingredient as Ingredient,
-                    qtyMode: newQtyMode,
                     qty,
                   })
-                }
               }}
-            >
-              <option value={'grams'}>grams</option>
-              <option value={'units'}>units</option>
-            </Select>
-          </InputGroup>
-        </FormControl>
-      </GridItem>
-      <GridItem>
-        {ingredient && qty > 0 && qtyMode === 'grams' && (
-          <span>{((ingredient.carbs_per_100g * qty) / 100).toFixed(2)}g/c</span>
-        )}
-        {ingredient &&
-          ingredient.carbs_per_serve &&
-          qty > 0 &&
-          qtyMode === 'units' && (
-            <span>{(ingredient.carbs_per_serve * qty).toFixed(2)}g/c</span>
-          )}
+              allowClear={mode === 'add'}
+            />
+          </GridItem>
+          <GridItem width={isLargerThan800 ? 'auto' : '65px'}>
+            <FormControl>
+              <InputGroup>
+                <Input
+                  type={'number'}
+                  value={qty}
+                  onChange={(e) => {
+                    const newQty = e.target.value
+                      ? parseFloat(e.target.value)
+                      : 0
+                    setQty(newQty)
+                    if (mode === 'edit')
+                      onChange({
+                        ingredient: ingredient as Ingredient,
+                        qtyMode,
+                        qty: newQty,
+                      })
+                  }}
+                  placeholder={'qty'}
+                />
+              </InputGroup>
+            </FormControl>
+          </GridItem>
+          <GridItem>
+            <FormControl>
+              <InputGroup>
+                <Select
+                  defaultValue={qtyMode ?? 'grams'}
+                  value={qtyMode}
+                  onChange={(e) => {
+                    const newQtyMode = e.target.value as QtyMode
+                    setQtyMode(newQtyMode)
+
+                    if (mode === 'edit') {
+                      onChange({
+                        ingredient: ingredient as Ingredient,
+                        qtyMode: newQtyMode,
+                        qty,
+                      })
+                    }
+                  }}
+                >
+                  <option value={'grams'}>grams</option>
+                  <option value={'units'}>units</option>
+                </Select>
+              </InputGroup>
+            </FormControl>
+          </GridItem>
+          <GridItem py={2}>
+            {ingredient && qty > 0 && qtyMode === 'grams' && (
+              <span>
+                {((ingredient.carbs_per_100g * qty) / 100).toFixed(1)}g/c
+              </span>
+            )}
+            {ingredient &&
+              ingredient.carbs_per_serve &&
+              qty > 0 &&
+              qtyMode === 'units' && (
+                <span>{(ingredient.carbs_per_serve * qty).toFixed(1)}g/c</span>
+              )}
+          </GridItem>
+        </Grid>
       </GridItem>
       {mode === 'add' && (
         <GridItem>
