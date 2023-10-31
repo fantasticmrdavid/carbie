@@ -54,10 +54,15 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
     if (
       ingredient &&
       ingredient.carbs_per_serve &&
+      ingredient.serving_size_units &&
       parseFloat(qty) > 0 &&
       qtyMode === 'units'
     ) {
-      return total + ingredient.carbs_per_serve * parseFloat(qty)
+      return (
+        total +
+        (ingredient.carbs_per_serve / ingredient.serving_size_units) *
+          parseFloat(qty)
+      )
     }
 
     return total
@@ -115,8 +120,10 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
           )}
           {carbTotal > 0 && (
             <>
-              <Flex justifyContent={'flex-end'} alignItems={'center'}>
-                <strong>Total: {carbTotal.toFixed(2)}g/c</strong>
+              <Flex justifyContent={'flex-end'} alignItems={'center'} pt={3}>
+                <Heading as={'h3'} size={'md'}>
+                  Total: {carbTotal.toFixed(2)}g/c
+                </Heading>
               </Flex>
               <Divider my={4} />
             </>

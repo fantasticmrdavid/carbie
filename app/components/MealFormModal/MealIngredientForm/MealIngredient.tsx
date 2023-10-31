@@ -39,6 +39,9 @@ export const MealIngredient = (props: Props) => {
   const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
   const isValid = ingredient && qtyMode && parseFloat(qty) > 0
 
+  const hasServingInfo =
+    ingredient?.carbs_per_serve && ingredient?.serving_size_units
+
   const resetForm = () => {
     setIngredient(null)
     setQty('')
@@ -121,27 +124,33 @@ export const MealIngredient = (props: Props) => {
                   }}
                 >
                   <option value={'grams'}>grams</option>
-                  <option value={'units'}>units</option>
+                  {hasServingInfo && <option value={'units'}>units</option>}
                 </Select>
               </InputGroup>
             </FormControl>
           </GridItem>
           <GridItem py={2}>
             {ingredient && parseFloat(qty) > 0 && qtyMode === 'grams' && (
-              <span>
+              <strong>
                 {((ingredient.carbs_per_100g * parseFloat(qty)) / 100).toFixed(
                   1,
                 )}
                 g/c
-              </span>
+              </strong>
             )}
             {ingredient &&
               ingredient.carbs_per_serve &&
+              ingredient.serving_size_units &&
               parseFloat(qty) > 0 &&
               qtyMode === 'units' && (
-                <span>
-                  {(ingredient.carbs_per_serve * parseFloat(qty)).toFixed(1)}g/c
-                </span>
+                <strong>
+                  {(
+                    (ingredient.carbs_per_serve /
+                      ingredient.serving_size_units) *
+                    parseFloat(qty)
+                  ).toFixed(1)}
+                  g/c
+                </strong>
               )}
           </GridItem>
         </Grid>
@@ -166,7 +175,10 @@ export const MealIngredient = (props: Props) => {
         </GridItem>
       )}
       {mode === 'edit' && ingredient && onRemove && (
-        <Button onClick={() => onRemove(ingredient)}>
+        <Button
+          size={isLargerThan800 ? 'md' : 'sm'}
+          onClick={() => onRemove(ingredient)}
+        >
           <CloseIcon />
         </Button>
       )}
