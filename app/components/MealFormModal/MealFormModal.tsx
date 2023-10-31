@@ -26,6 +26,7 @@ import {
   MealIngredientProps,
 } from '@/app/components/MealFormModal/MealIngredientForm/MealIngredient'
 import { Ingredient } from '@prisma/client'
+import { PiCalculator } from 'react-icons/pi'
 
 type Props = {
   isOpen: boolean
@@ -78,7 +79,12 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Meal Calculator</ModalHeader>
+        <ModalHeader>
+          <Flex gap={'0.15em'} alignItems={'center'}>
+            <PiCalculator />
+            Meal Calculator
+          </Flex>
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody className={styles.modalBody}>
           <Heading as="h5" noOfLines={1} size={'sm'} mt={4}>

@@ -1,12 +1,20 @@
 import React from 'react'
 import { useSession } from 'next-auth/react'
-import { Button, Center, Container, useDisclosure } from '@chakra-ui/react'
+import {
+  Button,
+  Center,
+  Container,
+  Flex,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { IngredientFormModal } from '@/app/components/IngredientFormModal/IngredientFormModal'
 import { IngredientSearch } from '@/app/components/IngredientSearch/IngredientSearch'
 import { Logo } from '@/app/components/Logo/Logo'
 import styles from './styles.module.scss'
 import { MealFormModal } from '@/app/components/MealFormModal/MealFormModal'
 import { useRouter } from 'next/router'
+import { PiCalculator } from 'react-icons/pi'
+import { AiOutlinePlusCircle } from 'react-icons/ai'
 
 const IndexPage = () => {
   const { data: session } = useSession()
@@ -38,7 +46,10 @@ const IndexPage = () => {
         {session?.user && (
           <>
             <Button onClick={openIngredientModal} colorScheme={'blue'}>
-              Add Food
+              <Flex gap={'0.15em'} alignItems={'center'}>
+                <AiOutlinePlusCircle />
+                Add Food
+              </Flex>
             </Button>
             <IngredientFormModal
               mode={'add'}
@@ -48,7 +59,10 @@ const IndexPage = () => {
           </>
         )}
         <Button onClick={openMealModal} colorScheme={'blue'}>
-          Meal Calculator
+          <Flex gap={'0.15em'} alignItems={'center'}>
+            <PiCalculator />
+            Meal Calculator
+          </Flex>
         </Button>
         <MealFormModal
           mode={'add'}
