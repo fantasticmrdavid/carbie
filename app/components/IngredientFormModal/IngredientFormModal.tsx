@@ -37,6 +37,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { Ingredient } from '@prisma/client'
 import { VendorAutocomplete } from '@/app/components/IngredientFormModal/VendorAutocomplete/VendorAutocomplete'
+import { AiOutlinePlusCircle } from 'react-icons/ai'
 
 type Props = {
   isOpen: boolean
@@ -359,7 +360,12 @@ export const IngredientFormModal = ({
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{mode === 'add' ? 'Add' : 'Edit'} Food</ModalHeader>
+        <ModalHeader>
+          <Flex gap={'0.15em'} alignItems={'center'}>
+            <AiOutlinePlusCircle />
+            {mode === 'add' ? 'Add' : 'Edit'} Food
+          </Flex>
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody className={styles.modalBody}>
           <FormControl

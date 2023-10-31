@@ -18,7 +18,7 @@ type QtyMode = 'grams' | 'units'
 export type MealIngredientProps = {
   ingredient: Ingredient
   qtyMode: QtyMode
-  qty: number
+  qty: string
 }
 
 type Props = {
@@ -35,13 +35,16 @@ export const MealIngredient = (props: Props) => {
     value?.ingredient ?? null,
   )
   const [qtyMode, setQtyMode] = useState<QtyMode>(value?.qtyMode ?? 'grams')
-  const [qty, setQty] = useState<number>(value?.qty ?? 0)
+  const [qty, setQty] = useState<string>(value?.qty ?? '')
   const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
-  const isValid = ingredient && qtyMode && qty > 0
+  const isValid = ingredient && qtyMode && parseFloat(qty) > 0
+
+  const hasServingInfo =
+    ingredient?.carbs_per_serve && ingredient?.serving_size_units
 
   const resetForm = () => {
     setIngredient(null)
-    setQty(0)
+    setQty('')
     setQtyMode('grams')
   }
 
@@ -88,8 +91,6 @@ export const MealIngredient = (props: Props) => {
                   value={qty}
                   onChange={(e) => {
                     const newQty = e.target.value
-                      ? parseFloat(e.target.value)
-                      : 0
                     setQty(newQty)
                     if (mode === 'edit')
                       onChange({
@@ -123,22 +124,33 @@ export const MealIngredient = (props: Props) => {
                   }}
                 >
                   <option value={'grams'}>grams</option>
-                  <option value={'units'}>units</option>
+                  {hasServingInfo && <option value={'units'}>units</option>}
                 </Select>
               </InputGroup>
             </FormControl>
           </GridItem>
           <GridItem py={2}>
-            {ingredient && qty > 0 && qtyMode === 'grams' && (
-              <span>
-                {((ingredient.carbs_per_100g * qty) / 100).toFixed(1)}g/c
-              </span>
+            {ingredient && parseFloat(qty) > 0 && qtyMode === 'grams' && (
+              <strong>
+                {((ingredient.carbs_per_100g * parseFloat(qty)) / 100).toFixed(
+                  1,
+                )}
+                g/c
+              </strong>
             )}
             {ingredient &&
               ingredient.carbs_per_serve &&
-              qty > 0 &&
+              ingredient.serving_size_units &&
+              parseFloat(qty) > 0 &&
               qtyMode === 'units' && (
-                <span>{(ingredient.carbs_per_serve * qty).toFixed(1)}g/c</span>
+                <strong>
+                  {(
+                    (ingredient.carbs_per_serve /
+                      ingredient.serving_size_units) *
+                    parseFloat(qty)
+                  ).toFixed(1)}
+                  g/c
+                </strong>
               )}
           </GridItem>
         </Grid>
@@ -163,7 +175,10 @@ export const MealIngredient = (props: Props) => {
         </GridItem>
       )}
       {mode === 'edit' && ingredient && onRemove && (
-        <Button onClick={() => onRemove(ingredient)}>
+        <Button
+          size={isLargerThan800 ? 'md' : 'sm'}
+          onClick={() => onRemove(ingredient)}
+        >
           <CloseIcon />
         </Button>
       )}
