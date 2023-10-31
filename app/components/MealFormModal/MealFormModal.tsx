@@ -45,19 +45,19 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
     if (
       ingredient &&
       ingredient.carbs_per_100g &&
-      qty > 0 &&
+      parseFloat(qty) > 0 &&
       qtyMode === 'grams'
     ) {
-      return total + (ingredient.carbs_per_100g * qty) / 100
+      return total + (ingredient.carbs_per_100g * parseFloat(qty)) / 100
     }
 
     if (
       ingredient &&
       ingredient.carbs_per_serve &&
-      qty > 0 &&
+      parseFloat(qty) > 0 &&
       qtyMode === 'units'
     ) {
-      return total + ingredient.carbs_per_serve * qty
+      return total + ingredient.carbs_per_serve * parseFloat(qty)
     }
 
     return total

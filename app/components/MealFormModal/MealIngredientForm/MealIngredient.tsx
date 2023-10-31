@@ -18,7 +18,7 @@ type QtyMode = 'grams' | 'units'
 export type MealIngredientProps = {
   ingredient: Ingredient
   qtyMode: QtyMode
-  qty: number
+  qty: string
 }
 
 type Props = {
@@ -35,13 +35,13 @@ export const MealIngredient = (props: Props) => {
     value?.ingredient ?? null,
   )
   const [qtyMode, setQtyMode] = useState<QtyMode>(value?.qtyMode ?? 'grams')
-  const [qty, setQty] = useState<number>(value?.qty ?? 0)
+  const [qty, setQty] = useState<string>(value?.qty ?? '')
   const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
-  const isValid = ingredient && qtyMode && qty > 0
+  const isValid = ingredient && qtyMode && parseFloat(qty) > 0
 
   const resetForm = () => {
     setIngredient(null)
-    setQty(0)
+    setQty('')
     setQtyMode('grams')
   }
 
@@ -88,8 +88,6 @@ export const MealIngredient = (props: Props) => {
                   value={qty}
                   onChange={(e) => {
                     const newQty = e.target.value
-                      ? parseFloat(e.target.value)
-                      : 0
                     setQty(newQty)
                     if (mode === 'edit')
                       onChange({
@@ -129,16 +127,21 @@ export const MealIngredient = (props: Props) => {
             </FormControl>
           </GridItem>
           <GridItem py={2}>
-            {ingredient && qty > 0 && qtyMode === 'grams' && (
+            {ingredient && parseFloat(qty) > 0 && qtyMode === 'grams' && (
               <span>
-                {((ingredient.carbs_per_100g * qty) / 100).toFixed(1)}g/c
+                {((ingredient.carbs_per_100g * parseFloat(qty)) / 100).toFixed(
+                  1,
+                )}
+                g/c
               </span>
             )}
             {ingredient &&
               ingredient.carbs_per_serve &&
-              qty > 0 &&
+              parseFloat(qty) > 0 &&
               qtyMode === 'units' && (
-                <span>{(ingredient.carbs_per_serve * qty).toFixed(1)}g/c</span>
+                <span>
+                  {(ingredient.carbs_per_serve * parseFloat(qty)).toFixed(1)}g/c
+                </span>
               )}
           </GridItem>
         </Grid>
