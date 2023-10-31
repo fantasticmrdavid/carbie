@@ -12,7 +12,6 @@ import {
   InputLeftElement,
   InputRightElement,
 } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Ingredient } from '@prisma/client'
 import styles from './ingredientSearch.module.scss'
@@ -22,13 +21,31 @@ import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/interna
 
 const MIN_SEARCH_CHARS = 2
 
-export const IngredientSearch = () => {
-  const router = useRouter()
+type Props = {
+  id: string
+  onChange: (i: Ingredient) => void
+  variant?: 'default' | 'formInput'
+  hideSearchIcon?: boolean
+  placeholder?: string
+  allowClear?: boolean
+  value?: string
+}
+
+export const IngredientSearch = (props: Props) => {
+  const {
+    id,
+    onChange,
+    variant = 'default',
+    allowClear = true,
+    hideSearchIcon = false,
+    placeholder,
+    value,
+  } = props
   const queryClient = useQueryClient()
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(value ?? '')
   const [isResultsOpen, setIsResultsOpen] = useState(false)
   const { data, isLoading, refetch } = useQuery<Ingredient[]>({
-    queryKey: ['searchIngredients', search],
+    queryKey: ['searchIngredients', id],
     queryFn: async ({ signal }) =>
       await axios
         .get(`/api/ingredients?q=${search}`, { signal })
@@ -37,26 +54,42 @@ export const IngredientSearch = () => {
   })
 
   useEffect(() => {
+    setSearch(value ?? '')
+  }, [value])
+
+  useEffect(() => {
     if (search.length >= MIN_SEARCH_CHARS) refetch()
   }, [search, refetch])
 
   useEffect(() => {
     // Clean up the query when the component unmounts
     return () => {
-      queryClient.cancelQueries({ queryKey: ['searchIngredients'] })
+      queryClient.cancelQueries({ queryKey: ['searchIngredients', id] })
     }
-  }, [queryClient])
+  }, [id, queryClient])
 
   return (
-    <div className={styles.container}>
-      <Box className={styles.searchField}>
+    <div
+      className={
+        variant === 'default' ? styles.container : styles.containerFormField
+      }
+    >
+      <Box
+        className={
+          variant === 'default'
+            ? styles.searchField
+            : styles.searchFieldFormField
+        }
+      >
         <InputGroup alignItems={'center'}>
-          <InputLeftElement pointerEvents="none" top={'unset'}>
-            <FiSearch opacity={0.5} />
-          </InputLeftElement>
+          {!hideSearchIcon && (
+            <InputLeftElement pointerEvents="none" top={'unset'}>
+              <FiSearch opacity={0.5} />
+            </InputLeftElement>
+          )}
           <Input
             outline={'unset'}
-            placeholder="Search for food and drinks..."
+            placeholder={placeholder ?? 'Search for food and drinks...'}
             value={search}
             onChange={(e) => {
               setIsResultsOpen(true)
@@ -73,7 +106,7 @@ export const IngredientSearch = () => {
               <Spinner size="sm" />
             </InputRightElement>
           )}
-          {!isLoading && search.length > 0 && (
+          {!isLoading && search.length > 0 && allowClear && (
             <InputRightElement
               cursor={'pointer'}
               top={'unset'}
@@ -98,30 +131,29 @@ export const IngredientSearch = () => {
               borderRadius={'24px'}
               padding={'0.5em'}
             >
-              {data &&
-                data.map((i) => (
-                  <List
-                    key={i.id}
-                    onClick={() => {
-                      setIsResultsOpen(false)
-                      setSearch(i.name)
-                      router.push(`/ingredient/${i.id}`)
-                    }}
-                    cursor={'pointer'}
-                    p={2}
-                    _hover={{
-                      bgColor: 'gray.100',
-                    }}
-                    w={'100%'}
-                    textAlign={'left'}
-                  >
-                    <ListItem display={'flex'} alignItems={'center'}>
-                      <Text>
-                        {i.name} - {i.brand_vendor}
-                      </Text>
-                    </ListItem>
-                  </List>
-                ))}
+              {data?.map((i) => (
+                <List
+                  key={i.id}
+                  onClick={() => {
+                    setIsResultsOpen(false)
+                    setSearch(i.name)
+                    onChange(i)
+                  }}
+                  cursor={'pointer'}
+                  p={2}
+                  _hover={{
+                    bgColor: 'gray.100',
+                  }}
+                  w={'100%'}
+                  textAlign={'left'}
+                >
+                  <ListItem display={'flex'} alignItems={'center'}>
+                    <Text>
+                      {i.name} - {i.brand_vendor}
+                    </Text>
+                  </ListItem>
+                </List>
+              ))}
               {((!isLoading && !data) || (data && data.length === 0)) && (
                 <List
                   key={'noResults'}
