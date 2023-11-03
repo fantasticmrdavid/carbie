@@ -16,6 +16,9 @@ import {
   Grid,
   GridItem,
   Heading,
+  Input,
+  InputGroup,
+  InputRightElement,
   useMediaQuery,
 } from '@chakra-ui/react'
 
@@ -40,34 +43,37 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
   const [ingredientList, setIngredientList] = useState<MealIngredientProps[]>(
     [],
   )
+  const [miscCarbs, setMiscCarbs] = useState<string>('')
 
-  const carbTotal = ingredientList.reduce((total, current) => {
-    const { ingredient, qty, qtyMode } = current
-    if (
-      ingredient &&
-      ingredient.carbs_per_100g &&
-      parseFloat(qty) > 0 &&
-      qtyMode === 'grams'
-    ) {
-      return total + (ingredient.carbs_per_100g * parseFloat(qty)) / 100
-    }
+  const carbTotal =
+    parseFloat(miscCarbs) +
+    ingredientList.reduce((total, current) => {
+      const { ingredient, qty, qtyMode } = current
+      if (
+        ingredient &&
+        ingredient.carbs_per_100g &&
+        parseFloat(qty) > 0 &&
+        qtyMode === 'grams'
+      ) {
+        return total + (ingredient.carbs_per_100g * parseFloat(qty)) / 100
+      }
 
-    if (
-      ingredient &&
-      ingredient.carbs_per_serve &&
-      ingredient.serving_size_units &&
-      parseFloat(qty) > 0 &&
-      qtyMode === 'units'
-    ) {
-      return (
-        total +
-        (ingredient.carbs_per_serve / ingredient.serving_size_units) *
-          parseFloat(qty)
-      )
-    }
+      if (
+        ingredient &&
+        ingredient.carbs_per_serve &&
+        ingredient.serving_size_units &&
+        parseFloat(qty) > 0 &&
+        qtyMode === 'units'
+      ) {
+        return (
+          total +
+          (ingredient.carbs_per_serve / ingredient.serving_size_units) *
+            parseFloat(qty)
+        )
+      }
 
-    return total
-  }, 0)
+      return total
+    }, 0)
 
   return (
     <Modal
@@ -123,6 +129,30 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
                 </GridItem>
               ))}
             </Grid>
+          )}
+          {ingredientList.length > 0 && (
+            <Flex justifyContent={'flex-end'} alignItems={'center'} pt={3}>
+              <Grid
+                gap={'0.5em'}
+                templateColumns={'1fr 80px'}
+                alignItems={'center'}
+              >
+                <GridItem>
+                  <Heading as="h5" noOfLines={1} size={'sm'}>
+                    Misc carbs:
+                  </Heading>
+                </GridItem>
+                <GridItem>
+                  <InputGroup>
+                    <Input
+                      value={miscCarbs}
+                      onChange={(e) => setMiscCarbs(e.target.value)}
+                    />
+                    <InputRightElement>g</InputRightElement>
+                  </InputGroup>
+                </GridItem>
+              </Grid>
+            </Flex>
           )}
           {carbTotal > 0 && (
             <>

@@ -73,6 +73,7 @@ model Meal {
   gi                 GI?
   serving_size_units Float? // No. of units in a serve
   serving_size_grams Float? // No. of grams per serve
+  misc_carbs         Float?
 
   users User[]
 }
