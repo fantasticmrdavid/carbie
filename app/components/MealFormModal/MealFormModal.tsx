@@ -11,6 +11,7 @@ import {
 import {
   Box,
   Button,
+  Collapse,
   Divider,
   Flex,
   Grid,
@@ -30,6 +31,7 @@ import {
 } from '@/app/components/MealFormModal/MealIngredientForm/MealIngredient'
 import { Ingredient } from '@prisma/client'
 import { PiCalculator } from 'react-icons/pi'
+import { BiSolidChevronDown, BiSolidChevronRight } from 'react-icons/bi'
 
 type Props = {
   isOpen: boolean
@@ -43,10 +45,12 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
   const [ingredientList, setIngredientList] = useState<MealIngredientProps[]>(
     [],
   )
+  const [isExtraExpanded, setIsExtraExpanded] = useState(false)
   const [miscCarbs, setMiscCarbs] = useState<string>('')
+  const [totalWeight, setTotalWeight] = useState<string>('')
 
   const carbTotal =
-    parseFloat(miscCarbs) +
+    (parseFloat(miscCarbs) || 0) +
     ingredientList.reduce((total, current) => {
       const { ingredient, qty, qtyMode } = current
       if (
@@ -74,6 +78,29 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
 
       return total
     }, 0)
+
+  const calculatedWeightTotal = ingredientList.reduce((total, current) => {
+    const { ingredient, qty, qtyMode } = current
+    if (
+      ingredient &&
+      ingredient.carbs_per_100g &&
+      parseFloat(qty) > 0 &&
+      qtyMode === 'grams'
+    ) {
+      return parseFloat(qty)
+    }
+
+    if (
+      ingredient &&
+      ingredient.serving_size_grams &&
+      parseFloat(qty) > 0 &&
+      qtyMode === 'units'
+    ) {
+      return total + ingredient.serving_size_grams * parseFloat(qty)
+    }
+
+    return total
+  }, 0)
 
   return (
     <Modal
@@ -131,34 +158,89 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
             </Grid>
           )}
           {ingredientList.length > 0 && (
-            <Flex justifyContent={'flex-end'} alignItems={'center'} pt={3}>
-              <Grid
-                gap={'0.5em'}
-                templateColumns={'1fr 80px'}
-                alignItems={'center'}
+            <>
+              <Box
+                style={{ cursor: 'pointer' }}
+                onClick={() => setIsExtraExpanded(!isExtraExpanded)}
+                mt={2}
               >
-                <GridItem>
-                  <Heading as="h5" noOfLines={1} size={'sm'}>
-                    Misc carbs:
-                  </Heading>
-                </GridItem>
-                <GridItem>
-                  <InputGroup>
-                    <Input
-                      value={miscCarbs}
-                      onChange={(e) => setMiscCarbs(e.target.value)}
-                    />
-                    <InputRightElement>g</InputRightElement>
-                  </InputGroup>
-                </GridItem>
-              </Grid>
-            </Flex>
+                <Heading as="h5" noOfLines={1} size={'sm'}>
+                  <Flex alignItems={'center'}>
+                    Extra Details{' '}
+                    {isExtraExpanded ? (
+                      <BiSolidChevronDown />
+                    ) : (
+                      <BiSolidChevronRight />
+                    )}
+                  </Flex>
+                </Heading>
+              </Box>
+              <Collapse in={isExtraExpanded}>
+                <Flex justifyContent={'flex-end'} alignItems={'center'} pt={1}>
+                  <Grid
+                    gap={'0.5em'}
+                    templateColumns={'1fr 80px'}
+                    alignItems={'center'}
+                  >
+                    <GridItem>
+                      <Heading as="h5" noOfLines={1} size={'sm'}>
+                        Misc carbs:
+                      </Heading>
+                    </GridItem>
+                    <GridItem>
+                      <InputGroup>
+                        <Input
+                          value={miscCarbs}
+                          onChange={(e) => setMiscCarbs(e.target.value)}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </GridItem>
+                  </Grid>
+                </Flex>
+                <Flex justifyContent={'flex-end'} alignItems={'center'} pt={1}>
+                  <Grid
+                    gap={'0.5em'}
+                    templateColumns={'1fr 100px'}
+                    alignItems={'center'}
+                  >
+                    <GridItem>
+                      <Heading as="h5" noOfLines={1} size={'sm'}>
+                        Total weight:
+                      </Heading>
+                    </GridItem>
+                    <GridItem>
+                      <InputGroup>
+                        <Input
+                          defaultValue={calculatedWeightTotal.toString()}
+                          onChange={(e) => setTotalWeight(e.target.value)}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </GridItem>
+                  </Grid>
+                </Flex>
+              </Collapse>
+            </>
           )}
           {carbTotal > 0 && (
             <>
+              <Divider mt={2} />
               <Flex justifyContent={'flex-end'} alignItems={'center'} pt={3}>
                 <Heading as={'h3'} size={'md'}>
-                  Total: {carbTotal.toFixed(2)}g/c
+                  Carb % of meal:{' '}
+                  {(
+                    (carbTotal /
+                      (parseFloat(totalWeight.length > 0 ? totalWeight : '0') ||
+                        calculatedWeightTotal)) *
+                    100
+                  ).toFixed(1)}
+                  %
+                </Heading>
+              </Flex>
+              <Flex justifyContent={'flex-end'} alignItems={'center'} pt={3}>
+                <Heading as={'h3'} size={'md'}>
+                  Total carbs: {carbTotal.toFixed(1)}g/c
                 </Heading>
               </Flex>
               <Divider my={4} />
