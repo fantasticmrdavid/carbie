@@ -81,13 +81,8 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
 
   const calculatedWeightTotal = ingredientList.reduce((total, current) => {
     const { ingredient, qty, qtyMode } = current
-    if (
-      ingredient &&
-      ingredient.carbs_per_100g &&
-      parseFloat(qty) > 0 &&
-      qtyMode === 'grams'
-    ) {
-      return parseFloat(qty)
+    if (ingredient && parseFloat(qty) > 0 && qtyMode === 'grams') {
+      return total + parseFloat(qty)
     }
 
     if (
@@ -101,6 +96,9 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
 
     return total
   }, 0)
+
+  const displayWeight =
+    totalWeight.length > 0 ? totalWeight : calculatedWeightTotal.toString()
 
   return (
     <Modal
@@ -120,7 +118,7 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody className={styles.modalBody}>
-          <Heading as="h5" noOfLines={1} size={'sm'} mt={4}>
+          <Heading as="h5" noOfLines={1} size={'sm'}>
             <Box mb={2}>Ingredients/Foods</Box>
           </Heading>
           {ingredientList.length > 0 && (
@@ -201,7 +199,7 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
                 <Flex justifyContent={'flex-end'} alignItems={'center'} pt={1}>
                   <Grid
                     gap={'0.5em'}
-                    templateColumns={'1fr 100px'}
+                    templateColumns={'1fr 120px'}
                     alignItems={'center'}
                   >
                     <GridItem>
@@ -212,7 +210,7 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
                     <GridItem>
                       <InputGroup>
                         <Input
-                          defaultValue={calculatedWeightTotal.toString()}
+                          value={displayWeight}
                           onChange={(e) => setTotalWeight(e.target.value)}
                         />
                         <InputRightElement>g</InputRightElement>
