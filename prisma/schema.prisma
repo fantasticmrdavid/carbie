@@ -49,8 +49,9 @@ model Ingredient {
   serving_size_units Float? // No. of units in a serve
   serving_size_grams Float? // No. of grams per serve
 
-  notes      String?
-  is_generic Boolean @default(false)
+  notes           String?
+  is_generic      Boolean @default(false)
+  unit_of_measure String? @default("grams")
 
   data_source String
   gi          GI?

@@ -19,7 +19,7 @@ import axios from 'axios'
 import { FiSearch } from 'react-icons/fi'
 import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon'
 
-const MIN_SEARCH_CHARS = 2
+const MIN_SEARCH_CHARS = 3
 
 type Props = {
   id: string
