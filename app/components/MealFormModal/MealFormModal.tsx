@@ -47,6 +47,7 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
   )
   const [isExtraExpanded, setIsExtraExpanded] = useState(false)
   const [miscCarbs, setMiscCarbs] = useState<string>('')
+  const [noOfServings, setNoOfServings] = useState<string>('')
   const [totalWeight, setTotalWeight] = useState<string>('')
 
   const carbTotal =
@@ -97,7 +98,7 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
     return total
   }, 0)
 
-  const displayWeight =
+  const finalWeight =
     totalWeight.length > 0 ? totalWeight : calculatedWeightTotal.toString()
 
   return (
@@ -118,6 +119,22 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody className={styles.modalBody}>
+          <Flex alignItems={'center'} pb={1}>
+            <Grid
+              gap={'0.5em'}
+              templateColumns={'1fr 80px'}
+              alignItems={'center'}
+            >
+              <GridItem>
+                <Heading as="h5" noOfLines={1} size={'sm'}>
+                  Name
+                </Heading>
+              </GridItem>
+              <GridItem>
+                <Input minWidth={'450px'} width={'auto'} />
+              </GridItem>
+            </Grid>
+          </Flex>
           <Heading as="h5" noOfLines={1} size={'sm'}>
             <Box mb={2}>Ingredients/Foods</Box>
           </Heading>
@@ -182,7 +199,7 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
                   >
                     <GridItem>
                       <Heading as="h5" noOfLines={1} size={'sm'}>
-                        Misc carbs:
+                        Misc carbs
                       </Heading>
                     </GridItem>
                     <GridItem>
@@ -199,18 +216,37 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
                 <Flex justifyContent={'flex-end'} alignItems={'center'} pt={1}>
                   <Grid
                     gap={'0.5em'}
+                    templateColumns={'1fr 80px'}
+                    alignItems={'center'}
+                  >
+                    <GridItem>
+                      <Heading as="h5" noOfLines={1} size={'sm'}>
+                        No. of servings
+                      </Heading>
+                    </GridItem>
+                    <GridItem>
+                      <Input
+                        value={noOfServings}
+                        onChange={(e) => setNoOfServings(e.target.value)}
+                      />
+                    </GridItem>
+                  </Grid>
+                </Flex>
+                <Flex justifyContent={'flex-end'} alignItems={'center'} pt={1}>
+                  <Grid
+                    gap={'0.5em'}
                     templateColumns={'1fr 120px'}
                     alignItems={'center'}
                   >
                     <GridItem>
                       <Heading as="h5" noOfLines={1} size={'sm'}>
-                        Total weight:
+                        Total weight
                       </Heading>
                     </GridItem>
                     <GridItem>
                       <InputGroup>
                         <Input
-                          value={displayWeight}
+                          value={finalWeight}
                           onChange={(e) => setTotalWeight(e.target.value)}
                         />
                         <InputRightElement>g</InputRightElement>
@@ -224,8 +260,35 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
           {carbTotal > 0 && (
             <>
               <Divider mt={2} />
+              {parseFloat(noOfServings) > 0 && (
+                <>
+                  <Flex
+                    justifyContent={'flex-end'}
+                    alignItems={'center'}
+                    pt={3}
+                  >
+                    <Heading as={'h3'} size={'sm'}>
+                      Serving size:{' '}
+                      {(
+                        parseFloat(finalWeight) / parseFloat(noOfServings)
+                      ).toFixed(1)}
+                      g
+                    </Heading>
+                  </Flex>
+                  <Flex
+                    justifyContent={'flex-end'}
+                    alignItems={'center'}
+                    pt={3}
+                  >
+                    <Heading as={'h3'} size={'sm'}>
+                      Carbs per serving:{' '}
+                      {(carbTotal / parseFloat(noOfServings)).toFixed(1)}g/c
+                    </Heading>
+                  </Flex>
+                </>
+              )}
               <Flex justifyContent={'flex-end'} alignItems={'center'} pt={3}>
-                <Heading as={'h3'} size={'md'}>
+                <Heading as={'h3'} size={'sm'}>
                   Carb % of meal:{' '}
                   {(
                     (carbTotal /
@@ -237,7 +300,7 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
                 </Heading>
               </Flex>
               <Flex justifyContent={'flex-end'} alignItems={'center'} pt={3}>
-                <Heading as={'h3'} size={'md'}>
+                <Heading as={'h3'} size={'sm'}>
                   Total carbs: {carbTotal.toFixed(1)}g/c
                 </Heading>
               </Flex>

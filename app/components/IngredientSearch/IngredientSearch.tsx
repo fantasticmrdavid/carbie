@@ -66,7 +66,7 @@ export const IngredientSearch = (props: Props) => {
     return () => {
       queryClient.cancelQueries({ queryKey: ['searchIngredients', id, search] })
     }
-  }, [id, queryClient])
+  }, [id, queryClient, search])
 
   return (
     <div
