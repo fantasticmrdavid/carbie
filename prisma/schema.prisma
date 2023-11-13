@@ -28,7 +28,7 @@ model Ingredient {
   protein_per_100g       Float?
   fat_per_100g           Float?
   saturated_fat_per_100g Float?
-  carbs_per_100g         Float
+  carbs_per_100g         Float?
   sugar_per_100g         Float?
   sodium_per_100g        Float?
   fibre_per_100g         Float?
