@@ -138,50 +138,55 @@ export const IngredientFormModal = ({
 
   const [isSaving, setIsSaving] = useState(false)
 
-  const { data: remoteValidation, refetch: revalidateAlreadyExists } =
-    useQuery<{ isValid: boolean }>({
-      queryKey: ['validateIngredient'],
-      queryFn: async () =>
-        await axios
-          .post(`/api/ingredients/validate`, {
+  const {
+    data: remoteValidation,
+    isLoading: isRemoteValidating,
+    refetch: revalidateAlreadyExists,
+  } = useQuery<{ isValid: boolean }>({
+    queryKey: ['validateIngredient', name, brand],
+    queryFn: async ({ signal }) =>
+      await axios
+        .post(
+          `/api/ingredients/validate`,
+          {
             name,
             brand,
-          })
-          .then((res) => res.data),
-      enabled: false,
-    })
+          },
+          { signal },
+        )
+        .then((res) => res.data),
+    enabled: false,
+  })
 
   const getValidationErrors = useCallback(() => {
     const errors: string[] = []
     if (
       !name ||
       name.length === 0 ||
-      (mode === 'add' && !remoteValidation?.isValid)
+      (mode === 'add' && !isRemoteValidating && !remoteValidation?.isValid)
     )
       errors.push('name')
     if (
       !brand ||
       brand.length === 0 ||
-      (mode === 'add' && !remoteValidation?.isValid)
+      (mode === 'add' && !isRemoteValidating && !remoteValidation?.isValid)
     )
       errors.push('brand')
     if (!carbsPer100g || carbsPer100g.length === 0) errors.push('carbsPer100g')
 
     return errors
-  }, [name, brand, mode, carbsPer100g, remoteValidation])
+  }, [name, brand, mode, carbsPer100g, remoteValidation, isRemoteValidating])
 
   useEffect(() => {
-    if (
-      mode === 'add' &&
-      !isPristine &&
-      name.length > 0 &&
-      brand.length > 0 &&
-      name.trim() !== '' &&
-      brand.trim() !== ''
-    )
-      revalidateAlreadyExists()
-    const errors = getValidationErrors()
-    if (!isPristine) setValidationErrors(errors)
+    const getRemoteErrors = async () => {
+      await revalidateAlreadyExists()
+    }
+    if (mode === 'add' && name.trim().length > 0 && brand.trim().length > 0)
+      getRemoteErrors()
+    if (!isRemoteValidating) {
+      const errors = getValidationErrors()
+      if (!isPristine) setValidationErrors(errors)
+    }
   }, [
     isPristine,
     name,
@@ -189,44 +194,43 @@ export const IngredientFormModal = ({
     mode,
     carbsPer100g,
     remoteValidation,
+    isRemoteValidating,
     getValidationErrors,
     revalidateAlreadyExists,
   ])
 
   const resetForm = () => {
-    if (mode === 'add') {
-      setName('')
-      setBrand('')
-      setCarbsPer100g('')
-      setEnergyPer100g('')
-      setProteinPer100g('')
-      setFatPer100g('')
-      setSaturatedFatPer100g('')
-      setSugarPer100g('')
-      setSodiumPer100g('')
-      setFibrePer100g('')
-      setAlcoholPer100g('')
-      setCaffeinePer100g('')
+    setName('')
+    setBrand('')
+    setCarbsPer100g('')
+    setEnergyPer100g('')
+    setProteinPer100g('')
+    setFatPer100g('')
+    setSaturatedFatPer100g('')
+    setSugarPer100g('')
+    setSodiumPer100g('')
+    setFibrePer100g('')
+    setAlcoholPer100g('')
+    setCaffeinePer100g('')
 
-      setCarbsPerServe('')
-      setEnergyPerServe('')
-      setProteinPerServe('')
-      setFatPerServe('')
-      setSaturatedFatPerServe('')
-      setSugarPerServe('')
-      setSodiumPerServe('')
-      setFibrePerServe('')
-      setAlcoholPerServe('')
-      setCaffeinePerServe('')
-      setServingSizeGrams('')
-      setServingSizeUnits('')
+    setCarbsPerServe('')
+    setEnergyPerServe('')
+    setProteinPerServe('')
+    setFatPerServe('')
+    setSaturatedFatPerServe('')
+    setSugarPerServe('')
+    setSodiumPerServe('')
+    setFibrePerServe('')
+    setAlcoholPerServe('')
+    setCaffeinePerServe('')
+    setServingSizeGrams('')
+    setServingSizeUnits('')
 
-      setNotes('')
-      setIsGeneric(false)
+    setNotes('')
+    setIsGeneric(false)
 
-      setIsPristine(true)
-      setValidationErrors([])
-    }
+    setIsPristine(true)
+    setValidationErrors([])
   }
 
   const addIngredient = useMutation({
@@ -869,7 +873,7 @@ export const IngredientFormModal = ({
           </Button>
           {mode === 'add' ? (
             <Button
-              disabled={isSaving}
+              disabled={isSaving || isRemoteValidating}
               colorScheme="blue"
               onClick={async () => {
                 const errors = getValidationErrors()
@@ -884,7 +888,7 @@ export const IngredientFormModal = ({
             </Button>
           ) : (
             <Button
-              disabled={isSaving}
+              disabled={isSaving || isRemoteValidating}
               colorScheme="blue"
               onClick={() => {
                 const errors = getValidationErrors()

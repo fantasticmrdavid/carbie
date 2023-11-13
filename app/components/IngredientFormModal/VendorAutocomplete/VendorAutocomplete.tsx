@@ -23,14 +23,14 @@ type Props = {
   value?: string
 }
 
-const MIN_SEARCH_CHARS = 2
+const MIN_SEARCH_CHARS = 3
 export const VendorAutocomplete = (props: Props) => {
   const { onSelect, value } = props
   const queryClient = useQueryClient()
   const [search, setSearch] = useState(value)
   const [isResultsOpen, setIsResultsOpen] = useState(false)
   const { data, isLoading, refetch } = useQuery<string[]>({
-    queryKey: ['searchVendors'],
+    queryKey: ['searchVendors', search],
     queryFn: async () =>
       await axios.get(`/api/vendors?q=${search}`).then((res) => res.data),
     enabled: false,
@@ -43,9 +43,9 @@ export const VendorAutocomplete = (props: Props) => {
   useEffect(() => {
     // Clean up the query when the component unmounts
     return () => {
-      queryClient.cancelQueries({ queryKey: ['searchVendors'] })
+      queryClient.cancelQueries({ queryKey: ['searchVendors', search] })
     }
-  }, [queryClient])
+  }, [search, queryClient])
 
   return (
     <div className={styles.container}>
@@ -106,13 +106,6 @@ export const VendorAutocomplete = (props: Props) => {
                   data.map((s) => (
                     <List
                       key={`vendorSearch_${s}`}
-                      onClick={() => {
-                        if (s.length > 0) {
-                          onSelect(s)
-                          setSearch(s)
-                        }
-                        return false
-                      }}
                       cursor={'pointer'}
                       p={2}
                       _hover={{
@@ -121,7 +114,15 @@ export const VendorAutocomplete = (props: Props) => {
                       w={'100%'}
                       textAlign={'left'}
                     >
-                      <ListItem display={'flex'} alignItems={'center'}>
+                      <ListItem
+                        display={'flex'}
+                        alignItems={'center'}
+                        onClick={() => {
+                          setSearch(s)
+                          onSelect(s)
+                          setIsResultsOpen(false)
+                        }}
+                      >
                         <Text>{s}</Text>
                       </ListItem>
                     </List>

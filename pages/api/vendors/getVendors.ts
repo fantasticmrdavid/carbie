@@ -21,6 +21,7 @@ export const getVendors = async (req: NextApiRequest, res: NextApiResponse) => {
               {
                 brand_vendor: {
                   contains: q as string,
+                  mode: 'insensitive',
                 },
               },
             ],
