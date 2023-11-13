@@ -172,10 +172,9 @@ export const IngredientFormModal = ({
       (mode === 'add' && !isRemoteValidating && !remoteValidation?.isValid)
     )
       errors.push('brand')
-    if (!carbsPer100g || carbsPer100g.length === 0) errors.push('carbsPer100g')
 
     return errors
-  }, [name, brand, mode, carbsPer100g, remoteValidation, isRemoteValidating])
+  }, [name, brand, mode, remoteValidation, isRemoteValidating])
 
   useEffect(() => {
     const getRemoteErrors = async () => {
@@ -392,56 +391,30 @@ export const IngredientFormModal = ({
               </FormErrorMessage>
             )}
           </FormControl>
+          <FormControl
+            isRequired
+            isInvalid={validationErrors.indexOf('brand') !== -1}
+          >
+            <FormLabel className={styles.formLabel}>Brand/Vendor</FormLabel>
+            <VendorAutocomplete
+              onSelect={(v) => {
+                setBrand(v)
+              }}
+              value={brand}
+            />
+            {validationErrors.indexOf('brand') !== -1 && (
+              <FormErrorMessage>
+                {mode === 'add' && !remoteValidation?.isValid
+                  ? 'Ingredient with this name and brand/vendor already exists'
+                  : 'Specify a brand/vendor for the ingredient'}
+              </FormErrorMessage>
+            )}
+          </FormControl>
           <Grid
             templateColumns={isLargerThan800 ? '1fr 250px' : '100%'}
             alignItems={'flex-start'}
             gap={'1em'}
           >
-            <GridItem>
-              <FormControl
-                isRequired
-                isInvalid={validationErrors.indexOf('brand') !== -1}
-              >
-                <FormLabel className={styles.formLabel}>Brand/Vendor</FormLabel>
-                <VendorAutocomplete
-                  onSelect={(v) => {
-                    setBrand(v)
-                  }}
-                  value={brand}
-                />
-                {validationErrors.indexOf('brand') !== -1 && (
-                  <FormErrorMessage>
-                    {mode === 'add' && !remoteValidation?.isValid
-                      ? 'Ingredient with this name and brand/vendor already exists'
-                      : 'Specify a brand/vendor for the ingredient'}
-                  </FormErrorMessage>
-                )}
-              </FormControl>
-            </GridItem>
-            <GridItem>
-              <FormControl
-                isRequired
-                isInvalid={validationErrors.indexOf('carbsPer100g') !== -1}
-              >
-                <FormLabel className={styles.formLabel}>
-                  Carbs per 100g/ml
-                </FormLabel>
-                <InputGroup>
-                  <Input
-                    type={'number'}
-                    value={carbsPer100g}
-                    onChange={(e) => {
-                      setCarbsPer100g(e.target.value)
-                    }}
-                    placeholder={'eg. 15'}
-                  />
-                  <InputRightElement>g</InputRightElement>
-                </InputGroup>
-                {validationErrors.indexOf('carbsPer100g') !== -1 && (
-                  <FormErrorMessage>Specify carbs per 100g/ml</FormErrorMessage>
-                )}
-              </FormControl>
-            </GridItem>
             <GridItem>
               <FormControl
                 isInvalid={validationErrors.indexOf('servingSizeUnits') !== -1}
@@ -576,6 +549,22 @@ export const IngredientFormModal = ({
                   </FormControl>
                   <FormControl>
                     <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Carbs</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={carbsPer100g}
+                          onChange={(e) => {
+                            setCarbsPer100g(e.target.value)
+                          }}
+                          placeholder={'eg. 15'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
                       <FormLabel className={styles.formLabel}>Sugar</FormLabel>
                       <InputGroup>
                         <Input
@@ -583,6 +572,22 @@ export const IngredientFormModal = ({
                           value={sugarPer100g}
                           onChange={(e) => {
                             setSugarPer100g(e.target.value)
+                          }}
+                          placeholder={'eg. 25'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Fibre</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={fibrePer100g}
+                          onChange={(e) => {
+                            setFibrePer100g(e.target.value)
                           }}
                           placeholder={'eg. 25'}
                         />
@@ -603,22 +608,6 @@ export const IngredientFormModal = ({
                           placeholder={'eg. 100'}
                         />
                         <InputRightElement>mg</InputRightElement>
-                      </InputGroup>
-                    </Flex>
-                  </FormControl>
-                  <FormControl>
-                    <Flex alignItems={'center'}>
-                      <FormLabel className={styles.formLabel}>Fibre</FormLabel>
-                      <InputGroup>
-                        <Input
-                          type={'number'}
-                          value={fibrePer100g}
-                          onChange={(e) => {
-                            setFibrePer100g(e.target.value)
-                          }}
-                          placeholder={'eg. 25'}
-                        />
-                        <InputRightElement>g</InputRightElement>
                       </InputGroup>
                     </Flex>
                   </FormControl>
@@ -662,22 +651,6 @@ export const IngredientFormModal = ({
               </TabPanel>
               <TabPanel>
                 <div className={styles.additionalInfo}>
-                  <FormControl>
-                    <Flex alignItems={'center'}>
-                      <FormLabel className={styles.formLabel}>Carbs</FormLabel>
-                      <InputGroup>
-                        <Input
-                          type={'number'}
-                          value={carbsPerServe}
-                          onChange={(e) => {
-                            setCarbsPerServe(e.target.value)
-                          }}
-                          placeholder={'eg. 15'}
-                        />
-                        <InputRightElement>g</InputRightElement>
-                      </InputGroup>
-                    </Flex>
-                  </FormControl>
                   <FormControl>
                     <Flex alignItems={'center'}>
                       <FormLabel className={styles.formLabel}>Energy</FormLabel>
@@ -748,6 +721,22 @@ export const IngredientFormModal = ({
                   </FormControl>
                   <FormControl>
                     <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Carbs</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={carbsPerServe}
+                          onChange={(e) => {
+                            setCarbsPerServe(e.target.value)
+                          }}
+                          placeholder={'eg. 15'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
                       <FormLabel className={styles.formLabel}>Sugar</FormLabel>
                       <InputGroup>
                         <Input
@@ -755,6 +744,22 @@ export const IngredientFormModal = ({
                           value={sugarPerServe}
                           onChange={(e) => {
                             setSugarPerServe(e.target.value)
+                          }}
+                          placeholder={'eg. 25'}
+                        />
+                        <InputRightElement>g</InputRightElement>
+                      </InputGroup>
+                    </Flex>
+                  </FormControl>
+                  <FormControl>
+                    <Flex alignItems={'center'}>
+                      <FormLabel className={styles.formLabel}>Fibre</FormLabel>
+                      <InputGroup>
+                        <Input
+                          type={'number'}
+                          value={fibrePerServe}
+                          onChange={(e) => {
+                            setFibrePerServe(e.target.value)
                           }}
                           placeholder={'eg. 25'}
                         />
@@ -775,22 +780,6 @@ export const IngredientFormModal = ({
                           placeholder={'eg. 100'}
                         />
                         <InputRightElement>mg</InputRightElement>
-                      </InputGroup>
-                    </Flex>
-                  </FormControl>
-                  <FormControl>
-                    <Flex alignItems={'center'}>
-                      <FormLabel className={styles.formLabel}>Fibre</FormLabel>
-                      <InputGroup>
-                        <Input
-                          type={'number'}
-                          value={fibrePerServe}
-                          onChange={(e) => {
-                            setFibrePerServe(e.target.value)
-                          }}
-                          placeholder={'eg. 25'}
-                        />
-                        <InputRightElement>g</InputRightElement>
                       </InputGroup>
                     </Flex>
                   </FormControl>

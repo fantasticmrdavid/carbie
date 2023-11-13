@@ -61,34 +61,6 @@ export const NutritionTable = (props: Props) => {
       <Table size="sm">
         <Tbody>
           <Tr>
-            <Td>
-              <strong>Carbs</strong>
-            </Td>
-            <Td isNumeric>
-              <strong>
-                {carbs_per_100g || carbs_per_100g === 0
-                  ? `${carbs_per_100g}g`
-                  : '-'}
-              </strong>
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>Sugar</Td>
-            <Td isNumeric>
-              {sugar_per_100g || sugar_per_100g === 0
-                ? `${sugar_per_100g}g`
-                : '-'}
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>Sodium</Td>
-            <Td isNumeric>
-              {sodium_per_100g || sodium_per_100g === 0
-                ? `${sodium_per_100g}mg`
-                : '-'}
-            </Td>
-          </Tr>
-          <Tr>
             <Td>Energy</Td>
             <Td isNumeric>
               {energy_per_100g || energy_per_100g === 0
@@ -119,10 +91,38 @@ export const NutritionTable = (props: Props) => {
             </Td>
           </Tr>
           <Tr>
+            <Td>
+              <strong>Carbs</strong>
+            </Td>
+            <Td isNumeric>
+              <strong>
+                {carbs_per_100g || carbs_per_100g === 0
+                  ? `${carbs_per_100g}g`
+                  : '-'}
+              </strong>
+            </Td>
+          </Tr>
+          <Tr>
+            <Td>Sugar</Td>
+            <Td isNumeric>
+              {sugar_per_100g || sugar_per_100g === 0
+                ? `${sugar_per_100g}g`
+                : '-'}
+            </Td>
+          </Tr>
+          <Tr>
             <Td>Fibre</Td>
             <Td isNumeric>
               {fibre_per_100g || fibre_per_100g === 0
                 ? `${fibre_per_100g}g`
+                : '-'}
+            </Td>
+          </Tr>
+          <Tr>
+            <Td>Sodium</Td>
+            <Td isNumeric>
+              {sodium_per_100g || sodium_per_100g === 0
+                ? `${sodium_per_100g}mg`
                 : '-'}
             </Td>
           </Tr>
