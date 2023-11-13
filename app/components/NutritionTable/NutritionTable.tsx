@@ -43,16 +43,27 @@ export const NutritionTable = (props: Props) => {
     caffeine_per_serve,
   } = ingredient
 
+  const has100gData =
+    energy_per_100g ||
+    protein_per_100g ||
+    fat_per_100g ||
+    saturated_fat_per_100g ||
+    carbs_per_100g ||
+    sugar_per_100g ||
+    fibre_per_100g ||
+    sodium_per_100g ||
+    alcohol_per_100g ||
+    caffeine_per_100g
+
   const hasServingData =
-    carbs_per_serve ||
     energy_per_serve ||
     protein_per_serve ||
     fat_per_serve ||
     saturated_fat_per_serve ||
+    carbs_per_serve ||
     sugar_per_serve ||
-    sodium_per_serve ||
     fibre_per_serve ||
-    fat_per_serve ||
+    sodium_per_serve ||
     alcohol_per_serve ||
     caffeine_per_serve
 
@@ -238,7 +249,7 @@ export const NutritionTable = (props: Props) => {
     </TableContainer>
   )
 
-  if (hasServingData)
+  if (has100gData && hasServingData)
     return (
       <Tabs>
         <TabList>
@@ -257,12 +268,23 @@ export const NutritionTable = (props: Props) => {
       </Tabs>
     )
 
-  return (
-    <div>
-      <Heading as="h5" noOfLines={1} size={'md'}>
-        Nutrition information (per 100g)
-      </Heading>
-      {per100gTable}
-    </div>
-  )
+  if (hasServingData)
+    return (
+      <div>
+        <Heading as="h5" noOfLines={1} size={'md'}>
+          Nutrition information (per serving)
+        </Heading>
+        {perServingTable}
+      </div>
+    )
+
+  if (has100gData)
+    return (
+      <div>
+        <Heading as="h5" noOfLines={1} size={'md'}>
+          Nutrition information (per 100g)
+        </Heading>
+        {per100gTable}
+      </div>
+    )
 }
