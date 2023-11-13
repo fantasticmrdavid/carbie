@@ -326,6 +326,14 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
           >
             Close
           </Button>
+          <Button
+            mr={3}
+            onClick={() => {
+              window.print()
+            }}
+          >
+            Print
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
