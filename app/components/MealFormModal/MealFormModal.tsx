@@ -122,8 +122,9 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
           <Flex alignItems={'center'} pb={1}>
             <Grid
               gap={'0.5em'}
-              templateColumns={'1fr 80px'}
+              templateColumns={'auto 1fr'}
               alignItems={'center'}
+              width={'100%'}
             >
               <GridItem>
                 <Heading as="h5" noOfLines={1} size={'sm'}>
@@ -131,7 +132,10 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
                 </Heading>
               </GridItem>
               <GridItem>
-                <Input minWidth={'450px'} width={'auto'} />
+                <Input
+                  minWidth={isLargerThan800 ? '450px' : undefined}
+                  width={'100%'}
+                />
               </GridItem>
             </Grid>
           </Flex>
@@ -144,7 +148,7 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
                 <GridItem key={`mealIngredient_${i.ingredient.id}`}>
                   <MealIngredient
                     id={`mealIngredient_${i.ingredient.id}`}
-                    mode={'edit'}
+                    mode={'modify'}
                     value={{
                       ingredient: i.ingredient,
                       qtyMode: i.qtyMode,
