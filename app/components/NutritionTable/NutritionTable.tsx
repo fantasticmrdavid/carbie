@@ -163,34 +163,6 @@ export const NutritionTable = (props: Props) => {
       <Table size="sm">
         <Tbody>
           <Tr>
-            <Td>
-              <strong>Carbs</strong>
-            </Td>
-            <Td isNumeric>
-              <strong>
-                {carbs_per_serve || carbs_per_serve === 0
-                  ? `${carbs_per_serve}g`
-                  : '-'}
-              </strong>
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>Sugar</Td>
-            <Td isNumeric>
-              {sugar_per_serve || sugar_per_serve === 0
-                ? `${sugar_per_serve}g`
-                : '-'}
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>Sodium</Td>
-            <Td isNumeric>
-              {sodium_per_serve || sodium_per_serve === 0
-                ? `${sodium_per_serve}mg`
-                : '-'}
-            </Td>
-          </Tr>
-          <Tr>
             <Td>Energy</Td>
             <Td isNumeric>
               {energy_per_serve || energy_per_serve === 0
@@ -221,10 +193,38 @@ export const NutritionTable = (props: Props) => {
             </Td>
           </Tr>
           <Tr>
+            <Td>
+              <strong>Carbs</strong>
+            </Td>
+            <Td isNumeric>
+              <strong>
+                {carbs_per_serve || carbs_per_serve === 0
+                  ? `${carbs_per_serve}g`
+                  : '-'}
+              </strong>
+            </Td>
+          </Tr>
+          <Tr>
+            <Td>Sugar</Td>
+            <Td isNumeric>
+              {sugar_per_serve || sugar_per_serve === 0
+                ? `${sugar_per_serve}g`
+                : '-'}
+            </Td>
+          </Tr>
+          <Tr>
             <Td>Fibre</Td>
             <Td isNumeric>
               {fibre_per_serve || fibre_per_serve === 0
                 ? `${fibre_per_serve}g`
+                : '-'}
+            </Td>
+          </Tr>
+          <Tr>
+            <Td>Sodium</Td>
+            <Td isNumeric>
+              {sodium_per_serve || sodium_per_serve === 0
+                ? `${sodium_per_serve}mg`
                 : '-'}
             </Td>
           </Tr>
