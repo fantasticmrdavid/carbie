@@ -130,14 +130,18 @@ export const MealIngredient = (props: Props) => {
             </FormControl>
           </GridItem>
           <GridItem py={2}>
-            {ingredient && parseFloat(qty) > 0 && qtyMode === 'grams' && (
-              <strong>
-                {((ingredient.carbs_per_100g * parseFloat(qty)) / 100).toFixed(
-                  1,
-                )}
-                g/c
-              </strong>
-            )}
+            {ingredient &&
+              ingredient.carbs_per_100g &&
+              parseFloat(qty) > 0 &&
+              qtyMode === 'grams' && (
+                <strong>
+                  {(
+                    (ingredient.carbs_per_100g * parseFloat(qty)) /
+                    100
+                  ).toFixed(1)}
+                  g/c
+                </strong>
+              )}
             {ingredient &&
               ingredient.carbs_per_serve &&
               ingredient.serving_size_units &&

@@ -9,6 +9,7 @@ type Props = {
 
 export const WeightCalculator = ({ ingredient }: Props) => {
   const [weightCalcValue, setWeightCalcValue] = useState<number | undefined>()
+  if (!ingredient.carbs_per_100g) return <></>
   return (
     <Flex className={styles.weightCalculator}>
       <Flex alignItems={'center'} gap={'0.2em'}>

@@ -119,7 +119,7 @@ export const Page = () => {
               </div>
             )}
             <NutritionTable ingredient={ingredient} />
-            {ingredient.carbs_per_100g > 0 && (
+            {ingredient.carbs_per_100g && ingredient.carbs_per_100g > 0 && (
               <>
                 <CarbCalculator ingredient={ingredient} />
                 <WeightCalculator ingredient={ingredient} />

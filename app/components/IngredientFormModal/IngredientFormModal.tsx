@@ -62,7 +62,7 @@ export const IngredientFormModal = ({
   const [name, setName] = useState(ingredient ? ingredient.name : '')
   const [brand, setBrand] = useState(ingredient ? ingredient.brand_vendor : '')
   const [carbsPer100g, setCarbsPer100g] = useState<string | undefined>(
-    ingredient?.carbs_per_100g.toString() ?? '',
+    ingredient?.carbs_per_100g?.toString() ?? '',
   )
   const [carbsPerServe, setCarbsPerServe] = useState<string | undefined>(
     ingredient?.carbs_per_serve?.toString() ?? undefined,
