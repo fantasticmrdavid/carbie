@@ -264,6 +264,23 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
           {carbTotal > 0 && (
             <>
               <Divider mt={2} />
+              <Flex justifyContent={'flex-end'} alignItems={'center'} pt={3}>
+                <Heading as={'h3'} size={'sm'}>
+                  Carb % of meal:{' '}
+                  {(
+                    (carbTotal /
+                      (parseFloat(totalWeight.length > 0 ? totalWeight : '0') ||
+                        calculatedWeightTotal)) *
+                    100
+                  ).toFixed(1)}
+                  %
+                </Heading>
+              </Flex>
+              <Flex justifyContent={'flex-end'} alignItems={'center'} pt={3}>
+                <Heading as={'h3'} size={'sm'}>
+                  Total carbs in meal: {carbTotal.toFixed(1)}g/c
+                </Heading>
+              </Flex>
               {parseFloat(noOfServings) > 0 && (
                 <>
                   <Flex
@@ -285,29 +302,12 @@ export const MealFormModal = ({ isOpen, onClose }: Props) => {
                     pt={3}
                   >
                     <Heading as={'h3'} size={'sm'}>
-                      Carbs per serving:{' '}
+                      Total carbs per serving:{' '}
                       {(carbTotal / parseFloat(noOfServings)).toFixed(1)}g/c
                     </Heading>
                   </Flex>
                 </>
               )}
-              <Flex justifyContent={'flex-end'} alignItems={'center'} pt={3}>
-                <Heading as={'h3'} size={'sm'}>
-                  Carb % of meal:{' '}
-                  {(
-                    (carbTotal /
-                      (parseFloat(totalWeight.length > 0 ? totalWeight : '0') ||
-                        calculatedWeightTotal)) *
-                    100
-                  ).toFixed(1)}
-                  %
-                </Heading>
-              </Flex>
-              <Flex justifyContent={'flex-end'} alignItems={'center'} pt={3}>
-                <Heading as={'h3'} size={'sm'}>
-                  Total carbs: {carbTotal.toFixed(1)}g/c
-                </Heading>
-              </Flex>
               <Divider my={4} />
             </>
           )}
