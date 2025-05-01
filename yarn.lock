@@ -8586,10 +8586,10 @@ os-browserify@^0.3.0:
   resolved "https://registry.yarnpkg.com/os-browserify/-/os-browserify-0.3.0.tgz#854373c7f5c2315914fc9bfc6bd8238fdda1ec27"
   integrity sha512-gjcpUc3clBf9+210TRaDWbf+rZZZEshZ+DlXMRCeAjp0xhTrnQsKHypIy1J3d5hKdUzj69t708EHtU8P6bUn0A==
 
-outsideclick-react@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/outsideclick-react/-/outsideclick-react-0.3.0.tgz#f35efa8e2659a58f8ad1afb2a9f0b61d7d0a9aea"
-  integrity sha512-itNOpLCGDwRr2ULHJyAV4M99rGj4Jp2DTpM0FTMpQpa3hLd7iXFjnZAu6l5nuJ+NUr3CUwx5rhyM+OZsGUb9yQ==
+outsideclick-react@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/outsideclick-react/-/outsideclick-react-1.0.0.tgz#aa390d52b756c80d80a7d8f8e3fa92f45fe3419d"
+  integrity sha512-1UguDq3IAY7gkwIPe4I2wJuvOt3wJ8X5/lQozNbdv+4QkNl/9YHWuOrZDTNO2o2P1Pc8JTHrc0v4IMAbQg5t7g==
 
 p-limit@^2.0.0, p-limit@^2.2.0:
   version "2.3.0"
